@@ -14,3 +14,7 @@
 
 #data files
 *.plot
+
+#bin_file
+membrane
+*.out
