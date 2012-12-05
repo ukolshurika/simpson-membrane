@@ -1,4 +1,4 @@
 simpson-membrane
 ================
 
-Shott dimploma task version
+Short dimploma task version
