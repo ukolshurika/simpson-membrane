@@ -24,7 +24,7 @@ const double alphaStart = 0.226;
 
 }  // namespace
 
-Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep): 
+Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep):
     h0_(h0), q_(q), n_(n), epsilon_(epsilon), simpsonStep_(simpsonStep){}
 
 double Membrane::operator()(double alpha) const{
@@ -34,16 +34,16 @@ double Membrane::operator()(double alpha) const{
 void Membrane::EasyIntegrate(int steps){
   double t = 0.0, da = (M_PI)/steps, tmp;
   for(int i = 1; i<steps-1; i++){
-    tmp = Simpson::Intergrate(alphaStart+(i-1)*da, alphaStart+(i+0)*da, simpsonStep_, *this); 
+    tmp = Simpson::Integrate(alphaStart+(i-1)*da, alphaStart+(i+0)*da, simpsonStep_, *this);
     if(IsNaN(tmp))
       break;
     t += tmp;
     times_[t] = i*da;
-  } 
+  }
 }
 
 void Membrane::IntegrateForAnimation(int steps){
-  EasyIntegrate(steps); // get initial values 
+  EasyIntegrate(steps); // get initial values
 
   double dt_average, da_average;
   dt_average = 0.0;
@@ -75,14 +75,14 @@ double Membrane::ValueAsLine(double time, map<double, double>::iterator point1, 
 
   return k*time + b;
 }
-  
+
 void Membrane::CorrectTimes(){
-  double alpha, tmp; 
+  double alpha, tmp;
   map<double, double>::iterator it;
 
   // TODO (ukolshurika@): create  second map, fill it and swqap with times_.
   for(it = times_.begin(); it!=times_.end(); ++it){
-    tmp = Simpson::Intergrate(alphaStart, it->second, simpsonStep_, *this);
+    tmp = Simpson::Integrate(alphaStart, it->second, simpsonStep_, *this);
     alpha = it->second;
     // times_.erase(it);
     times_[tmp] = alpha;
@@ -100,12 +100,12 @@ void Membrane::AverageDt(double dt_average){
   // TODO save DA & simpson values for correct data.
   while(next != times_.end()){
     delta = next->first - cur->first;
-        
+
     cout << next_time << ' ' << next->first<< endl;
-    
+
     if(new_times.size() == 0)
       new_times[cur->first] = new_times[cur->second];
-    
+
     next_time = new_times.end()->first + dt_average;
     if (delta >= dt_average){
       for(double i = cur->first; i <= next->first; i += dt_average)
@@ -125,12 +125,12 @@ void Membrane::AverageDt(double dt_average){
 
 double Membrane::MeanValueDt(){
   assert(times_.size() > 2);
-  
+
   double delta = 0.0;
   map<double, double>::iterator next, cur;
   next = times_.begin();
   cur = next++;
-  
+
   while(next != times_.end()){
     delta += (next->first - cur->first);
     ++cur;

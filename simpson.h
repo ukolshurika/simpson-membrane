@@ -5,7 +5,7 @@ class Simpson{
   public:
 
   template <class F>
-  static double Intergrate(double from, double to, int steps, const F& f){
+  static double Integrate(double from, double to, int steps, const F& f){
     double  h = (to - from) / steps;
     double sum = f(from);
 

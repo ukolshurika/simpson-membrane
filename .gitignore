@@ -17,4 +17,5 @@
 
 #bin_file
 membrane
+unittests
 *.out
