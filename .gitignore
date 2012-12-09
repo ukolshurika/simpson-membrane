@@ -18,4 +18,8 @@
 #bin_file
 membrane
 unittests
+animation
 *.out
+
+#video
+*.ogv

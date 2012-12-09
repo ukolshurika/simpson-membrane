@@ -45,13 +45,13 @@ void Membrane::EasyIntegrate(int steps){
 void Membrane::IntegrateForAnimation(int steps){
   EasyIntegrate(steps); // get initial values
 
-  double dt_average, da_average;
-  dt_average = 0.0;
-  da_average = 1.0;
+  // double dt_average, da_average;
+  // dt_average = 0.0;
+  // da_average = 1.0;
 
 
-  AverageDt(MeanValueDt());
-  da_average = MeanValueDa();
+  // AverageDt(MeanValueDt());
+  // da_average = MeanValueDa();
 
   // while(da_average > epsilon_){
   //   correctTimes();

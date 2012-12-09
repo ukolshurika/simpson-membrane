@@ -26,6 +26,9 @@ double center(double alpha){
   return -1*a/tan(alpha);
 }
 
+double h(double alpha){
+  return sin(alpha)/alpha*h0;
+}
 
 GLfloat spin=-9.0;
 GLUquadricObj *quadObj;
@@ -93,7 +96,8 @@ void set_camera() {
 
 void display(void) {
   double t, alpha;
-  double clip_plane1[]={0.0,1.0,0.0,h0/2};
+  double clip_plane1[]={0.0,1.0,0.0,-h0/2.0};
+  double clip_plane2[]={0.0,1.0,0.0,h0/2.0};
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   glColor3ub(255,255,0);
@@ -116,21 +120,32 @@ void display(void) {
 
   glClipPlane(GL_CLIP_PLANE1,clip_plane1);
   glEnable(GL_CLIP_PLANE1);
-  // glutSolidCube(5.0);
 
   glColor4f(0.5,0.5,0.5, 1.0);
 
   if (cin.fail()) return;
 
   cin >> t >> alpha;
-  cerr << po(alpha) << " " << center(alpha) << endl;
+  // cerr << po(alpha) << " " << center(alpha) << endl;
   
 
   glPushMatrix();
     glTranslatef(0, center(alpha), -l/2.0);
     gluCylinder(quadObj1, po(alpha), po(alpha), l, 100, 100);
+    gluDisk(quadObj1, po(alpha) - h(alpha), po(alpha), 100, 100);
   glPopMatrix();
 
+  glClipPlane(GL_CLIP_PLANE1,clip_plane2);
+
+  glPushMatrix();
+    glTranslatef(0, center(alpha), -l/2.0);
+    gluCylinder(quadObj1, po(alpha)-h(alpha), po(alpha)-h(alpha), l, 100, 100);
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(0, center(alpha), l/2.0);
+    gluDisk(quadObj1, po(alpha) - h(alpha), po(alpha), 100, 100);
+  glPopMatrix();
 
   usleep(1000);
   glDisable(GL_CLIP_PLANE1);
@@ -140,8 +155,6 @@ void display(void) {
 
 }
 
-
-
 void init_global(){
   global.camera.distance = 20.0;
   global.camera.rotation_x = 0.0;
@@ -149,6 +162,7 @@ void init_global(){
   global.camera.rotation_z = 0.0;
   global.mouse.sensetivity = 0.25;
 }
+
 void init(void) {
   GLfloat mat_specular[]={0.8,0.8,0.8,0.0};
 	GLfloat mat_shininess[]={200.0};
@@ -178,7 +192,6 @@ void init(void) {
   glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular);
   glMaterialfv(GL_FRONT,GL_SHININESS,mat_shininess);
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, white_light);
-
 }
 
 void reshape(GLint width, GLint height) {
@@ -226,7 +239,7 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void spinDisplay(void){
-    glutPostRedisplay();
+  glutPostRedisplay();
 }
 
 int main(int argc, char **argv) {
