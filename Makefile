@@ -1,7 +1,5 @@
 CC=g++
 
-GTEST_DIR=/home/aukolova/gtest-1.6.0
-
 CFLAGS=-g -Wall -I. -I$(GTEST_DIR)/include
 LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread
 
