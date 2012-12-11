@@ -101,8 +101,6 @@ void Membrane::AverageDt(double dt_average){
   while(next != times_.end()){
     delta = next->first - cur->first;
 
-    cout << next_time << ' ' << next->first<< endl;
-
     if(new_times.size() == 0)
       new_times[cur->first] = new_times[cur->second];
 
@@ -119,7 +117,6 @@ void Membrane::AverageDt(double dt_average){
     ++next;
   }
 
-  cout << new_times.size() << endl;
   times_.swap(new_times);
 }
 

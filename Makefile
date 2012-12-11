@@ -11,7 +11,7 @@ ANIMATE=animation
 $(EXECUTABLE): main.o membrane.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(UNITTESTS): unittests.o simpson_unittest.o
+$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o membrane.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(ANIMATE): drawer2.cpp
@@ -25,6 +25,10 @@ main.o: main.cpp
 
 simpson_unittest.o: simpson_unittest.cc
 	$(CC) $(CFLAGS) $^ -c -o $@
+
+membrane_unittest.o: membrane_unittest.cc
+	$(CC) $(CFLAGS) $^ -c -o $@
+
 
 unittests.o: unittests.cc
 	$(CC) $(CFLAGS) $^ -c -o $@

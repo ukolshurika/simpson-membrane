@@ -10,7 +10,7 @@ class Membrane{
     double operator () (double alpha) const;
     void IntegrateForAnimation(int steps);
     void OutputResult();
-  private:
+  // private:
     std::map<double, double> times_;
     std::map<double, double> da_;
 
