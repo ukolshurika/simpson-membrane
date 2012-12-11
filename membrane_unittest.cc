@@ -97,7 +97,10 @@ TEST(MembraneTest, QuadAverageDt) {
 
   m.AverageDt(m.MeanValueDt());
 
+  // std::map<double, double>::iterator i;
+  // for(i=m.times_.begin(); i!=m.times_.end(); ++i)
+  //   std::cout << i->first << std::endl;
+
   for(double i = 0; i<81; i+=9)
-    std::cout << m.times_[i] << std::endl;
-    // ASSERT_TRUE(eql(sqrt(i), m.times_[i]));
+    ASSERT_TRUE(eql(sqrt(i), m.times_[i]));
 }

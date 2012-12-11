@@ -45,14 +45,14 @@ void Membrane::EasyIntegrate(int steps){
 void Membrane::IntegrateForAnimation(int steps){
   EasyIntegrate(steps); // get initial values
 
-  // double dt_average, da_average;
+  double dt_average, da_average;
   // dt_average = 0.0;
   // da_average = 1.0;
 
 
-  // AverageDt(MeanValueDt());
-  // da_average = MeanValueDa();
-
+  AverageDt(MeanValueDt());
+  da_average = MeanValueDa();
+  cout << MeanValueDa();
   // while(da_average > epsilon_){
   //   correctTimes();
   //   averageDt(meanValueDt());
@@ -104,19 +104,22 @@ void Membrane::AverageDt(double dt_average){
     if(new_times.size() == 0)
       new_times[cur->first] = new_times[cur->second];
 
-    next_time = new_times.end()->first + dt_average;
+    next_time = new_times.rbegin()->first + dt_average;
+    
     if (delta >= dt_average){
-      for(double i = cur->first; i <= next->first; i += dt_average)
+      for(double i = new_times.rbegin()->first; i <= next->first; i += dt_average)
         new_times[i] = ValueAsLine(i, cur, next);
 
     }else if(next_time <= next->first){
       new_times[next_time] = ValueAsLine(next_time, cur, next);
     }
-
+      
     ++cur;
     ++next;
+
   }
 
+   
   times_.swap(new_times);
 }
 
