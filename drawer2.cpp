@@ -132,7 +132,6 @@ void display(void) {
   glPushMatrix();
     glTranslatef(0, center(alpha), -l/2.0);
     gluCylinder(quadObj1, po(alpha), po(alpha), l, 100, 100);
-    gluDisk(quadObj1, po(alpha) - h(alpha), po(alpha), 100, 100);
   glPopMatrix();
 
   glClipPlane(GL_CLIP_PLANE1,clip_plane2);
@@ -147,7 +146,13 @@ void display(void) {
     gluDisk(quadObj1, po(alpha) - h(alpha), po(alpha), 100, 100);
   glPopMatrix();
 
-  usleep(1000);
+
+  glPushMatrix();
+    glTranslatef(0, center(alpha), -l/2.0);
+    gluDisk(quadObj1, po(alpha) - h(alpha), po(alpha), 100, 100);
+  glPopMatrix();
+
+  // usleep(1000);
   glDisable(GL_CLIP_PLANE1);
   
   gluDeleteQuadric(quadObj1);
