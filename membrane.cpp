@@ -9,7 +9,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <thread>
-#include <map>
 
 #include "simpson.h"
 
@@ -37,7 +36,7 @@ double Membrane::operator()(double alpha) const{
   return (1/alpha-1/tan(alpha))*pow((2*h0_*sin(alpha)*sin(alpha)/(sqrt(3)*q_*alpha) -1), n_);
 }
 
-void Membrane::EasyIntegrate(int tid, map<double, double>* m){
+void Membrane::EasyIntegrate(int tid, vector<pair<double, double>> *v) {
   double t = 0.0, tmp;
   int from = tid*dstep_;
   int to = (tid+1)*dstep_;
@@ -47,28 +46,27 @@ void Membrane::EasyIntegrate(int tid, map<double, double>* m){
     if(IsNaN(tmp))
       break;
     // t += tmp;
-    (*m)[tmp] = i*da_;
+    v->push_back(make_pair(tmp, i * da_));
   }
 }
 
 void Membrane::IntegrateForAnimation(int steps){
 
   thread threads[num_threads_];
-  map<double, double> maps[num_threads_];
+  vector<pair<double, double>> vectors[num_threads_];
   for(int i = 0; i<num_threads_; ++i)
-    threads[i] = thread(bind(&Membrane::EasyIntegrate, this, i, &maps[i]));
+    threads[i] = thread(bind(&Membrane::EasyIntegrate, this, i, &vectors[i]));
 
   for(int i = 0; i<num_threads_; ++i)
     threads[i].join();
 
-  double offset = 0, last = 0;
+  times_.clear();
+  double offset = 0;
   for (int i = 0; i < num_threads_; ++i) {
-    for (auto it = maps[i].begin(); it != maps[i].end(); ++it) {
+    for (auto it = vectors[i].begin(); it != vectors[i].end(); ++it) {
       times_[it->first + offset] = it->second;
-      offset+=it->first;
-      // last = it->first;
+      offset += it->first;
     }
-    // offset = last;
   }
   // EasyIntegrate(steps); // get initial values
 
