@@ -1,6 +1,7 @@
 #include "membrane.h"
 
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <cassert>
 #include <cstddef>
@@ -28,30 +29,48 @@ const double alphaStart = 0.226;
 Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps):
     h0_(h0), q_(q), n_(n), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
       da_ = (M_PI)/steps_;
-      num_threads = 2;
-      dstep_ = steps_/num_threads;
+      num_threads_ = 2;
+      dstep_ = steps_/num_threads_;
 }
 
 double Membrane::operator()(double alpha) const{
   return (1/alpha-1/tan(alpha))*pow((2*h0_*sin(alpha)*sin(alpha)/(sqrt(3)*q_*alpha) -1), n_);
 }
 
-void Membrane::EasyIntegrate(int tid){
+void Membrane::EasyIntegrate(int tid, map<double, double>* m){
   double t = 0.0, tmp;
   int from = tid*dstep_;
   int to = (tid+1)*dstep_;
 
-  for(int i = form; i<to; i++){
+  for(int i = from; i < to; i++){
     tmp = Simpson::Integrate(alphaStart+(i-1)*da_, alphaStart+(i+0)*da_, simpsonStep_, *this);
     if(IsNaN(tmp))
       break;
-    t += tmp;
-    times_[t] = i*da;
+    // t += tmp;
+    (*m)[tmp] = i*da_;
   }
 }
 
 void Membrane::IntegrateForAnimation(int steps){
-  EasyIntegrate(steps); // get initial values
+
+  thread threads[num_threads_];
+  map<double, double> maps[num_threads_];
+  for(int i = 0; i<num_threads_; ++i)
+    threads[i] = thread(bind(&Membrane::EasyIntegrate, this, i, &maps[i]));
+
+  for(int i = 0; i<num_threads_; ++i)
+    threads[i].join();
+
+  double offset = 0, last = 0;
+  for (int i = 0; i < num_threads_; ++i) {
+    for (auto it = maps[i].begin(); it != maps[i].end(); ++it) {
+      times_[it->first + offset] = it->second;
+      offset+=it->first;
+      // last = it->first;
+    }
+    // offset = last;
+  }
+  // EasyIntegrate(steps); // get initial values
 
   double dt_average, da_average;
   // dt_average = 0.0;
