@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <cstdlib>
+#include <thread>
 #include <map>
 
 #include "simpson.h"
@@ -24,17 +25,24 @@ const double alphaStart = 0.226;
 
 }  // namespace
 
-Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep):
-    h0_(h0), q_(q), n_(n), epsilon_(epsilon), simpsonStep_(simpsonStep){}
+Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps):
+    h0_(h0), q_(q), n_(n), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
+      da_ = (M_PI)/steps_;
+      num_threads = 2;
+      dstep_ = steps_/num_threads;
+}
 
 double Membrane::operator()(double alpha) const{
   return (1/alpha-1/tan(alpha))*pow((2*h0_*sin(alpha)*sin(alpha)/(sqrt(3)*q_*alpha) -1), n_);
 }
 
-void Membrane::EasyIntegrate(int steps){
-  double t = 0.0, da = (M_PI)/steps, tmp;
-  for(int i = 1; i<steps-1; i++){
-    tmp = Simpson::Integrate(alphaStart+(i-1)*da, alphaStart+(i+0)*da, simpsonStep_, *this);
+void Membrane::EasyIntegrate(int tid){
+  double t = 0.0, tmp;
+  int from = tid*dstep_;
+  int to = (tid+1)*dstep_;
+
+  for(int i = form; i<to; i++){
+    tmp = Simpson::Integrate(alphaStart+(i-1)*da_, alphaStart+(i+0)*da_, simpsonStep_, *this);
     if(IsNaN(tmp))
       break;
     t += tmp;
