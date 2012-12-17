@@ -1,7 +1,7 @@
 CC=g++-4.6
 
 CFLAGS=-g -Wall -I. -I$(GTEST_DIR)/include -std=c++0x
-LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread
+LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt
 GLFLAGS=-lglut -lGL -lGLU
 
 EXECUTABLE=membrane
