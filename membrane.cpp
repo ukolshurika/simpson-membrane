@@ -28,7 +28,12 @@ const double alphaStart = 0.226;
 Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps):
     h0_(h0), q_(q), n_(n), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
       da_ = (M_PI)/steps_;
-      num_threads_ = 2;
+      #ifdef __linux__
+        num_threads_ = sysconf(_SC_NPROCESSORS_ONLN);
+      #else
+        num_threads_ = 2;
+      #endif
+
       dstep_ = steps_/num_threads_;
 }
 
@@ -37,16 +42,15 @@ double Membrane::operator()(double alpha) const{
 }
 
 void Membrane::EasyIntegrate(int tid, vector<pair<double, double>> *v) {
-  double t = 0.0, tmp;
+  double t;
   int from = tid*dstep_;
   int to = (tid+1)*dstep_;
 
   for(int i = from; i < to; i++){
-    tmp = Simpson::Integrate(alphaStart+(i-1)*da_, alphaStart+(i+0)*da_, simpsonStep_, *this);
-    if(IsNaN(tmp))
+    t = Simpson::Integrate(alphaStart+(i-1)*da_, alphaStart+(i+0)*da_, simpsonStep_, *this);
+    if(IsNaN(t))
       break;
-    // t += tmp;
-    v->push_back(make_pair(tmp, i * da_));
+    v->push_back(make_pair(t, i * da_));
   }
 }
 
@@ -68,16 +72,13 @@ void Membrane::IntegrateForAnimation(int steps){
       offset += it->first;
     }
   }
-  // EasyIntegrate(steps); // get initial values
 
-  double dt_average, da_average;
-  // dt_average = 0.0;
-  // da_average = 1.0;
+  // double dt_average, da_average;
 
 
   AverageDt(MeanValueDt());
-  da_average = MeanValueDa();
-  cout << MeanValueDa();
+  // da_average = MeanValueDa();
+
   // while(da_average > epsilon_){
   //   correctTimes();
   //   averageDt(meanValueDt());

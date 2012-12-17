@@ -1,6 +1,7 @@
 #include "membrane.h"
 
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
@@ -11,8 +12,12 @@ int main(){
 
   int steps;
   cin >> steps;
+  time_t start = time(NULL);
   Membrane m(h0, q, n, 0.1, 999, steps);
   m.IntegrateForAnimation(steps);
-  m.OutputResult();
+  time_t stop = time(NULL);
+
+  cout << (stop - start) << endl;
+  // m.OutputResult();
   return 0;
 }
