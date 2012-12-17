@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <ctime>
+#include <sys/time.h>
 
 using namespace std;
 
@@ -10,18 +11,19 @@ int main(){
   double q = 2650.0/88.3/1000000;
   double n = 3.4;
   
-  std::clock_t start;
+  timeval tim;
   int steps;
   cin >> steps;
 
-
-  start = clock();
+  gettimeofday(&tim,NULL);
+  double t1 = tim.tv_sec+(tim.tv_usec/1000000.0);;  
   
   Membrane m(h0, q, n, 0.1, 999, steps);
   m.IntegrateForAnimation(steps);
-  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &stop);
-
-  cout << (( std::clock() - start ) / (double) CLOCKS_PER_SEC) << endl;
+  
+  gettimeofday(&tim,NULL);
+  double t2 = tim.tv_sec+(tim.tv_usec/1000000.0);;
+  cout << t2-t1 << endl;
   // m.OutputResult();
   return 0;
 }
