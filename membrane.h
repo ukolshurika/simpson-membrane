@@ -5,6 +5,9 @@
 #include <vector>
 #include <utility>
 
+#define FREE
+#define 
+
 class Membrane{
   public:
     Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps);
@@ -16,6 +19,7 @@ class Membrane{
     std::map<double, double> times_;
     // std::map<double, double> da_;
 
+    // TODO shablon function with 2 retyrn values: free functor or IdealSliding functor
     double h0_;
     double q_;
     double n_;

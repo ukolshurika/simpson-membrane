@@ -21,9 +21,47 @@ bool IsNaN(double value){
 }
 
 //TODO fix this const!
-const double alphaStart = 0.226;
+const double alphaElasticity = 0.226;
 
 }  // namespace
+
+struct IdealSliding {
+  double operator () (double x) const {
+    return 1;
+  }
+};
+
+struct FreeDeformation {
+  double operator () (double alpha) const {
+    return (1/alpha-1/tan(alpha))*pow((2*h0_*sin(alpha)*sin(alpha)/(sqrt(3)*q_*alpha) -1), n_);
+  }
+};
+
+int state;
+
+//TODO this should be in new file
+class  MatrixSurface {
+  /* should  be rewritten for each matrix*/
+  public: 
+    double operator () (double x) const {
+      return -1*x*x+1;
+    }
+
+    double derivative (double x) const {
+      return -2*x;
+    }
+
+    // coorect(???) for all matrixes 
+    double alphaConstrained (double x) const { 
+       return M_PI_2 - asinh( derivative(right_zero()));
+    }
+
+  private:
+    //TODO  method to calculate zero automaticly ?!
+    double right_zero () const {
+      return 1;
+    }
+};
 
 Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps):
     h0_(h0), q_(q), n_(n), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
@@ -46,8 +84,9 @@ void Membrane::EasyIntegrate(int tid, vector<pair<double, double>> *v) {
   int from = tid*dstep_;
   int to = (tid+1)*dstep_;
 
+
   for(int i = from; i < to; i++){
-    t = Simpson::Integrate(alphaStart+(i-1)*da_, alphaStart+(i+0)*da_, simpsonStep_, *this);
+    t = Simpson::Integrate(alphaElasticity+(i-1)*da_, alphaElasticity+(i+0)*da_, simpsonStep_, get_function(i-1));
     if(IsNaN(t))
       break;
     v->push_back(make_pair(t, i * da_));
@@ -108,7 +147,7 @@ void Membrane::CorrectTimes(){
 
   // TODO (ukolshurika@): create  second map, fill it and swqap with times_.
   for(it = times_.begin(); it!=times_.end(); ++it){
-    tmp = Simpson::Integrate(alphaStart, it->second, simpsonStep_, *this);
+    tmp = Simpson::Integrate(alphaElasticity, it->second, simpsonStep_, *this);
     alpha = it->second;
     // times_.erase(it);
     times_[tmp] = alpha;
@@ -166,6 +205,5 @@ double Membrane::MeanValueDt(){
 }
 
 double Membrane::MeanValueDa(){
-
   return 0.0;
 }
