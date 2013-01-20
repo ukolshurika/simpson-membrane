@@ -46,14 +46,14 @@ TEST(MembraneTest, positiveKValueAsLine) {
 TEST(MembraneTest, EqualMeanValueDt) {
   Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 0.1, 999, 1000);
   for(double i = 0; i<10; ++i)
-    m.times_[i] = 1.0;
+    m.times_free_[i] = 1.0;
   ASSERT_TRUE(eql(1.0, m.MeanValueDt()));
 }
 
 TEST(MembraneTest, LinearMeanValueDt) {
   Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 0.1, 999, 1000);
   for(double i = 0; i<10; ++i)
-    m.times_[i*2] = 1.0;
+    m.times_free_[i*2] = 1.0;
 
   ASSERT_TRUE(eql(2.0, m.MeanValueDt()));
 }
@@ -61,7 +61,7 @@ TEST(MembraneTest, LinearMeanValueDt) {
 TEST(MembraneTest, QuadrickMeanValueDt) {
   Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 0.1, 999, 1000);
   for(double i = 0; i<10; ++i)
-    m.times_[i*i] = 1.0;
+    m.times_free_[i*i] = 1.0;
 
   ASSERT_TRUE(eql(9.0, m.MeanValueDt()));
 }
@@ -71,36 +71,36 @@ TEST(MembraneTest, QuadrickMeanValueDt) {
 TEST(MembraneTest, EqualAverageDt) {
   Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 0.1, 999, 1000);
   for(double i = 0; i<10; ++i)
-    m.times_[i] = i*2;
+    m.times_free_[i] = i*2;
 
   m.AverageDt(m.MeanValueDt());
 
   for(double i = 0; i<10; ++i)
-    ASSERT_TRUE(eql(i*2, m.times_[i]));
+    ASSERT_TRUE(eql(i*2, m.times_free_[i]));
 }
 
 TEST(MembraneTest, LinearAverageDt) {
   Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 0.1, 999, 1000);
   for(double i = 0; i<10; ++i)
-    m.times_[i*2] = i*0.5+4;
+    m.times_free_[i*2] = i*0.5+4;
 
   m.AverageDt(m.MeanValueDt());
 
   for(double i = 0; i<10; ++i)
-    ASSERT_TRUE(eql(i*0.5+4, m.times_[i*2]));
+    ASSERT_TRUE(eql(i*0.5+4, m.times_free_[i*2]));
 }
 
 TEST(MembraneTest, QuadAverageDt) {
   Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 0.1, 999, 1000);
   for(double i = 0; i<10; ++i)
-    m.times_[i*i] = i;
+    m.times_free_[i*i] = i;
 
   m.AverageDt(m.MeanValueDt());
 
   // std::map<double, double>::iterator i;
-  // for(i=m.times_.begin(); i!=m.times_.end(); ++i)
+  // for(i=m.times_free_.begin(); i!=m.times_free_.end(); ++i)
   //   std::cout << i->first << std::endl;
 
   for(double i = 0; i<81; i+=9)
-    ASSERT_TRUE(eql(sqrt(i), m.times_[i]));
+    ASSERT_TRUE(eql(sqrt(i), m.times_free_[i]));
 }

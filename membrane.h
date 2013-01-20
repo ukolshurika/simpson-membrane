@@ -4,19 +4,23 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <cmath>
 
-#define FREE
-#define 
+#include "matrix_surface.h"
 
 class Membrane{
   public:
     Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps);
     void EasyIntegrate(int tid, std::vector<std::pair<double, double>>* v);
+    void IntegrateConstrained(int tid, std::vector<std::pair<double, double>>* v);
     double operator () (double alpha) const;
     void IntegrateForAnimation(int steps);
     void OutputResult();
+    void FreeStep(int steps);
+    void ConstrainedStep(int steps);
   // private:
-    std::map<double, double> times_;
+    std::map<double, double> times_free_;
+    std::map<double, double> times_constrained_;
     // std::map<double, double> da_;
 
     // TODO shablon function with 2 retyrn values: free functor or IdealSliding functor
@@ -26,9 +30,11 @@ class Membrane{
     double epsilon_;
     int dstep_;
     double da_;
+    double dx_;
     int simpsonStep_;
     int steps_;
     int num_threads_;
+    MatrixSurface m_surface_;
     double ValueAsLine(double time, std::map<double, double>::iterator point1, std::map<double, double>::iterator point2);
     void CorrectTimes();
     void AverageDt(double dt_average);

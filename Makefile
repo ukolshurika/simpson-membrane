@@ -8,10 +8,10 @@ EXECUTABLE=membrane
 UNITTESTS=unittests
 ANIMATE=animation
 
-$(EXECUTABLE): main.o membrane.o
+$(EXECUTABLE): main.o membrane.o matrix_surface.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o membrane.o
+$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o membrane.o matrix_surface.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(ANIMATE): drawer2.cpp
@@ -23,12 +23,14 @@ membrane.o: membrane.cpp
 main.o: main.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
 
+matrix_surface.o: matrix_surface.cpp
+	$(CC) $(CFLAGS) $^ -c -o $@
+
 simpson_unittest.o: simpson_unittest.cc
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 membrane_unittest.o: membrane_unittest.cc
 	$(CC) $(CFLAGS) $^ -c -o $@
-
 
 unittests.o: unittests.cc
 	$(CC) $(CFLAGS) $^ -c -o $@
