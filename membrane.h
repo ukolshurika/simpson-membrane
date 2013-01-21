@@ -10,7 +10,7 @@
 
 class Membrane{
   public:
-    Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps);
+    Membrane(double h0, double q, double n, double sigma_b, double epsilon, int simpsonStep, int steps);
     void EasyIntegrate(int tid, std::vector<std::pair<double, double>>* v);
     void IntegrateConstrained(int tid, std::vector<std::pair<double, double>>* v);
     double operator () (double alpha) const;
@@ -21,13 +21,12 @@ class Membrane{
   // private:
     std::map<double, double> times_free_;
     std::map<double, double> times_constrained_;
-    // std::map<double, double> da_;
 
-    // TODO shablon function with 2 retyrn values: free functor or IdealSliding functor
     double h0_;
     double q_;
     double n_;
     double epsilon_;
+    double sigma_b_;
     int dstep_;
     double da_;
     double dx_;
@@ -35,6 +34,9 @@ class Membrane{
     int steps_;
     int num_threads_;
     MatrixSurface m_surface_;
+    
+
+
     double ValueAsLine(double time, std::map<double, double>::iterator point1, std::map<double, double>::iterator point2);
     void CorrectTimes();
     void AverageDt(double dt_average);

@@ -6,6 +6,9 @@
 
 using namespace std;
 
+//TODO get correct value from article
+#define SIGMA_B 80
+
 int main(){
   double h0 = 0.02;
   double q = 2650.0/88.3/1000000;
@@ -18,12 +21,12 @@ int main(){
   gettimeofday(&tim,NULL);
   double t1 = tim.tv_sec+(tim.tv_usec/1000000.0);;  
   
-  Membrane m(h0, q, n, 0.1, 999, steps);
+  Membrane m(h0, q, n, SIGMA_B, 0.1, 999, steps);
   m.IntegrateForAnimation(steps);
   
   gettimeofday(&tim,NULL);
   double t2 = tim.tv_sec+(tim.tv_usec/1000000.0);;
-  cout << t2-t1 << endl;
-  // m.OutputResult();
+  // cout << t2-t1 << endl;
+  m.OutputResult();
   return 0;
 }

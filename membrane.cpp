@@ -22,11 +22,58 @@ bool IsNaN(double value){
 
 //TODO fix this const!
 const double alphaElasticity = 0.226;
+struct Cyrcle{
+  double center(double alpha){
+    return -1*a/tan(alpha);
+  }
+};
 
 struct IdealSliding {
-  double operator () (double x) const {
-      return 1;
+  IdealSliding(const MatrixSurface& ms, const Membrane& m): ms_(ms), m_(m){
   }
+
+  double operator () (double x) const {
+    return B1(x)/B2(x)*pow((2*h(x)*m_.sigma_b_)/(sqrt(3)*m_.q_*Pho(x) - 2), m_.n_);
+  }
+
+  double Alpha(double x) const{
+    return M_PI_2 - atanh(ms_.normal(x));
+  }
+
+  double dAlpha(double x) const{
+    return (Alpha(x) + Alpha(x+DELTA))/DELTA;
+  }
+
+  double S(double x) const{
+
+  }
+
+  double dS(double x) const{
+    return (S(x) + S(x+DELTA))/DELTA;
+  }
+
+  double Rho(double x) const{
+    return sqrt((m_(x) - Cyrcle(Alpha))*(m_(x) - Cyrcle(Alpha))+x*x);
+  }
+
+  double dRho(double x) const{
+    return (Rho(x) + Rho(x+DELTA))/DELTA;
+  }
+
+  double B1(double x) const {
+    return Rho(x) * dAlpha(x) + Alpha(x)*dRho(x) + dS(x);
+  }
+
+  double B2(double x) const{
+    return Rho(x)*Alpha(x) + S(x);
+  }
+
+  double h(double x) const{
+    Simpson::Integrate(alphaElasticity+(i-1)*da_, alphaElasticity+(i+0)*da_, simpsonStep_;
+  }
+
+  MatrixSurface ms_;
+  Membrane m_;
 };
 
 struct FreeDeformation {
@@ -44,8 +91,8 @@ struct FreeDeformation {
 
 }  // namespace
 
-Membrane::Membrane(double h0, double q, double n, double epsilon, int simpsonStep, int steps):
-    h0_(h0), q_(q), n_(n), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
+Membrane::Membrane(double h0, double q, double n, double sigma_b, double epsilon, int simpsonStep, int steps):
+    h0_(h0), q_(q), n_(n), sigma_b_(sigma_b), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
       da_ = (m_surface_.alphaConstrained())/steps_;
       dx_ = (m_surface_.right_zero())/steps_;
       #ifdef __linux__
