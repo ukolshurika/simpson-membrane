@@ -10,7 +10,7 @@
 
 class Membrane{
   public:
-    Membrane(double h0, double q, double n, double sigma_b, double epsilon, int simpsonStep, int steps);
+    Membrane(double h0, double q, double n, double sigma_b, double a,  double epsilon, int simpsonStep, int steps);
     void EasyIntegrate(int tid, std::vector<std::pair<double, double>>* v);
     void IntegrateConstrained(int tid, std::vector<std::pair<double, double>>* v);
     double operator () (double alpha) const;
@@ -25,8 +25,9 @@ class Membrane{
     double h0_;
     double q_;
     double n_;
-    double epsilon_;
     double sigma_b_;
+    double a_;
+    double epsilon_;
     int dstep_;
     double da_;
     double dx_;

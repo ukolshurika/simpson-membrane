@@ -1,4 +1,4 @@
-CC=g++-4.6
+CC=g++
 
 CFLAGS=-g -Wall -I. -I$(GTEST_DIR)/include -std=c++0x
 LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt
@@ -8,7 +8,7 @@ EXECUTABLE=membrane
 UNITTESTS=unittests
 ANIMATE=animation
 
-$(EXECUTABLE): main.o membrane.o matrix_surface.o
+$(EXECUTABLE): main.o membrane.o matrix_surface.o ideal_sliding.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o membrane.o matrix_surface.o
@@ -24,6 +24,9 @@ main.o: main.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 matrix_surface.o: matrix_surface.cpp
+	$(CC) $(CFLAGS) $^ -c -o $@
+
+ideal_sliding.o: ideal_sliding.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 simpson_unittest.o: simpson_unittest.cc

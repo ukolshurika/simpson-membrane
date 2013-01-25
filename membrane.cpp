@@ -11,6 +11,7 @@
 #include <thread>
 
 #include "simpson.h"
+#include "ideal_sliding.h"
 
 using namespace std;
 
@@ -22,59 +23,7 @@ bool IsNaN(double value){
 
 //TODO fix this const!
 const double alphaElasticity = 0.226;
-struct Cyrcle{
-  double center(double alpha){
-    return -1*a/tan(alpha);
-  }
-};
 
-struct IdealSliding {
-  IdealSliding(const MatrixSurface& ms, const Membrane& m): ms_(ms), m_(m){
-  }
-
-  double operator () (double x) const {
-    return B1(x)/B2(x)*pow((2*h(x)*m_.sigma_b_)/(sqrt(3)*m_.q_*Pho(x) - 2), m_.n_);
-  }
-
-  double Alpha(double x) const{
-    return M_PI_2 - atanh(ms_.normal(x));
-  }
-
-  double dAlpha(double x) const{
-    return (Alpha(x) + Alpha(x+DELTA))/DELTA;
-  }
-
-  double S(double x) const{
-
-  }
-
-  double dS(double x) const{
-    return (S(x) + S(x+DELTA))/DELTA;
-  }
-
-  double Rho(double x) const{
-    return sqrt((m_(x) - Cyrcle(Alpha))*(m_(x) - Cyrcle(Alpha))+x*x);
-  }
-
-  double dRho(double x) const{
-    return (Rho(x) + Rho(x+DELTA))/DELTA;
-  }
-
-  double B1(double x) const {
-    return Rho(x) * dAlpha(x) + Alpha(x)*dRho(x) + dS(x);
-  }
-
-  double B2(double x) const{
-    return Rho(x)*Alpha(x) + S(x);
-  }
-
-  double h(double x) const{
-    Simpson::Integrate(alphaElasticity+(i-1)*da_, alphaElasticity+(i+0)*da_, simpsonStep_;
-  }
-
-  MatrixSurface ms_;
-  Membrane m_;
-};
 
 struct FreeDeformation {
   FreeDeformation(double h0, double q, double n): h0_(h0), q_(q), n_(n) {
@@ -91,10 +40,10 @@ struct FreeDeformation {
 
 }  // namespace
 
-Membrane::Membrane(double h0, double q, double n, double sigma_b, double epsilon, int simpsonStep, int steps):
-    h0_(h0), q_(q), n_(n), sigma_b_(sigma_b), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
-      da_ = (m_surface_.alphaConstrained())/steps_;
-      dx_ = (m_surface_.right_zero())/steps_;
+Membrane::Membrane(double h0, double q, double n, double sigma_b, double a,double epsilon, int simpsonStep, int steps):
+    h0_(h0), q_(q), n_(n), sigma_b_(sigma_b), a_(a), epsilon_(epsilon), simpsonStep_(simpsonStep), steps_(steps){
+      da_ = (m_surface_.AlphaConstrained())/steps_;
+      dx_ = (m_surface_.RightZero())/steps_;
       #ifdef __linux__
         num_threads_ = 1; //for debug constained step
         // num_threads_ = sysconf(_SC_NPROCESSORS_ONLN);
@@ -147,8 +96,10 @@ void Membrane::IntegrateConstrained(int tid, vector<pair<double, double>> *v){
   double t;
   int from = tid*dstep_;
   int to = (tid+1)*dstep_;
+  //TODO meke correct value to h
+  IdealSliding is(m_surface_, (*this), 1.0);
   for(int i = to; i < from; i--){
-    // t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, simpsonStep_, Membrane::IdealSliding);
+    t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, simpsonStep_, is);
     if(IsNaN(t))
       break;
     v->push_back(make_pair(t, i * da_));
@@ -159,6 +110,8 @@ void Membrane::ConstrainedStep(int steps){
   vector<pair<double, double>> vectors[num_threads_];
 
   Membrane::IntegrateConstrained(0, &vectors[0]);
+
+  // times_constrained_.swap(vectors[0]);
 }
 
 void Membrane::IntegrateForAnimation(int steps){

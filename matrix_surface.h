@@ -5,9 +5,11 @@
 class MatrixSurface{
   public:
     double operator () (double x) const;
-    double derivative (double x) const;
-    double alphaConstrained () const;
-    double right_zero () const;
-    double 
+    double Derivative (double x) const;
+    double SecondDerivative (double x) const;
+    double AlphaConstrained () const;
+    double RightZero () const;
+    double Normal(double x) const;
+    double dNormal(double x) const;
 };
 #endif  // MATRIX_SURFACE_H_
