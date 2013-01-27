@@ -4,9 +4,9 @@
 
 #include "simpson.h"
 
-#define SIMSON_STEP 999 
+int kSimpsonStep = 999;
 
-double Cyrcle::center(double a, double alpha){
+double Circle::center(double a, double alpha){
   return -1*a/tan(alpha);
 }
 
@@ -27,7 +27,7 @@ double IdealSliding::dAlpha(double x) const{
 
 double IdealSliding::S(double x) const{
   //WARN: integration order is changed!
-  return Simpson::Integrate(x, ms_.RightZero(), SIMSON_STEP, SFunctor((*this)));
+  return Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
 }
 
 double IdealSliding::dS(double x) const{
@@ -35,7 +35,7 @@ double IdealSliding::dS(double x) const{
 }
 
 double IdealSliding::Rho(double x) const{
-  return sqrt((m_(x) - Cyrcle::center(m_.a_, Alpha(x) )) * (m_(x) - Cyrcle::center(m_.a_, Alpha(x)))+x*x);
+  return sqrt((m_(x) - Circle::center(m_.a_, Alpha(x) )) * (m_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
   // return 0.1;
 }
 
@@ -53,7 +53,7 @@ double IdealSliding::B2(double x) const{
 
 double IdealSliding::h(double x) const{
   // return 0.1;
-  return -1*h1_*exp(Simpson::Integrate(x, ms_.RightZero(), SIMSON_STEP, HFunctor((*this))));
+  return -1*h1_*exp(Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))));
 }
 
 HFunctor::HFunctor (const IdealSliding& is): is_(is){};

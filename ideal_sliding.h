@@ -29,7 +29,7 @@ class IdealSliding{
   double h1_;
 };
 
-struct Cyrcle{
+struct Circle{
   static double center(double a, double alpha);
 };
 
