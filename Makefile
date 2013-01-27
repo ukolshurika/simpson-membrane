@@ -8,7 +8,7 @@ EXECUTABLE=membrane
 UNITTESTS=unittests
 ANIMATE=animation
 
-$(EXECUTABLE): main.o membrane.o matrix_surface.o ideal_sliding.o
+$(EXECUTABLE): main.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o membrane.o matrix_surface.o
@@ -24,6 +24,9 @@ main.o: main.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 matrix_surface.o: matrix_surface.cpp
+	$(CC) $(CFLAGS) $^ -c -o $@
+
+free_deformation.o: free_deformation.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 ideal_sliding.o: ideal_sliding.cpp

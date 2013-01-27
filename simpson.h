@@ -15,7 +15,7 @@ class Simpson{
       else
         sum += 4*f(from + h * i);
     }
-
+    
     sum += f(to);
     sum *= h/3;
     return sum;

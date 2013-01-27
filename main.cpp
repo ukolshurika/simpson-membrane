@@ -19,14 +19,15 @@ int main(){
   int steps;
   cin >> steps;
 
-  gettimeofday(&tim,NULL);
-  double t1 = tim.tv_sec+(tim.tv_usec/1000000.0);  
+  // gettimeofday(&tim,NULL);
+  // double t1 = tim.tv_sec+(tim.tv_usec/1000000.0);  
   
   Membrane m(h0, q, n, SIGMA_B, a,0.1, 999, steps);
-  m.IntegrateForAnimation(steps);
+  m.ConstrainedStep(steps);
+  // m.IntegrateForAnimation(steps);
   
-  gettimeofday(&tim,NULL);
-  double t2 = tim.tv_sec+(tim.tv_usec/1000000.0);
+  // gettimeofday(&tim,NULL);
+  // double t2 = tim.tv_sec+(tim.tv_usec/1000000.0);
   // cout << t2-t1 << endl;
   m.OutputResult();
   return 0;

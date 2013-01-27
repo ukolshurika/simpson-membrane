@@ -5,12 +5,12 @@
 #include <iostream>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <cmath>
 #include <cstdlib>
 #include <thread>
 
 #include "simpson.h"
+#include "free_deformation.h"
 #include "ideal_sliding.h"
 
 using namespace std;
@@ -24,19 +24,6 @@ bool IsNaN(double value){
 //TODO fix this const!
 const double alphaElasticity = 0.226;
 
-
-struct FreeDeformation {
-  FreeDeformation(double h0, double q, double n): h0_(h0), q_(q), n_(n) {
-  }
-
-  double operator () (double alpha) const {
-    return (1/alpha-1/tan(alpha))*pow((2*h0_*sin(alpha)*sin(alpha)/(sqrt(3)*q_*alpha) -1), n_);
-  }
-
-  double h0_;
-  double q_;
-  double n_;
-};
 
 }  // namespace
 
@@ -92,26 +79,32 @@ void Membrane::FreeStep(int steps){
   }
 }
 
-void Membrane::IntegrateConstrained(int tid, vector<pair<double, double>> *v){
+void Membrane::IntegrateConstrained(vector<pair<double, double>> *v){
   double t;
-  int from = tid*dstep_;
-  int to = (tid+1)*dstep_;
-  //TODO meke correct value to h
-  IdealSliding is(m_surface_, (*this), 1.0);
-  for(int i = to; i < from; i--){
-    t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, simpsonStep_, is);
-    if(IsNaN(t))
-      break;
-    v->push_back(make_pair(t, i * da_));
+  int from = dstep_;
+  int to = 0;
+
+
+  FreeDeformation f(h0_, q_, n_);
+
+  IdealSliding is(m_surface_, (*this), f.h(m_surface_.AlphaConstrained()));
+  for(int i = from; i > to; i--){
+    t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, 9, is);
+    // if(IsNaN(t))
+    //   break;
+    cout << t << " " << i*dx_ << endl;
+    // times_constrained_[t] = i*dx_;
+    // v->push_back(make_pair(t, i * da_));
   }
+
 }
 
 void Membrane::ConstrainedStep(int steps){
   vector<pair<double, double>> vectors[num_threads_];
+  
+  // assert(1>2);
+  Membrane::IntegrateConstrained(&vectors[0]);
 
-  Membrane::IntegrateConstrained(0, &vectors[0]);
-
-  // times_constrained_.swap(vectors[0]);
 }
 
 void Membrane::IntegrateForAnimation(int steps){
@@ -136,7 +129,7 @@ void Membrane::OutputResult(){
   // for(it = times_free_.begin(); it!=times_free_.end(); ++it){
   //   cout << it->first << ' ' << it->second << endl;
   // }
-
+  cout << times_constrained_.size() << endl; 
   for(it = times_constrained_.begin(); it!=times_constrained_.end(); ++it){
     cout << it->first << ' ' << it->second << endl;
   }

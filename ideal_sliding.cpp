@@ -27,7 +27,7 @@ double IdealSliding::dAlpha(double x) const{
 
 double IdealSliding::S(double x) const{
   //WARN: integration order is changed!
-  return -1*Simpson::Integrate(1, x, SIMSON_STEP, SFunctor((*this)));
+  return Simpson::Integrate(x, ms_.RightZero(), SIMSON_STEP, SFunctor((*this)));
 }
 
 double IdealSliding::dS(double x) const{
@@ -36,6 +36,7 @@ double IdealSliding::dS(double x) const{
 
 double IdealSliding::Rho(double x) const{
   return sqrt((m_(x) - Cyrcle::center(m_.a_, Alpha(x) )) * (m_(x) - Cyrcle::center(m_.a_, Alpha(x)))+x*x);
+  // return 0.1;
 }
 
 double IdealSliding::dRho(double x) const{
@@ -51,7 +52,8 @@ double IdealSliding::B2(double x) const{
 }
 
 double IdealSliding::h(double x) const{
-  return h1_*exp(Simpson::Integrate(1, x, SIMSON_STEP, HFunctor((*this))));
+  // return 0.1;
+  return -1*h1_*exp(Simpson::Integrate(x, ms_.RightZero(), SIMSON_STEP, HFunctor((*this))));
 }
 
 HFunctor::HFunctor (const IdealSliding& is): is_(is){};
@@ -62,5 +64,6 @@ double HFunctor::operator () (double x) const{
 }
 
 double SFunctor::operator () (double x) const{
+  // return 0.1;
   return sqrt(1+is_.ms_.SecondDerivative(x)*is_.ms_.SecondDerivative(x));
 }
