@@ -8,7 +8,6 @@
 
 #include "matrix_surface.h"
 
-
 class Membrane{
   public:
     Membrane(double h0, double q, double n, double sigma_b, double a,  double epsilon, int simpsonStep, int steps);

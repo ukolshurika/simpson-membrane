@@ -1,6 +1,7 @@
 #include "ideal_sliding.h"
 
 #include <cmath>
+#include <iostream>
 
 #include "simpson.h"
 
@@ -18,11 +19,11 @@ double IdealSliding::operator () (double x) const {
 }
 
 double IdealSliding::Alpha(double x) const{
-  return M_PI_2 - atanh(ms_.dNormal(x));
+  return M_PI_2 - atan(ms_.dNormal(x));
 }
 
 double IdealSliding::dAlpha(double x) const{
-  return (Alpha(x) + Alpha(x+DELTA))/DELTA;
+  return (Alpha(x+DELTA) - Alpha(x))/DELTA;
 }
 
 double IdealSliding::S(double x) const{
@@ -31,16 +32,17 @@ double IdealSliding::S(double x) const{
 }
 
 double IdealSliding::dS(double x) const{
-  return (S(x) + S(x+DELTA))/DELTA;
+  return (S(x+DELTA) - S(x))/DELTA;
 }
 
 double IdealSliding::Rho(double x) const{
-  return sqrt((m_(x) - Circle::center(m_.a_, Alpha(x) )) * (m_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
+  return (ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x;
+  // return sqrt((ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
   // return 0.1;
 }
 
 double IdealSliding::dRho(double x) const{
-  return (Rho(x) + Rho(x+DELTA))/DELTA;
+  return (Rho(x+DELTA) - Rho(x))/DELTA;
 }
 
 double IdealSliding::B1(double x) const {

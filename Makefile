@@ -11,7 +11,7 @@ ANIMATE=animation
 $(EXECUTABLE): main.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o membrane.o matrix_surface.o
+$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o ideal_sliding_unittest.o matrix_surface_unittest.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o 
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(ANIMATE): drawer2.cpp
@@ -36,6 +36,12 @@ simpson_unittest.o: simpson_unittest.cc
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 membrane_unittest.o: membrane_unittest.cc
+	$(CC) $(CFLAGS) $^ -c -o $@
+
+ideal_sliding_unittest.o: ideal_sliding_unittest.cc
+	$(CC) $(CFLAGS) $^ -c -o $@
+
+matrix_surface_unittest.o: matrix_surface_unittest.cc
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 unittests.o: unittests.cc

@@ -7,7 +7,7 @@ double MatrixSurface::operator () (double x) const {
 }
 
 double MatrixSurface::Derivative (double x) const {
-  return ((*this)(x)+(*this)(x+DELTA))/DELTA;
+  return ((*this)(x+DELTA) - (*this)(x))/DELTA;
   // return -2*x;
 }
 
@@ -27,10 +27,7 @@ double MatrixSurface::RightZero () const {
   return 1;
 }
 
-double MatrixSurface::Normal(double x) const{
-	return (*this)(x)-1/(Derivative(x))*(x-x);
-}
 
 double MatrixSurface::dNormal(double x) const{
-	return (*this)(x)-1/(Derivative(x))*(x-x);
+  return 1/(Derivative(x));
 }
