@@ -36,8 +36,7 @@ double IdealSliding::dS(double x) const{
 }
 
 double IdealSliding::Rho(double x) const{
-  return (ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x;
-  // return sqrt((ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
+  return sqrt((ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
   // return 0.1;
 }
 

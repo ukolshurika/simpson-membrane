@@ -92,9 +92,9 @@ void Membrane::IntegrateConstrained(vector<pair<double, double>> *v){
     t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, 9, is);
     // if(IsNaN(t))
     //   break;
-    cout << t << " " << i*dx_ << endl;
+    // cout << t << " " << i*dx_ << endl;
     // times_constrained_[t] = i*dx_;
-    // v->push_back(make_pair(t, i * da_));
+    v->push_back(make_pair(t, i * dx_));
   }
 
 }
@@ -104,7 +104,14 @@ void Membrane::ConstrainedStep(int steps){
   
   // assert(1>2);
   Membrane::IntegrateConstrained(&vectors[0]);
-
+  times_constrained_.clear();
+    double offset = 0;
+    for (int i = 0; i < num_threads_; ++i) {
+      for (auto it = vectors[i].begin(); it != vectors[i].end(); ++it) {
+        times_constrained_[it->first + offset] = it->second;
+        offset += it->first;
+      }
+    }
 }
 
 void Membrane::IntegrateForAnimation(int steps){
@@ -129,7 +136,6 @@ void Membrane::OutputResult(){
   // for(it = times_free_.begin(); it!=times_free_.end(); ++it){
   //   cout << it->first << ' ' << it->second << endl;
   // }
-  cout << times_constrained_.size() << endl; 
   for(it = times_constrained_.begin(); it!=times_constrained_.end(); ++it){
     cout << it->first << ' ' << it->second << endl;
   }

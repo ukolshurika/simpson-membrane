@@ -2,17 +2,23 @@
 
 #include <cmath>
 
+namespace{
+  const double kDelta = 1e-7;
+  const double kInvDelta = 1e7;
+  const double kInvSquareDelta = 1e14;
+}
+
 double MatrixSurface::operator () (double x) const {
-  return -1*x*x+1;
+  return -x*x+1;
 }
 
 double MatrixSurface::Derivative (double x) const {
-  return ((*this)(x+DELTA) - (*this)(x))/DELTA;
+  return ((*this)(x+kDelta) - (*this)(x))*kInvDelta;
   // return -2*x;
 }
 
 double MatrixSurface::SecondDerivative (double x) const {
-  return ((*this)(x+DELTA) - 2*(*this)(x) + (*this)(x-DELTA))/DELTA/DELTA;
+  return ((*this)(x+kDelta) - 2*(*this)(x) + (*this)(x-kDelta))*kInvSquareDelta;
   // return -2;
 }
 
