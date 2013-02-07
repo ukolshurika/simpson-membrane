@@ -40,8 +40,10 @@ TEST(Circle, centerm10){
 
 TEST(IdealSlidingTest, Alpha) {
   double x;
-  for(x = 0; x<1; x+=0.1)
+  for(x = 0; x<1; x+=0.1){
     ASSERT_TRUE(!IsNaN(is.Alpha(x)));
+    ASSERT_TRUE(is.Alpha(x) >= 0);
+  }
 }
 
 TEST(IdealSlidingTest, dAlpha) {
@@ -52,8 +54,10 @@ TEST(IdealSlidingTest, dAlpha) {
 
 TEST(IdealSlidingTest, Rho) {
   double x;
-  for(x = 0; x<0.99; x+=0.1)
+  for(x = 0; x<0.99; x+=0.1){
     ASSERT_TRUE(!IsNaN(is.Rho(x)));
+    ASSERT_TRUE(is.Rho(x) >= 0);
+  }
 }
 
 TEST(IdealSlidingTest, dRho) {
@@ -64,18 +68,44 @@ TEST(IdealSlidingTest, dRho) {
 
 TEST(IdealSlidingTest, S){
   double x;
-  for(x = 0; x<1; x+=0.1)
+  for(x = 0; x<1; x+=0.1){
     ASSERT_TRUE(!IsNaN(is.S(x)));
+    ASSERT_TRUE(is.S(x) >= 0);
+  }
 }
 
 TEST(IdealSlidingTest, dS){
   double x;
-  for(x = 0; x<1; x+=0.1)
+  for(x = 1; x>0; x-=0.1){
     ASSERT_TRUE(!IsNaN(is.dS(x)));
+    ASSERT_TRUE(is.dS(x) >= 0);
+  }
 }
 
 TEST(IdealSlidingTest, Operator){
   double x;
-  for(x = 0; x<1; x+=0.1)
+  for(x = 0.01; x<1; x+=0.1){
     ASSERT_TRUE(!IsNaN(is(x)));
+  }
 }
+
+TEST(IdealSlidingTest, B1){
+  double x;
+  for(x = 0; x<1; x+=0.1)
+    ASSERT_TRUE(!IsNaN(is.B1(x)));
+}
+
+TEST(IdealSlidingTest, B2){
+  double x;
+  for(x = 0; x<1; x+=0.1)
+    ASSERT_TRUE(!IsNaN(is.B2(x)));
+}
+
+TEST(IdealSlidingTest, h){
+  double x;
+  for(x = 0; x<1; x+=0.1){
+    ASSERT_TRUE(!IsNaN(is.h(x)));
+    ASSERT_TRUE(is.h(x)>0);
+  }
+}
+

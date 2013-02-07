@@ -2,10 +2,20 @@
 
 #include <cmath>
 #include <iostream>
+#include <cassert>
 
 #include "simpson.h"
+#include "utils.h"
 
-int kSimpsonStep = 999;
+
+namespace {
+const double kEpsilon = 1e-9;
+const int kSimpsonStep = 999;
+bool eql(double u, double v){
+  return abs(u - v) < kEpsilon;
+}
+
+}
 
 double Circle::center(double a, double alpha){
   return -1*a/tan(alpha);
@@ -15,46 +25,68 @@ IdealSliding::IdealSliding(const MatrixSurface& ms, const Membrane& m, double h1
 }
 
 double IdealSliding::operator () (double x) const {
-  return B1(x)/B2(x)*pow((2*h(x)*m_.sigma_b_)/(sqrt(3)*m_.q_*Rho(x) - 2), m_.n_);
+  double y = B1(x)/B2(x)*pow((2*h(x)*m_.sigma_b_)/(sqrt(3)*m_.q_*Rho(x)) - 2, m_.n_);
+  // std::cout << h(x) << std::endl;
+  return y;
 }
 
 double IdealSliding::Alpha(double x) const{
-  return M_PI_2 - atan(ms_.dNormal(x));
+  double y = M_PI_2 - atan(ms_.dNormal(x));
+  // assert(y>=0);
+  return y;
 }
 
 double IdealSliding::dAlpha(double x) const{
-  return (Alpha(x+DELTA) - Alpha(x))/DELTA;
+  double y = (Alpha(x+DELTA) - Alpha(x))/DELTA;
+  // assert(y>=0);
+  return y;
 }
 
 double IdealSliding::S(double x) const{
   //WARN: integration order is changed!
-  return Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
+  double y = Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
+  if(eql(x, ms_.RightZero()))
+    y=0;
+  CHECK(y>=0);
+  return y;
 }
 
 double IdealSliding::dS(double x) const{
-  return (S(x+DELTA) - S(x))/DELTA;
+  double y = (S(x-DELTA) - S(x))/DELTA;
+  return y;
 }
 
 double IdealSliding::Rho(double x) const{
-  return sqrt((ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
+  double y = sqrt((ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
+  // assert(y>=0);
+  return y;
   // return 0.1;
 }
 
 double IdealSliding::dRho(double x) const{
-  return (Rho(x+DELTA) - Rho(x))/DELTA;
+  double y = (Rho(x+DELTA) - Rho(x))/DELTA;
+  // assert(y>=0);
+  return y; 
 }
 
 double IdealSliding::B1(double x) const {
-  return Rho(x) * dAlpha(x) + Alpha(x)*dRho(x) + dS(x);
+  double y = Rho(x) * dAlpha(x) + Alpha(x)*dRho(x) + dS(x);
+  // assert(y>=0);
+  return y;
 }
 
 double IdealSliding::B2(double x) const{
-  return Rho(x)*Alpha(x) + S(x);
+  double y = Rho(x)*Alpha(x) + S(x);
+  // assert(y>=0);
+  return y;
 }
 
 double IdealSliding::h(double x) const{
   // return 0.1;
-  return -1*h1_*exp(Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))));
+  double y = h1_*exp(Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))));
+  // std::cout << x << ' '<< Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))) << y<< std::endl;
+  // assert(y>=0);
+  return y;
 }
 
 HFunctor::HFunctor (const IdealSliding& is): is_(is){};
@@ -62,6 +94,7 @@ SFunctor::SFunctor (const IdealSliding& is): is_(is){};
 
 double HFunctor::operator () (double x) const{
   return is_.B1(x)/is_.B2(x);
+  std::cout << is_.B1(x) << " " << is_.B2(x) << std::endl;
 }
 
 double SFunctor::operator () (double x) const{

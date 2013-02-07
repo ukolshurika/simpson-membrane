@@ -3,9 +3,9 @@
 #include <cmath>
 
 namespace{
-  const double kDelta = 1e-7;
-  const double kInvDelta = 1e7;
-  const double kInvSquareDelta = 1e14;
+  const double kDelta = 1e-3;
+  const double kInvDelta = 1/kDelta;
+  const double kInvSquareDelta = kInvDelta*kInvDelta;
 }
 
 double MatrixSurface::operator () (double x) const {
@@ -13,13 +13,13 @@ double MatrixSurface::operator () (double x) const {
 }
 
 double MatrixSurface::Derivative (double x) const {
-  return ((*this)(x+kDelta) - (*this)(x))*kInvDelta;
-  // return -2*x;
+  // return ((*this)(x+kDelta) - (*this)(x))*kInvDelta;
+  return -2*x;
 }
 
 double MatrixSurface::SecondDerivative (double x) const {
-  return ((*this)(x+kDelta) - 2*(*this)(x) + (*this)(x-kDelta))*kInvSquareDelta;
-  // return -2;
+  // return ((*this)(x+kDelta) - 2*(*this)(x) + (*this)(x-kDelta))*kInvSquareDelta;
+  return -2;
 }
 
 // correct(???) for all matrixes

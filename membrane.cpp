@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <thread>
+#include <cassert>
 
 #include "simpson.h"
 #include "free_deformation.h"
@@ -82,7 +83,7 @@ void Membrane::FreeStep(int steps){
 void Membrane::IntegrateConstrained(vector<pair<double, double>> *v){
   double t;
   int from = dstep_;
-  int to = 0;
+  int to = 1;
 
 
   FreeDeformation f(h0_, q_, n_);
@@ -90,6 +91,8 @@ void Membrane::IntegrateConstrained(vector<pair<double, double>> *v){
   IdealSliding is(m_surface_, (*this), f.h(m_surface_.AlphaConstrained()));
   for(int i = from; i > to; i--){
     t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, 9, is);
+    cout << (i-1)*dx_ << ' ' << (i+0)*dx_ << endl;
+    assert(!IsNaN(t));
     // if(IsNaN(t))
     //   break;
     // cout << t << " " << i*dx_ << endl;
@@ -131,15 +134,15 @@ void Membrane::IntegrateForAnimation(int steps){
 }
 
 void Membrane::OutputResult(){
-  map<double, double>::iterator it;
-
   // for(it = times_free_.begin(); it!=times_free_.end(); ++it){
   //   cout << it->first << ' ' << it->second << endl;
   // }
-  for(it = times_constrained_.begin(); it!=times_constrained_.end(); ++it){
-    cout << it->first << ' ' << it->second << endl;
+  for(auto it = times_constrained_.cbegin(); it != times_constrained_.cend(); ++it) {
+    if (IsNaN(it->first) || IsNaN(it->second))
+      cerr << "Failure" << endl;
+    else
+      cout << it->first << ' ' << it->second << endl;
   }
-
 }
 
 double Membrane::ValueAsLine(double time, map<double, double>::iterator point1, map<double, double>::iterator point2){
