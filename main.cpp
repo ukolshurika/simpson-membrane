@@ -15,18 +15,18 @@ int main(){
   double n = 3.4;
   double a = 1.0;
   double SigmaB = 88.3*1000000;
-  
+
   // timeval tim;
   int steps;
   cin >> steps;
 
   // gettimeofday(&tim,NULL);
-  // double t1 = tim.tv_sec+(tim.tv_usec/1000000.0);  
-  
+  // double t1 = tim.tv_sec+(tim.tv_usec/1000000.0);
+
   Membrane m(h0, q, n, SigmaB, a, 0.1, 999, steps);
   m.ConstrainedStep(steps);
   // m.IntegrateForAnimation(steps);
-  
+
   // gettimeofday(&tim,NULL);
   // double t2 = tim.tv_sec+(tim.tv_usec/1000000.0);
   // cout << t2-t1 << endl;

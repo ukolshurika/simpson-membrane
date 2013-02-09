@@ -21,7 +21,8 @@ double Circle::center(double a, double alpha){
   return -1*a/tan(alpha);
 }
 
-IdealSliding::IdealSliding(const MatrixSurface& ms, const Membrane& m, double h1): ms_(ms), m_(m), h1_(h1){
+IdealSliding::IdealSliding(const MatrixSurface& ms, const Membrane& m): ms_(ms), m_(m){
+  h1_=Alpha(ms_.RightZero());
 }
 
 double IdealSliding::operator () (double x) const {
@@ -44,22 +45,22 @@ double IdealSliding::dAlpha(double x) const{
 
 double IdealSliding::S(double x) const{
   //WARN: integration order is changed!
-  double y = -Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
+  double y = Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
   if(eql(x, ms_.RightZero()))
     y=0;
-  DCHECK(y>=0);
+  // DCHECK(y>=0);
   return y;
 }
 
 double IdealSliding::dS(double x) const{
   double y = SFunctor((*this))(x);
   // double y = (S(x+DELTA) - S(x))/DELTA;
-  DCHECK(y>=0);
+  // DCHECK(y>=0);
   return y;
 }
 
 double IdealSliding::Rho(double x) const{
-  double y = sqrt((ms_(x) - Circle::center(m_.a_, Alpha(x)))*(ms_(x) - Circle::center(m_.a_, Alpha(x)))+x*x);
+  double y = sqrt((ms_(x) - Circle::center(x, Alpha(x)))*(ms_(x) - Circle::center(x, Alpha(x)))+x*x);
   // assert(y>=0);
   return y;
   // return 0.1;
@@ -85,18 +86,22 @@ double IdealSliding::B2(double x) const{
 
 double IdealSliding::h(double x) const{
   // return 0.1;
-  double y = h1_*exp(Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))));
-  // std::cout << x << ' '<< Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))) << y<< std::endl;
+  double y = h1_*exp(-Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))));
+  // std::cout << x <<' ' <<y<< std::endl;
   // assert(y>=0);
   return y;
+}
+
+double IdealSliding::SigmaE(double x) const{
+  return sqrt(3)/2*m_.q_*Rho(x)/h(x);
 }
 
 HFunctor::HFunctor (const IdealSliding& is): is_(is){};
 SFunctor::SFunctor (const IdealSliding& is): is_(is){};
 
 double HFunctor::operator () (double x) const{
+  // std::cout << x << ": "<< is_.B1(x) << " " << is_.B2(x) << std::endl;
   return is_.B1(x)/is_.B2(x);
-  std::cout << is_.B1(x) << " " << is_.B2(x) << std::endl;
 }
 
 double SFunctor::operator () (double x) const{

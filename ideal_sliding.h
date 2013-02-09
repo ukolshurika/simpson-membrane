@@ -11,7 +11,7 @@
 
 class IdealSliding{
   public:
-  IdealSliding(const MatrixSurface& ms, const Membrane& m, double h1);
+  IdealSliding(const MatrixSurface& ms, const Membrane& m);
 
   double operator () (double x)const;
   double Alpha(double x) const;
@@ -23,6 +23,7 @@ class IdealSliding{
   double B1(double x) const;
   double B2(double x) const;
   double h(double x) const;
+  double SigmaE(double x) const;
 
   MatrixSurface ms_;
   Membrane m_;

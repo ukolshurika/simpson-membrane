@@ -1,26 +1,33 @@
 CC=g++
 
-CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -g -DDEBUG
-LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt -pg
+CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -O2
+LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt
 GLFLAGS=-lglut -lGL -lGLU
 
 EXECUTABLE=membrane
 UNITTESTS=unittests
 ANIMATE=animation
+PLOT_DATA=plot
 
 $(EXECUTABLE): main.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o ideal_sliding_unittest.o matrix_surface_unittest.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o 
+$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o ideal_sliding_unittest.oA matrix_surface_unittest.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o 
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(ANIMATE): drawer2.cpp
 	$(CC) $^ -o $@ $(GLFLAGS)
 
+$(PLOT_DATA): main_second.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o
+	$(CC) $^ -o $@ $(LDFLAGS)
+
 membrane.o: membrane.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 main.o: main.cpp
+	$(CC) $(CFLAGS) $^ -c -o $@
+
+main_second.o: main_second.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 matrix_surface.o: matrix_surface.cpp

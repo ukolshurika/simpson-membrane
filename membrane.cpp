@@ -85,13 +85,10 @@ void Membrane::IntegrateConstrained(vector<pair<double, double>> *v){
   int from = dstep_;
   int to = 1;
 
-
-  FreeDeformation f(h0_, q_, n_);
-
-  IdealSliding is(m_surface_, (*this), f.h(m_surface_.AlphaConstrained()));
+  IdealSliding is(m_surface_, (*this));
   for(int i = from; i > to; i--){
     t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, 9, is);
-    cout << (i-1)*dx_ << ' ' << (i+0)*dx_ << endl;
+    // cout << (i-1)*dx_ << ' ' << (i+0)*dx_ << endl;
     assert(!IsNaN(t));
     // if(IsNaN(t))
     //   break;
@@ -137,11 +134,12 @@ void Membrane::OutputResult(){
   // for(it = times_free_.begin(); it!=times_free_.end(); ++it){
   //   cout << it->first << ' ' << it->second << endl;
   // }
+  // double x;
+  IdealSliding is(m_surface_, (*this));
   for(auto it = times_constrained_.cbegin(); it != times_constrained_.cend(); ++it) {
-    if (IsNaN(it->first) || IsNaN(it->second))
-      cerr << "Failure" << endl;
-    else
-      cout << it->first << ' ' << it->second << endl;
+  // for(x=1; x>0; x-=0.1){
+    // is.h(x);
+    cout<< it -> first << ' ' << it->second << endl;
   }
 }
 

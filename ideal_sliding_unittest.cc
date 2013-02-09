@@ -21,7 +21,7 @@ bool eql(double u, double v){
 
 Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 88.3*1000000, 1.0,  0.1, 999, 1000);
 MatrixSurface ms;
-IdealSliding is(ms, m, 0.2);
+IdealSliding is(ms, m);
 
 }
 
@@ -103,7 +103,7 @@ TEST(IdealSlidingTest, B2){
 
 TEST(IdealSlidingTest, h){
   double x;
-  for(x = 0; x<1; x+=0.1){
+  for(x = 0.1; x<1; x+=0.1){
     ASSERT_TRUE(!IsNaN(is.h(x)));
     ASSERT_TRUE(is.h(x)>0);
   }
