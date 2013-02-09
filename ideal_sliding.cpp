@@ -26,7 +26,7 @@ IdealSliding::IdealSliding(const MatrixSurface& ms, const Membrane& m, double h1
 
 double IdealSliding::operator () (double x) const {
   double y = B1(x)/B2(x)*pow((2*h(x)*m_.sigma_b_)/(sqrt(3)*m_.q_*Rho(x)) - 2, m_.n_);
-  // std::cout << h(x) << std::endl;
+  // DCHECK(B1(x)/B2(x)>=0);
   return y;
 }
 
@@ -44,15 +44,17 @@ double IdealSliding::dAlpha(double x) const{
 
 double IdealSliding::S(double x) const{
   //WARN: integration order is changed!
-  double y = Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
+  double y = -Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
   if(eql(x, ms_.RightZero()))
     y=0;
-  CHECK(y>=0);
+  DCHECK(y>=0);
   return y;
 }
 
 double IdealSliding::dS(double x) const{
-  double y = (S(x-DELTA) - S(x))/DELTA;
+  double y = SFunctor((*this))(x);
+  // double y = (S(x+DELTA) - S(x))/DELTA;
+  DCHECK(y>=0);
   return y;
 }
 

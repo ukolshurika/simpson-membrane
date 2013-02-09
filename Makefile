@@ -1,6 +1,6 @@
 CC=g++
 
-CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -g -DALL_CHECKS
+CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -g -DDEBUG
 LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt -pg
 GLFLAGS=-lglut -lGL -lGLU
 

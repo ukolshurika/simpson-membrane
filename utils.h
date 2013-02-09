@@ -4,8 +4,8 @@
 #include <cstdlib>
 #include <iostream>
 
-#if defined(ALL_CHECKS)
-#define CHECK(e) {							\
+#if defined(DEBUG)
+#define DCHECK(e) {							\
   if (!(e)) {								\
     std::cerr << "Check failed for " << (#e) << " "			\
               << "at " << __FILE__ << ":" << __LINE__ << std::endl;	\
@@ -13,7 +13,7 @@
   }									\
 }
 #else
-#define CHECK(e)
-#endif  // defined(ALL_CHECKS)
+#define DCHECK(e)
+#endif  // defined(DEBUG)
 
 #endif  // UTILS_H_
