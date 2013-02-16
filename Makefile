@@ -1,6 +1,6 @@
 CC=g++
 
-CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -O2
+CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -DDEBUG
 LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt
 GLFLAGS=-lglut -lGL -lGLU
 
@@ -12,7 +12,7 @@ PLOT_DATA=plot
 $(EXECUTABLE): main.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o ideal_sliding_unittest.oA matrix_surface_unittest.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o 
+$(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o ideal_sliding_unittest.o matrix_surface_unittest.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o 
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(ANIMATE): drawer2.cpp
@@ -57,4 +57,4 @@ unittests.o: unittests.cc
 .PHONY: clean
 
 clean:
-	rm -rf  *.o $(EXECUTABLE) $(UNITTESTS) $(ANIMATE)
+	rm -rf  *.o $(EXECUTABLE) $(UNITTESTS) $(ANIMATE) $(PLOT_DATA)

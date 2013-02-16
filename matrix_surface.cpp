@@ -9,17 +9,17 @@ namespace{
 }
 
 double MatrixSurface::operator () (double x) const {
-  return -x*x+1;
+  return -3*x+3/*-pow(x, 1.5)+1*/;
 }
 
 double MatrixSurface::Derivative (double x) const {
   // return ((*this)(x+kDelta) - (*this)(x))*kInvDelta;
-  return -2*x;
+  return -3/*-1.5*sqrt(x)*/;
 }
 
 double MatrixSurface::SecondDerivative (double x) const {
   // return ((*this)(x+kDelta) - 2*(*this)(x) + (*this)(x-kDelta))*kInvSquareDelta;
-  return -2;
+  return 0/*-1.5/sqrt(x)*/;
 }
 
 // correct(???) for all matrixes

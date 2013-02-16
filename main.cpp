@@ -14,7 +14,7 @@ int main(){
   double q = 2650.0/88.3/1000000;
   double n = 3.4;
   double a = 1.0;
-  double SigmaB = 88.3*1000000;
+  double SigmaB = 1.0;//88.3*1000000;
 
   // timeval tim;
   int steps;

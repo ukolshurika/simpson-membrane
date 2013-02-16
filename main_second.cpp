@@ -16,8 +16,12 @@ int main(){
 
   Membrane m(h0, q, n, SigmaB, a, 0.1, 999, 1);
   IdealSliding is(m.m_surface_, m);
-  while(cin >> t >> x){
-    cout<< t << ' ' << is.SigmaE(x) << endl;
+  // while(cin >> t >> x){
+  //   cout<< t << ' ' << is.SigmaE(x) << endl;
+  // }
+  for(x=1; x>0;x-=0.01){
+    t = is.h(x);
+    cout<< x << ' ' << is.h(x) << endl;  
   }
   return 0;
 }

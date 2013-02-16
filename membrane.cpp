@@ -89,7 +89,7 @@ void Membrane::IntegrateConstrained(vector<pair<double, double>> *v){
   for(int i = from; i > to; i--){
     t = Simpson::Integrate((i-1)*dx_, (i+0)*dx_, 9, is);
     // cout << (i-1)*dx_ << ' ' << (i+0)*dx_ << endl;
-    assert(!IsNaN(t));
+    // assert(!IsNaN(t));
     // if(IsNaN(t))
     //   break;
     // cout << t << " " << i*dx_ << endl;
