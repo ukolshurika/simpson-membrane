@@ -21,8 +21,10 @@ double Circle::center(double a, double alpha){
   return -1*a/tan(alpha);
 }
 
-IdealSliding::IdealSliding(const MatrixSurface& ms, const Membrane& m): ms_(ms), m_(m){
-  h1_=Alpha(ms_.RightZero());
+IdealSliding::IdealSliding(const Membrane& m): m_(m){
+  ms_ = m_.m_surface_;
+  h1_ = sin(Alpha(ms_.RightZero()))/Alpha(ms_.RightZero());
+  std::cerr << h1_<<std::endl;
 }
 
 double IdealSliding::operator () (double x) const {
@@ -75,7 +77,7 @@ double IdealSliding::dRho(double x) const{
 
 double IdealSliding::B1(double x) const {
   double y = Rho(x) * dAlpha(x) + Alpha(x)*dRho(x) + dS(x);
-  // std::cout << x << ": "<< Rho(x) * dAlpha(x) << ' ' << Alpha(x)*dRho(x) << ' ' << dS(x) << std::endl;
+  // std::cerr << x <<  ": "<< Rho(x) * dAlpha(x) + Alpha(x)*dRho(x) << ' ' << dS(x) << std::endl;
   // DCHECK(y>=0);
   return y;
 }
@@ -88,8 +90,8 @@ double IdealSliding::B2(double x) const{
 
 double IdealSliding::h(double x) const{
   // return 0.1;
-  // double y = h1_*exp(-Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))));
-  double y = HFunctor(*this)(x);
+  double y = h1_*exp(-Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, HFunctor((*this))));
+  // double y = h1_;
   // std::cout << x <<' ' <<y<< std::endl;
   // DCHECK(y>=0);
   return y;

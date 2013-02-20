@@ -20,8 +20,7 @@ bool eql(double u, double v){
 }
 
 Membrane m(0.02, 2650.0/88.3/1000000, 3.4, 88.3*1000000, 1.0,  0.1, 999, 1000);
-MatrixSurface ms;
-IdealSliding is(ms, m);
+IdealSliding is(m);
 
 }
 
