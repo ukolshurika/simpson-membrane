@@ -20,7 +20,7 @@ class GeneratePlots
     gnuplot_file.write("set xlabel 't'\n")
     gnuplot_file.write("set ylabel 'h'\n")
     gnuplot_file.write("plot 'data_h.out' with lines\n")
-    gnuplot_file.write("pause 3\n")
+    gnuplot_file.write("pause -1\n")
     gnuplot_file.close()
     system('gnuplot plot.out')
   end
@@ -31,7 +31,17 @@ class GeneratePlots
     gnuplot_file.write("set xlabel 't'\n")
     gnuplot_file.write("set ylabel 'sigma_e'\n")
     gnuplot_file.write("plot 'data_s.out' with lines\n")
-    gnuplot_file.write("pause 3\n")
+    gnuplot_file.write("pause -1\n")
+    gnuplot_file.close()
+    system("gnuplot plot.out")
+  end
+
+  def plot_x
+    gnuplot_file = File.open("plot.out", "w")
+    gnuplot_file.write("set xlabel 't'\n")
+    gnuplot_file.write("set ylabel 'x_0'\n")
+    gnuplot_file.write("plot 'data.out' with lines\n")
+    gnuplot_file.write("pause -1\n")
     gnuplot_file.close()
     system("gnuplot plot.out")
   end
@@ -54,7 +64,8 @@ end
 
 gp = GeneratePlots.new('membrane', 'plot')
 gp.generate_test_data
-# gp.plot_h
-# gp.plot_s
-gp.plot_debug
+gp.plot_x
+gp.plot_h
+gp.plot_s
+# gp.plot_debug
 # gp.clean

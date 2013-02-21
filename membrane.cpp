@@ -78,6 +78,10 @@ void Membrane::FreeStep(int steps){
       offset += it->first;
     }
   }
+
+  for(auto it = times_free_.cbegin(); it != times_free_.cend(); ++it) {
+    cout<< it -> first << ' ' <<  it->second << ' ' << sin(it->second)/it->second*h0_ << endl;
+  }
 }
 
 void Membrane::IntegrateConstrained(vector<pair<double, double>> *v){

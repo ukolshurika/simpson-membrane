@@ -27,7 +27,7 @@ double center(double alpha){
 }
 
 double h(double alpha){
-  return sin(alpha)/alpha*h0;
+  return sin(alpha)/alpha;
 }
 
 GLfloat spin=-9.0;

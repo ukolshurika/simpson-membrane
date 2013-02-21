@@ -24,7 +24,7 @@ double MatrixSurface::SecondDerivative (double x) const {
 
 // correct(???) for all matrixes
 double MatrixSurface::AlphaConstrained () const {
-  return M_PI_2 - asinh(Derivative(RightZero()));
+  return M_PI_2 - atan(dNormal(RightZero()));;
 }
 
 

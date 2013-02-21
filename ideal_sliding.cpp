@@ -23,8 +23,7 @@ double Circle::center(double a, double alpha){
 
 IdealSliding::IdealSliding(const Membrane& m): m_(m){
   ms_ = m_.m_surface_;
-  h1_ = sin(Alpha(ms_.RightZero()))/Alpha(ms_.RightZero());
-  std::cerr << h1_<<std::endl;
+  h1_ = sin(Alpha(ms_.RightZero()))/Alpha(ms_.RightZero())*m.h0_;
 }
 
 double IdealSliding::operator () (double x) const {
@@ -41,7 +40,6 @@ double IdealSliding::Alpha(double x) const{
 
 double IdealSliding::dAlpha(double x) const{
   double y = (Alpha(x+DELTA) - Alpha(x))/DELTA;
-  // assert(y>=0);
   return y;
 }
 
