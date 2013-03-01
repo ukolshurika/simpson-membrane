@@ -140,10 +140,12 @@ void Membrane::OutputResult(){
   // double x;
   IdealSliding is((*this));
   for(auto it = times_constrained_.cbegin(); it != times_constrained_.cend(); ++it) {
-  // for(x=1; x>0; x-=0.1){
-    // is.h(x);
-    cout<< it -> first << ' ' << it->second << endl;
+    cout<< it -> first/1000000 << ' ' << it->second << endl;
   }
+  // cout << -1 << " " << -1 << endl;
+  // for(auto it = times_free_.cbegin(); it != times_free_.cend(); ++it) {
+  //     cout<< it -> first << ' ' << it->second << endl;
+  // }
 }
 
 double Membrane::ValueAsLine(double time, map<double, double>::iterator point1, map<double, double>::iterator point2){

@@ -15,8 +15,8 @@ $(EXECUTABLE): main.o membrane.o matrix_surface.o ideal_sliding.o free_deformati
 $(UNITTESTS): unittests.o simpson_unittest.o membrane_unittest.o ideal_sliding_unittest.o matrix_surface_unittest.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o 
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(ANIMATE): drawer2.cpp
-	$(CC) $^ -o $@ $(GLFLAGS)
+$(ANIMATE): drawer_ideal.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o
+	$(CC) $^ -o $@ $(LDFLAGS) $(GLFLAGS)
 
 $(PLOT_DATA): main_second.o membrane.o matrix_surface.o ideal_sliding.o free_deformation.o
 	$(CC) $^ -o $@ $(LDFLAGS)
@@ -26,6 +26,10 @@ membrane.o: membrane.cpp
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@
+
+drawer.o: drawer_ideal.cpp
+	$(CC) $^ -o $@ $(GLFLAGS)
+
 
 main_second.o: main_second.cpp
 	$(CC) $(CFLAGS) $^ -c -o $@

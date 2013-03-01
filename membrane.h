@@ -11,8 +11,8 @@
 class Membrane{
   public:
     Membrane(double h0, double q, double n, double sigma_b, double a,  double epsilon, int simpsonStep, int steps);
-    void EasyIntegrate(int tid, std::vector<std::pair<double, double>>* v);
-    void IntegrateConstrained(std::vector<std::pair<double, double>>* v);
+    void EasyIntegrate(int tid, std::vector<std::pair<double, double> >* v);
+    void IntegrateConstrained(std::vector<std::pair<double, double> >* v);
     double operator () (double alpha) const;
     void IntegrateForAnimation(int steps);
     void OutputResult();

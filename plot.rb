@@ -9,7 +9,7 @@ class GeneratePlots
   end
 
   def generate_test_data
-    system('echo > in 100')
+    system('echo > in 50')
     system("./#{prog_name} < in > data.out")
     system("rm", 'in')
   end
