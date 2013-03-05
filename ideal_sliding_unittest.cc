@@ -53,7 +53,7 @@ TEST(IdealSlidingTest, dAlpha) {
 
 TEST(IdealSlidingTest, Rho) {
   double x;
-  for(x = 0; x<0.99; x+=0.1){
+  for(x = 0.01; x<0.99; x+=0.1){
     ASSERT_TRUE(!IsNaN(is.Rho(x)));
     ASSERT_TRUE(is.Rho(x) >= 0);
   }

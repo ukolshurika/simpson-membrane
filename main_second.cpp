@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "ideal_sliding.h"
-
+#include "simpson.h"
 using namespace std;
 
 
@@ -18,9 +18,9 @@ int main(int argc, char **argv){
   Membrane m(h0, q, n, SigmaB, a, 0.1, 999, 1);
   IdealSliding is(m);
   if(argv[1][0] == 'd'){ // d means debug
-    for(x=1; x>0;x-=0.01){
+    for(x=1; x >= 0;x-=0.01){
       t = is.h(x);
-      cout<< x << ' ' << is.h(x) << endl;
+      cout<< x << ' ' << -Simpson::Integrate(x, is.ms_.RightZero(), 999, HFunctor(is)) << endl;
     }
   }else{
     while(cin >> t >> x){

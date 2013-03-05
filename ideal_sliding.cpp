@@ -15,6 +15,10 @@ bool eql(double u, double v){
   return abs(u - v) < kEpsilon;
 }
 
+bool IsNaN(double value){
+  return value != value;
+}
+
 }
 
 double Circle::center(double a, double alpha){
@@ -23,11 +27,12 @@ double Circle::center(double a, double alpha){
 
 IdealSliding::IdealSliding(const Membrane& m): m_(m){
   ms_ = m_.m_surface_;
-  h1_ = sin(Alpha(ms_.RightZero()))/Alpha(ms_.RightZero())*m.h0_;
+  h1_ = /*0.71;*/sin(Alpha(ms_.RightZero()))/Alpha(ms_.RightZero());
+  // std::cerr << "alpha " <<Alpha(ms_.RightZero()) << ' ' << sin(Alpha(ms_.RightZero()))<< std::endl;
 }
 
 double IdealSliding::operator () (double x) const {
-  double y = B1(x)/B2(x)*pow((2*h(x)*m_.sigma_b_)/(sqrt(3)*m_.q_*Rho(x)) - 2, m_.n_);
+  double y = B1(x)/B2(x)*pow((2*h(x))/(sqrt(3)*m_.q_*Rho(x)) - 1, m_.n_);
   // DCHECK(B1(x)/B2(x)>=0);
   return y;
 }
@@ -62,7 +67,8 @@ double IdealSliding::dS(double x) const{
 
 double IdealSliding::Rho(double x) const{
   double y = sqrt((ms_(x) - Circle::center(x, Alpha(x)))*(ms_(x) - Circle::center(x, Alpha(x)))+x*x);
-  DCHECK(y>=0);
+  // std::cerr << Alpha(x) << ' ' << ms_(x)  << ' ' << x << std::endl;
+  // DCHECK(!IsNaN(y));
   return y;
   // return 0.1;
 }
@@ -82,7 +88,7 @@ double IdealSliding::B1(double x) const {
 
 double IdealSliding::B2(double x) const{
   double y = Rho(x)*Alpha(x) + S(x);
-  DCHECK(y>=0);
+  // DCHECK(y>=0);
   return y;
 }
 

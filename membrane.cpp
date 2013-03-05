@@ -80,7 +80,7 @@ void Membrane::FreeStep(int steps){
   }
 
   for(auto it = times_free_.cbegin(); it != times_free_.cend(); ++it) {
-    cout<< it -> first << ' ' <<  it->second << ' ' << sin(it->second)/it->second*h0_ << endl;
+    // cout<< it -> first << ' ' <<  it->second << ' ' << sin(it->second)/it->second*h0_ << endl;
   }
 }
 
@@ -140,12 +140,12 @@ void Membrane::OutputResult(){
   // double x;
   IdealSliding is((*this));
   for(auto it = times_constrained_.cbegin(); it != times_constrained_.cend(); ++it) {
-    cout<< it -> first/1000000 << ' ' << it->second << endl;
+    cout<< it -> first << ' ' << it->second << endl;
   }
-  // cout << -1 << " " << -1 << endl;
-  // for(auto it = times_free_.cbegin(); it != times_free_.cend(); ++it) {
-  //     cout<< it -> first << ' ' << it->second << endl;
-  // }
+  cout << endl;
+  for(auto it = times_free_.cbegin(); it != times_free_.cend(); ++it) {
+      cout<< it -> first << ' ' << it->second << ' ' << endl;
+  }
 }
 
 double Membrane::ValueAsLine(double time, map<double, double>::iterator point1, map<double, double>::iterator point2){

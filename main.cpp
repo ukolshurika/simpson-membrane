@@ -10,7 +10,7 @@ using namespace std;
 
 
 int main(){
-  double h0 = 0.02;
+  double h0 = 0.02 ;
   double q = 2650.0/88.3/1000000;
   double n = 3.4;
   double a = 1.0;
@@ -26,6 +26,7 @@ int main(){
   Membrane m(h0, q, n, SigmaB, a, 0.1, 999, steps);
 
   // m.IntegrateForAnimation(steps);
+  // m.FreeStep(steps);
   m.ConstrainedStep(steps);
   // gettimeofday(&tim,NULL);
   // double t2 = tim.tv_sec+(tim.tv_usec/1000000.0);

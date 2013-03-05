@@ -9,6 +9,6 @@ double FreeDeformation::operator () (double alpha) const {
 }
 
 double FreeDeformation::h(double alpha){
-  return sin(alpha)/alpha*h0_;
+  return sin(alpha)/alpha;
 };
 
