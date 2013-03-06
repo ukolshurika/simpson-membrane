@@ -20,7 +20,7 @@ int main(int argc, char **argv){
   if(argv[1][0] == 'd'){ // d means debug
     for(x=1; x >= 0;x-=0.01){
       t = is.h(x);
-      cout<< x << ' ' << -Simpson::Integrate(x, is.ms_.RightZero(), 999, HFunctor(is)) << endl;
+      cout<< x << ' ' << is.Rho(x) << endl;
     }
   }else{
     while(cin >> t >> x){

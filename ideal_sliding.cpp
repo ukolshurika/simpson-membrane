@@ -51,8 +51,8 @@ double IdealSliding::dAlpha(double x) const{
 double IdealSliding::S(double x) const{
   //WARN: integration order is changed!
   double y = Simpson::Integrate(x, ms_.RightZero(), kSimpsonStep, SFunctor((*this)));
-  if(eql(x, ms_.RightZero()))
-    y=0;
+  // if(eql(x, ms_.RightZero()))
+  //   y=0;
   DCHECK(y>=0);
   assert(y>=0);
   return y;
