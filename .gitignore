@@ -1,26 +1,3 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-
-#data files
-*.plot
-
-#bin_file
-membrane
-unittests
-animation
-plot
-*.out
-
-#video
-*.ogv
+data/
+img/
+bin/
