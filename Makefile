@@ -22,8 +22,8 @@ $(BDIR)/$(EXECUTABLE): $(OBJECTS)
 $(BDIR)/$(PLOT_DATA): $(filter-out $(BDIR)/main.o,$(OBJECTS)) $(addprefix $(BDIR)/,plot.o)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(BDIR)/$(ANIMATE): $(DRAWER2) $(BDIR)/matrix.o
-	$(CC) $^ -o $@ $(LDFLAGS) $(GLFLAGS)
+$(BDIR)/$(ANIMATE): $(SDIR)/drawer2.cpp
+	$(CC) $^ -o $@ $(GLFLAGS)
 
 $(addprefix $(BDIR)/,%.o): $(addprefix $(SDIR)/,%.cpp) $(HEADERS)
 	$(CC) $(CFLAGS) $< -c -o $@

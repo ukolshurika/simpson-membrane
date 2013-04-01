@@ -21,7 +21,7 @@ int main(int argc, char **argv){
   Bound b(m);
   if(argv[1][0] == 'd'){ // d means debug5
     for(x=1; x >= 0;x-=0.01){
-      cout<< x << ' ' << b.SigmaE(x) << endl;
+      cout<< x << ' ' << (b.Rho(x)*b.dAlpha(x) + b.Alpha(x)*b.dRho(x) + b.dS(x))<< endl;
     }
   }else{
     while(cin >> t >> x){

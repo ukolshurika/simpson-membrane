@@ -22,6 +22,10 @@ struct Free {
     return (1/alpha-1/tan(alpha))*pow(((2*h0_*sin(alpha)*sin(alpha))/(kSqrt3*q_*alpha)-1), n_);
   }
 
+  double h(double alpha){
+    return sin(alpha)/alpha*h0_;
+  }
+
   private:
   double q_;
   double h0_;
