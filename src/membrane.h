@@ -15,6 +15,7 @@ class Membrane{
 
   std::vector<std::pair<double, double>> t_free_;
   std::vector<std::pair<double, double>> t_constrained_;
+  std::vector<std::pair<double, double>> t_constrained_y_;
   double q_;
   double n_;
 

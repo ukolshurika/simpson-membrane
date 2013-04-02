@@ -7,8 +7,9 @@
 class Bound{
 public:
   const static int kSimpsonStep = 99;
+  const static double kB = 4.5;
 
-  Bound(const Membrane& m);
+  Bound(const Membrane& m, char ordinate);
 
   double operator()(double x) const;
   double B1(double x) const;
@@ -26,6 +27,7 @@ public:
   double H(double x) const;
 
   Membrane m_;
+  char ordinate_;
 };
 
 #endif //BOUND_H_

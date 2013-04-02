@@ -3,11 +3,11 @@ CC=g++
 SDIR=src
 BDIR=bin
 
-SOURCES=$(addprefix $(SDIR)/,main.cpp bound.cpp membrane.cpp matrix.cpp)
+SOURCES=$(addprefix $(SDIR)/,main.cpp bound.cpp membrane.cpp matrix.cpp utils.cpp)
 HEADERS=$(wildcard $(SDIR)/*.h)
 OBJECTS=$(addprefix $(BDIR)/,$(notdir $(SOURCES:.cpp=.o)))
 
-CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -DDEBUG
+CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -DDEBUG -g
 LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt
 GLFLAGS=-lglut -lGL -lGLU
 

@@ -18,21 +18,27 @@ int main(){
   double n = 3.4;
 
   Membrane m(q, h0, n);
-  Bound b(m);
   ofstream free_data("data/free_new.dat");
-  ofstream constrained_data("data/constrained_new.dat");
+  ofstream constrained_data_x("data/constrained_x.dat");
+  ofstream constrained_data_y("data/constrained_y.dat");
 
   m.free(999);
   m.constrained(999);
 
 
   for(auto i = m.t_free_.cbegin(); i != m.t_free_.cend(); ++i){
-    free_data<< i -> first << ' '<< i->second  << ' ' << h(i->second)<< endl;
+    free_data<< i -> first << ' '<< i->second << endl;
   }
 
   for(auto i = m.t_constrained_.cbegin(); i != m.t_constrained_.cend(); ++i){
-    constrained_data<< i -> first << ' ' << i->second << ' ' << b.H(i->second) << endl;
+    constrained_data_x<< i -> first << ' ' << i->second << endl;
   }
+
+
+  for(auto i = m.t_constrained_y_.cbegin(); i != m.t_constrained_y_.cend(); ++i){
+    constrained_data_y<< i -> first << ' ' << i->second << endl;
+  }
+
   cerr << "C0MPLETE" << endl;
   return 0;
 }

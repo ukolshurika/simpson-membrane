@@ -16,11 +16,11 @@
 #define DCHECK(e)
 #endif  // defined(DEBUG)
 
-namespace util{
+namespace utils{
   const double kEpsilon = 0.001;
 
   bool eql(double a, double b);
-  bool IsNan(double a);
+  bool IsNaN(double a);
 
 };
 

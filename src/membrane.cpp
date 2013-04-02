@@ -6,6 +6,7 @@
 #include "bound.h"
 #include "matrix.h"
 #include "simpson.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -34,9 +35,9 @@ struct Free {
 
 Membrane::Membrane(double q, double h0, double n):q_(q), h0_(h0), n_(n){
   alpha1_ = 0.41; // from Maxima flexible step(boolsh it just get it from terraud)
-  alpha2_ = Bound((*this)).Alpha(Matrix::RZero());
-  cerr << alpha2_ << endl;
+  alpha2_ = M_PI/2;
   h1_ = sin(alpha2_)/alpha2_*h0_;
+  cerr << h1_ << endl;
 }
 
 void Membrane::free(int steps){
@@ -61,23 +62,50 @@ void Membrane::free(int steps){
 }
 
 void Membrane::constrained(int steps){
-  double dx = Matrix::RZero()/steps;
+  
+  double dx = Bound::kB/steps;
   double t;
 
-  Bound b(*this);
+  Bound b1(*this, 'y');
+  Bound b2(*this, 'x');
+
   vector<pair<double, double>> v;
-  for(double x = 1; x >= 0; x-=dx){
-    t = Simpson::Integrate(x, x-dx, kSimpsonStep, b);
+  for(double x = 0; x <= Bound::kB; x+=dx){
+    t = Simpson::Integrate(x, x+dx, kSimpsonStep, b1);
     v.push_back(make_pair(t, x));
   }
 
-  t_constrained_.clear();
+  /*by y ordinate*/
+  t_constrained_y_.clear();
   double offset = 0;
   double multiplire = sqrt(3)/2;
   double t_free_end = t_free_.back().first;
 
   for (auto it = v.begin(); it != v.end(); ++it) {
+    t_constrained_y_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
+    offset += it->first;
+    // cerr << it->first << ' ' << it->second << endl;
+  }
+
+  h1_ = b1.H(Bound::kB - 1);
+
+  /*by x ordinate*/
+  v.clear();
+  for(double x = 0; x <= 1; x+=dx){
+    t = Simpson::Integrate(x, x+dx, kSimpsonStep, b2);
+    if(!utils::IsNaN(t))
+    v.push_back(make_pair(t, x));
+  }
+
+
+  t_constrained_.clear();
+  // offset = 0;
+  
+  for (auto it = v.begin(); it != v.end(); ++it) {
     t_constrained_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
     offset += it->first;
   }
+
+
+
 }
