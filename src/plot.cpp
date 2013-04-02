@@ -37,8 +37,8 @@ int main(int argc, char **argv){
         cout << t/100000000.0 << ' ' << b1.SigmaE(x)*h0*1000+0.3 << endl;
     }
 
-    m.h1_ = b1.H(Bound::kB - 1);
-    cerr << "!!!!!!!!!!!!!!!!!" << m.h1_ << "    " << b1.H(Bound::kB - 1) << endl;
+    b2.m_.h1_ = b1.H(Bound::kB - 1);
+    // cerr << "!!!!!!!!!!!!!!!!!" << m.h1_ << "    " << b1.H(Bound::kB - 1) << endl;
     while(constrained_data_x >> t >> x){
       if(argv[1][0] == 'h')
         cout<< t/100000000.0 << ' ' << b2.H(x)/h0 << endl;
