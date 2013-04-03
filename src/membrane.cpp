@@ -80,16 +80,20 @@ void Membrane::constrained(int steps){
   double offset = 0;
   double multiplire = sqrt(3)/2;
   double t_free_end = t_free_.back().first;
+  double x_touch = Bound::kB - 1;
+  double offset2 = 0;
 
   for (auto it = v.begin(); it != v.end(); ++it) {
     t_constrained_y_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
     offset += it->first;
+    if(utils::eql(it->second, x_touch))
+      offset2 = multiplire*(it->first + offset)+t_free_end;
     // cerr << it->first << ' ' << it->second << endl;
   }
 
   h1_ = b1.H(Bound::kB - 1);
-
   /*by x ordinate*/
+  offset2 = Simpson::Integrate(0, x_touch, 999, b1);
   v.clear();
   for(double x = 0; x <= 1; x+=dx){
     t = Simpson::Integrate(x, x+dx, kSimpsonStep, b2);
@@ -102,7 +106,7 @@ void Membrane::constrained(int steps){
   // offset = 0;
   
   for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
+    t_constrained_.push_back(make_pair(multiplire*(it->first + offset2)+t_free_end, it->second));
     offset += it->first;
   }
 
