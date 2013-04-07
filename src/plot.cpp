@@ -16,7 +16,7 @@ int main(int argc, char **argv){
   double q = 2.65/88.3/1000;
   double n = 3.4;
 
-  double t, x, alpha;
+  double t, x;
 
   Membrane m(q, h0, n);
   Bound b1(m, 'y');
@@ -31,27 +31,28 @@ int main(int argc, char **argv){
       cout<< x << ' ' << b1.H(x) << endl;
     }
   }else{
-    while(free_data >> t >> alpha){
-      if(argv[1][0] == 'h')
-        cout<< t/100000000.0 << ' ' << b1.H(x)/h0 << endl;
+
+    while(free_data >> t >> x){
+       if(argv[1][0] == 'h')
+        cout<< t/100000000.0 << ' ' << sin(x)/(x) << endl;
       else if(argv[1][0] == 's')
-        cout << t/100000000.0 << ' ' << b1.SigmaE(x)*h0*1000+0.3 << endl;
+        cout<< t/100000000.0 << ' ' << q*x/h0/sin(x)/sin(x)*1000 << endl;
     }
 
     while(constrained_data_y >> t >> x){
       if(argv[1][0] == 'h')
         cout<< t/100000000.0 << ' ' << b1.H(x)/h0 << endl;
       else if(argv[1][0] == 's')
-        cout << t/100000000.0 << ' ' << b1.SigmaE(x)*h0*1000+0.3 << endl;
+        cout << t/100000000.0 << ' ' << b1.SigmaE(x)*h0*1000 +0.33<< endl;
     }
 
     b2.m_.h1_ = b1.H(Bound::kB - 1);
     // cerr << "!!!!!!!!!!!!!!!!!" << m.h1_ << "    " << b1.H(Bound::kB - 1) << endl;
     while(constrained_data_x >> t >> x){
       if(argv[1][0] == 'h')
-        cout<< t/100000000.0 << ' ' << b2.H(x)/h0 << endl;
+        cout<< t/100000000.0 << ' ' << b2.H(x)/h0 - 0.1 << endl;
       else if(argv[1][0] == 's')
-        cout << t/100000000.0 << ' ' << b2.SigmaE(x)*h0*1000+0.3 << endl;
+        cout << t/100000000.0 << ' ' << b2.SigmaE(x)*h0*1000+0.33 << endl;
     }
 
   }

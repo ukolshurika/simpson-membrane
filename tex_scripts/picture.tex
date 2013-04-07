@@ -14,64 +14,100 @@ ps2eps "\image.ps"}}
 \begin{document}
 
 \begin{tikzpicture}
-	\begin{axis}[
-		scale only axis,
-	    xlabel=$\overline{t} \cdot 10^{-8}$,
-	    ylabel=$\overline{H}(t)$,
-	    axis x line=box,
-		axis y line*=left,
-    	ytick={0,0.2,...,0.8, 0.97},
-    	xtick={0,5.36,15, 30,...,80},
-    	ymin=0,
-    	ymax=1,
-    	xmin=-0.1,
-    	xmax=80]
-    	\addplot[mark=none, smooth] file {data/h_last.out};   % Here is the data file
-    	\addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 1)};   % Here is the data file
-	\end{axis}
-	\begin{axis}[		
-		scale only axis,
-	    ylabel=$\overline{\sigma}_u(t) \cdot 10^3$,
-	    axis y line*=right,
-	    y label style={at={(1.26,0.5)}},
-		axis x line=ceb,
-    	ytick={0,10,...,20},
-    	xtick={0,15,...,80},
-    	ymin=0,
-    	ymax=20,
-    	xmin=-0.1,
-    	xmax=80]
-		\addplot[mark=none,smooth, dashdotted] file {data/s.out};   % Here is the data file	
-		\addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 20)}; 
-		%\addplot[mark=none] coordinates {(60, 16) (60, 19.5) (75, 19.5) (75, 16) (60, 16)};
-		\addplot[mark=none, dashdotted] coordinates {(57, 17) (70, 17)};
-		\addplot[mark=none] coordinates {(57, 18.5) (70, 18.5)};
-		\node at (72, 170) {2};
-		\node at (72, 185) {1};
-	\end{axis}
+  \begin{axis}[
+    scale only axis,
+      xlabel=$\overline{t} \cdot 10^{-8}$,
+      ylabel=$\overline{H}(t)$,
+      axis x line=box,
+    axis y line*=left,
+      ytick={0,0.2,...,0.8, 0.97},
+      xtick={0,5.36,15, 30,...,80},
+      ymin=0,
+      ymax=1,
+      xmin=-0.1,
+      xmax=80]
+      \addplot[mark=none, smooth] file {data/h_is_1.5.out};   % Here is the data file
+      \addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 1)};   % Here is the data file
+  \end{axis}
+  \begin{axis}[   
+    scale only axis,
+      ylabel=$\overline{\sigma}_u(t) \cdot 10^3$,
+      axis y line*=right,
+      y label style={at={(1.26,0.5)}},
+    axis x line=center,
+      ytick={0,10,...,20},
+      xtick={0,15,...,80},
+      ymin=0,
+      ymax=20,
+      xmin=-0.1,
+      xmax=80]
+    \addplot[mark=none,smooth, dashdotted] file {data/s_is_1.5.out};   % Here is the data file 
+    \addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 20)}; 
+    %\addplot[mark=none] coordinates {(60, 16) (60, 19.5) (75, 19.5) (75, 16) (60, 16)};
+    \addplot[mark=none, dashdotted] coordinates {(57, 17) (70, 17)};
+    \addplot[mark=none] coordinates {(57, 18.5) (70, 18.5)};
+    \node at (72, 170) {2};
+    \node at (72, 185) {1};
+  \end{axis}
 \end{tikzpicture}
 
 
 \begin{tikzpicture}
-	\begin{axis}[
-		scale only axis,
-	    xlabel=$x$,
-	    ylabel=$y$,
-	    samples={500},
-	    axis x line=center,
-		axis y line=center,
-    	ytick={0},
-    	xtick={0},
-    	xmin=-1.2,
-    	xmax=1.2, 
-    	ymax=7.5,
-    	ymin=-0.5 ]
-    	\draw[pattern=north west lines, pattern color=white, line width=0.2pt] (0, 0) rectangle (280,1050);
-    	\addplot[mark=none, color=black] gnuplot[id=mtrx,domain=-1:1]{6.5*(1-abs(x)**(1.5))};
-		\node at (220, 26) {a};
-		\node at (116, 720) {b};
-		\draw[pattern=north west lines, pattern color=gray, line width=0.2pt] (20,37) rectangle (220,49);
-	\end{axis}
-	
+  \begin{axis}[
+    scale only axis,
+      xlabel=$x$,
+      ylabel=$y$,
+      samples={500},
+      axis x line=center,
+    axis y line=center,
+      ytick={0},
+      xtick={0},
+      xmin=-1.2,
+      xmax=1.2, 
+      ymax=7.5,
+      ymin=-0.5 ]
+      \addplot[mark=none, color=black] gnuplot[id=mtrx,domain=-1:1]{6.5*(1-abs(x)**(1.5))};
+    \node at (220, 26) {a};
+    \node at (116, 720) {b};
+    \draw[pattern=north west lines, pattern color=gray, line width=0.2pt] (20,37) rectangle (220,49);
+  \end{axis}
+  
 \end{tikzpicture}
+
+\begin{tikzpicture}
+  \begin{axis}[
+    scale only axis,
+      xlabel=$\overline{t} \cdot 10^{-8}$,
+      ylabel=$\overline{H}(t)$,
+      axis x line=box,
+    axis y line*=left,
+      ytick={0,0.2,...,0.8, 0.97},
+      % xtick={0,7.14,15, 25,...,80},
+      ymin=0,
+      ymax=1,
+      xmin=-0.1,
+      xmax=80]
+      \addplot[mark=none, smooth] file {data/h_cup.dat};   % Here is the data file
+  \end{axis}
+  \begin{axis}[   
+    scale only axis,
+      ylabel=$\overline{\sigma}_u(t) \cdot 10^3$,
+      axis y line*=right,
+      y label style={at={(1.26,0.5)}},
+      ytick={0,10,...,20},
+      xtick={},
+      ymin=0,
+      ymax=20,
+      xmin=-0.1,
+      xmax=80]
+    \addplot[mark=none,smooth, dashdotted] file {data/s_cup.dat};   % Here is the data file 
+    \addplot[mark=none, dotted] coordinates {(7.14, 0) (7.14, 20)}; 
+    \addplot[mark=none, dashdotted] coordinates {(57, 17) (70, 17)};
+    \addplot[mark=none] coordinates {(57, 18.5) (70, 18.5)};
+    \node at (72, 170) {2};
+    \node at (72, 185) {1};
+  \end{axis}
+\end{tikzpicture}
+
+
 \end{document}

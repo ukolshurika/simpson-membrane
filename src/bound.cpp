@@ -20,7 +20,10 @@ struct HFunctor{
   HFunctor(const Bound& bound): b(bound){};
 
   double operator()(double x) const{
-    return b.B1(x)/b.B2(x);
+    if(b.ordinate_=='y')
+      return b.B1(x)/b.B2(x);
+    if(b.ordinate_=='x')
+    return (2-M_PI_2)/(Bound::kB+(M_PI_2-1))+(2-M_PI_2)*x;
   }
 
   Bound b;
@@ -31,7 +34,9 @@ Bound::Bound(const Membrane& m, char ordinate):m_(m), ordinate_(ordinate){};
 double Bound::operator()(double x) const{
   // std::cerr << "CONSTRAINED" << std::endl;
   // std::cerr << "!!!!"<< B1(x) << ' ' << B2(x) << std::endl;
-  return B1(x)/B2(x)*pow(k2Sqrt3*H(x)/(m_.q_*Rho(x)), m_.n_);
+  double multiplier;
+  multiplier = (x > Bound::kB - 1) ? ((2-M_PI_2)/(Bound::kB+(M_PI_2-1))+(2-M_PI_2)*x) : (B1(x)/B2(x));
+  return multiplier*pow(k2Sqrt3*H(x)/(m_.q_*Rho(x)), m_.n_);
 }
 
 double Bound::Rho(double x) const{
@@ -51,7 +56,7 @@ double Bound::dS(double x) const{
 }
 
 double Bound::Alpha(double x) const{
-  return M_PI_2;
+  return ((ordinate_ == 'y') ? M_PI_2 : M_PI_2/2); 
 }
 
 double Bound::dAlpha(double x) const{
@@ -80,5 +85,6 @@ double Bound::SigmaE(double x) const{
 
 double Bound::H(double x) const{
   // std::cerr << m_.h1_ << std::endl;
-  return m_.h1_*exp(Simpson::Integrate(x, Matrix::RZero(), kSimpsonStep, HFunctor(*this)));
+  // return m_.h1_*exp(Simpson::Integrate(x, Matrix::RZero(), kSimpsonStep, HFunctor(*this)));
+  return m_.h1_*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
 }
