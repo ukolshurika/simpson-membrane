@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 
+#include "matrix.h"
 using namespace std;
 
 #define SCENE_BOUNDING_SPHERE_RADIUS (3.1)
@@ -104,7 +105,19 @@ void display(void) {
 
   set_camera();
   renderAxes();
-  
+
+  Matrix m;
+  double x= -1;
+
+  for(x = -1.0; x < 1; x+=0.01){
+    glBegin(GL_POLYGON);
+      glVertex3d(x, m(x), 0);
+      glVertex3d(x, m(x), a);
+      glVertex3d(x+0.01, m(x+0.01), a);
+      glVertex3d(x+0.01, m(x+0.01), 0);
+    glEnd(); 
+  }
+
   GLUquadricObj *quadObj1;
 
   quadObj1 = gluNewQuadric();
