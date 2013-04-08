@@ -1,6 +1,7 @@
 data/
 img/
 bin/
+tex_script/data
 *.aux*
 *.dvi
 *.log
