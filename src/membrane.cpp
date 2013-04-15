@@ -37,7 +37,7 @@ Membrane::Membrane(double q, double h0, double n):q_(q), h0_(h0), n_(n){
   alpha1_ = 0.41; // from Maxima flexible step(boolsh it just get it from terraud)
   alpha2_ = M_PI/2;
   h1_ = sin(alpha2_)/alpha2_*h0_;
-  cerr << h1_ << endl;
+  cerr << h1_ << ' ' << h1_/h0_ << endl;
 }
 
 void Membrane::free(int steps){
@@ -86,12 +86,10 @@ void Membrane::constrained(int steps){
   for (auto it = v.begin(); it != v.end(); ++it) {
     t_constrained_y_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
     offset += it->first;
-    if(utils::eql(it->second, x_touch))
-      offset2 = multiplire*(it->first + offset)+t_free_end;
-    // cerr << it->first << ' ' << it->second << endl;
   }
 
   h1_ = b1.H(Bound::kB - 1);
+  cerr << h1_ << endl;
   /*by x ordinate*/
   offset2 = Simpson::Integrate(0, x_touch, 999, b1);
   v.clear();
@@ -103,11 +101,11 @@ void Membrane::constrained(int steps){
 
 
   t_constrained_.clear();
-  // offset = 0;
+  // offset2 = 0;
   
   for (auto it = v.begin(); it != v.end(); ++it) {
     t_constrained_.push_back(make_pair(multiplire*(it->first + offset2)+t_free_end, it->second));
-    offset += it->first;
+    offset2 += it->first;
   }
 
  // for (auto it = t_constrained_.begin(); it != t_constrained_.end(); ++it) {

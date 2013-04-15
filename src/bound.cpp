@@ -7,7 +7,6 @@
 #include "utils.h"
 
 const double k2Sqrt3 = 2/sqrt(3);
-const double kB      = 4.5;
 
 struct SFunctor{
   SFunctor(){};
@@ -23,7 +22,7 @@ struct HFunctor{
     if(b.ordinate_=='y')
       return b.B1(x)/b.B2(x);
     if(b.ordinate_=='x')
-    return (2-M_PI_2)/(Bound::kB+(M_PI_2-1))+(2-M_PI_2)*x;
+      return (2-M_PI_2)/(Bound::kB+(M_PI_2-1))+(2-M_PI_2)*x;
   }
 
   Bound b;
@@ -35,7 +34,7 @@ double Bound::operator()(double x) const{
   // std::cerr << "CONSTRAINED" << std::endl;
   // std::cerr << "!!!!"<< B1(x) << ' ' << B2(x) << std::endl;
   double multiplier;
-  multiplier = (x > Bound::kB - 1) ? ((2-M_PI_2)/(Bound::kB+(M_PI_2-1))+(2-M_PI_2)*x) : (B1(x)/B2(x));
+  multiplier = (ordinate_ == 'y') ? 1/(x+M_PI_2/2) : ((2-M_PI_2)/(M_PI_2+(2-M_PI_2)*x));
   return multiplier*pow(k2Sqrt3*H(x)/(m_.q_*Rho(x)), m_.n_);
 }
 
@@ -80,11 +79,10 @@ double Bound::B2(double x) const{
 double Bound::SigmaE(double x) const{
   // double h = H(x);
   // std::cerr << m_.q_ <<  ' ' << Rho(x) << ' ' << h << std::endl;
-  return sqrt(3)/2*m_.q_*Rho(x)/H(x)/0.02;
+  return sqrt(3)/2*m_.q_*Rho(x)/H(x);
 }
 
 double Bound::H(double x) const{
-  // std::cerr << m_.h1_ << std::endl;
-  // return m_.h1_*exp(Simpson::Integrate(x, Matrix::RZero(), kSimpsonStep, HFunctor(*this)));
-  return m_.h1_*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
+
+  return (ordinate_ == 'y') ? m_.h1_/(2/M_PI*x+1) : m_.h1_/(1+(4/M_PI - 1)*x);//(1+(2/M_PI - 1)*x); //*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
 }
