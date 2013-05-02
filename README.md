@@ -1,3 +1,3 @@
 simpson-membrane
 ================
-USE -DDRAWER to uotput for animation
+USE -DDRAWER to output for animation
