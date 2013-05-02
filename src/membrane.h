@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <utility>
+#include <string>
 
 #include "matrix.h"
 
@@ -12,6 +13,12 @@ class Membrane{
 
   void free(int steps);
   void constrained(int steps);
+  void averageAllDt();
+  
+  std::string free_data_to_draw(double alpha);
+  std::string constrained_x_data_to_draw(double x);
+  std::string constrained_y_data_to_draw(double x);
+
 
   std::vector<std::pair<double, double>> t_free_;
   std::vector<std::pair<double, double>> t_constrained_;

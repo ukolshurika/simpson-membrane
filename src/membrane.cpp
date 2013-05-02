@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <sstream> 
 
 #include "bound.h"
 #include "matrix.h"
@@ -113,4 +114,113 @@ void Membrane::constrained(int steps){
  //    offset += it->first;
  //  }
 
+}
+
+/*double Membrane::ValueAsLine(double time, vector<pair<double, double>>::iterator point1, vector<pair<double, double>>::iterator point2){
+  double k, b;
+  k = (point2->second - point1->second)/(point2->first - point1->first);
+  b = -k*point1->first+point1->second;
+  return k*time + b;
+}
+
+double Membrane::MeanValueDt(){
+  assert(t_free_.size() > 2);
+
+  double delta = 0.0;
+  vector<pair<double, double>>::iterator next, cur;
+  next = t_free_.begin();
+  cur = next++;
+
+  while(next != t_free_.end()){
+    delta += (next->first - cur->first);
+    ++cur;
+    ++next;
+  }
+
+  next = t_constrained_.begin();
+  cur = next++;
+  while(next != t_constrained_.end()){
+    delta += (next->first - cur->first);
+    ++cur;
+    ++next;
+  }
+
+  next = t_constrained_y_.begin();
+  cur = next++;
+  while(next != t_constrained_y_.end()){
+    delta += (next->first - cur->first);
+    ++cur;
+    ++next;
+  }
+
+  return delta/(t_free_.size() + t_constrained_y_.size() + t_constrained_.size() - 3);
+}
+
+void Membrane::averageDt(vector<pair<double, double>>* times, double dt_average){
+  double delta, next_time;
+  vector<pair<double, double>> new_times;
+  vector<pair<double, double>><double, double>::iterator next, cur;
+  next = (*times).begin();
+  cur = next++;
+  
+  while(next != (*times).end()){
+    delta = next->first - cur->first;
+
+    if(new_times.size() == 0)
+      new_times[cur->first] = new_times[cur->second];
+
+    next_time = new_times.rbegin()->first + dt_average;
+
+    if (delta >= dt_average){
+      for(double i = new_times.rbegin()->first; i <= next->first; i += dt_average)
+        new_times[i] = ValueAsLine(i, cur, next);
+
+    }else if(next_time <= next->first){
+      new_times[next_time] = ValueAsLine(next_time, cur, next);
+    }
+
+    ++cur;
+    ++next;
+  }
+
+
+  (*times).swap(new_times);
+}
+
+void Membrane::averageAllDt(){
+  double dt_average;
+  dt_average = MeanValueDt();
+
+  averageDt(t_free_,         dt_average);
+  averageDt(t_constrained_,  dt_average);
+  averageDt(t_constrained_y_, dt_average);
+}*/
+
+string Membrane::free_data_to_draw(double alpha){
+  ostringstream data;
+  data << "";
+  #ifdef DRAWER
+    data << " " << sin(alpha)/alpha*h0_ << " " << (1/sin(alpha)) << " " << (-1/tan(alpha));
+  #endif
+  return data.str();
+}
+
+string Membrane::constrained_y_data_to_draw(double x){
+  ostringstream data;
+  Bound b1(*this, 'y');
+  data << "";
+  #ifdef DRAWER
+    data << " " << b1.H(x) << " " << b1.Rho(x) /*wide*/ << " " << x;
+  #endif
+  return data.str();
+}
+
+string Membrane::constrained_x_data_to_draw(double x){
+  ostringstream data;
+  Bound b2(*this, 'x');
+  data << "";
+  #ifdef DRAWER
+    data << " " << b2.H(x) << " " << b2.Rho(x) << " " << 1-x;
+  #endif
+  return data.str();
 }

@@ -7,7 +7,7 @@
 class Bound{
 public:
   const static int kSimpsonStep = 99;
-  const static double kB = 5;
+  const static double kB = 4.5;
 
   Bound(const Membrane& m, char ordinate);
 

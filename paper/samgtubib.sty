@@ -1,0 +1,672 @@
+%      Стилевой ф йл AMSBIB.STY для оформления списк  литер туры
+%             в LaTeX2е посредством AmS-TeX'овских ком нд
+%
+%                    для LaTeX2e под MikTeX
+%
+%             Последнее испр вление 16  вгуст  2010
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+
+\newif\if@hyper
+\@hypertrue
+\newif\if@logos
+\@logosfalse
+\DeclareOption{hyper}{\@hypertrue\@logostrue}
+\DeclareOption{logos}{\@logostrue}
+\DeclareOption{dataonly}{\@logostrue}
+\ProcessOptions
+
+%\RequirePackage{graphicx}
+
+\newread\@@Read
+\newwrite\@@Write
+
+
+\let\z@Z=n
+
+
+\def\bef@rall{%
+\immediate\openin\@@Read=pdfs.txt \relax
+\ifeof\@@Read \else\global\@hypertrue \fi
+\immediate\closein\@@Read
+\let\bef@rall\relax}
+
+
+\bef@rall
+
+
+
+
+\def\endthebibliography{\nobreak\@@par\def\@noitemerr{}\endlist}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   М кросы для оформления списк  литер туры:
+
+\newcounter{aux@counter}
+
+\def\thebibliography#1{%
+\refstepcounter{aux@counter}%
+%\addcontentsline{toc}{section}{\refname}%
+%\section*{\refname}
+%\def\@biblabel##1{{\select@language{russian}[##1]}}
+\def\@biblabel##1{{\select@language{russian}##1.}}
+\footnotesize
+\list
+ {\@biblabel{\arabic{enumi}}}{\settowidth\labelwidth{\@biblabel{#1}}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep
+ \usecounter{enumi}}
+ \baselineskip3.8mm
+ \parskip-0.5pt
+ \def\newblock{\hskip .11em plus .33em minus .07em}
+ \sloppy\clubpenalty4000\widowpenalty4000
+ \sfcode`\.=1000\relax
+ \def\makelabel##1{\hfil ##1}
+}
+
+
+\def\eat@#1{}
+
+\newif\ifbook@
+\newif\ifprocpaper@
+\RequirePackage{color}
+
+\def\nofrills{%
+  \expandafter\ifx\envir@end\end@@ref
+    \let\do\relax
+    \xdef\nofrills@list{\nofrills@list\do\curbox}%
+  \else\errmessage{\Invalid@@ \string\nofrills}%
+  \fi}%
+
+\newif\if@Ref@
+\@Ref@false
+\newif\ifmoreref@
+\newif\if@kern
+
+\def\test@Ref@{\if@Ref@\else\@@Ref\fi}
+
+\def\@@Ref{\ifhmode\unskip\else\leavevmode\fi
+  \begingroup \@Ref@true
+  \def\envir@end{\end@@ref}%
+  \let\par\end@@ref
+  \global\let\nofrills@list\empty
+  \refbreaks%
+  \procpaper@false \book@false \moreref@false
+  \def\curbox{\z@}\setbox\z@\vbox\bgroup
+}
+\let\keyhook@\empty
+
+
+\def\jour@true{\global\book@false\global\procpaper@false}%
+
+
+\newbox\translbox@
+\newbox\holdoverbox
+\newbox\bybox@
+
+\gdef\page@text{\pagetext}%
+\gdef\by{\makerefbox\bybox@{\empty\byfont}}
+\gdef\with{\makerefbox\withbox@{\empty\withfont}} \newbox\withbox@
+\let\manyby\by % for backward compatibility
+\def\bysame{\by\hbox to3em{\hrulefill}\thinspace\kern\z@}%
+\def\paper{\makerefbox\paperbox@\empty} \newbox\paperbox@
+\def\paperinfo{\makerefbox\paperinfobox@\empty} \newbox\paperinfobox@
+\gdef\jour{\makerefbox\jourbox@{\it\aftergroup\jour@true}}%
+\newbox\jourbox@
+\def\issue{\makerefbox\issuebox@\empty} \newbox\issuebox@
+\def\yr{\makerefbox\yrbox@\empty} \newbox\yrbox@
+\def\pages{\makerefbox\pagesbox@\empty} \newbox\pagesbox@
+\def\page{\gdef\page@text{\pagestext}\makerefbox\pagesbox@\empty}%
+\def\page{\makerefbox\pagesbox@\empty}%
+\def\ed{\makerefbox\edbox@\empty} \newbox\edbox@
+\def\eds{\ed}%
+\def\book{\makerefbox\bookbox@{\aftergroup\book@true}}%
+\newbox\bookbox@
+\def\publ{\makerefbox\publbox@\empty} \newbox\publbox@
+\def\publaddr{\makerefbox\publaddrbox@\empty} \newbox\publaddrbox@
+\gdef\inbook{\makerefbox\bookbox@{\it\aftergroup\procpaper@true}}
+\def\procinfo{\makerefbox\procinfobox@\empty} \newbox\procinfobox@
+%\def\finalinfo{\makerefbox\finalinfobox@\empty} \newbox\finalinfobox@
+%\def\@@finalinfo{\makerefbox\@@finalinfobox@\empty} \newbox\@@finalinfobox@
+\def\miscnote{\makerefbox\miscnotebox@\empty} \newbox\miscnotebox@
+\def\toappear{\miscnote \t@appear}%
+\def\lang{\makerefbox\langbox@\empty} \newbox\langbox@
+\def\vol{\makerefbox\volbox@{\rmfamily}}%
+\newbox\volbox@
+\def\bookinfo{\makerefbox\bookinfobox@{\aftergroup\procpaper@true\rm}} \newbox\bookinfobox@
+\def\serial{\makerefbox\serialbox@{\aftergroup\procpaper@true\rm}} \newbox\serialbox@
+
+\def\misc@{\makerefbox\misc@box@\empty\ifx\cyrillicencoding\@undefined\else\select@language{russian}\fi} \newbox\misc@box@
+
+\let\preprint=\book
+\def\preprintinfo{\makerefbox\bookinfobox@{\aftergroup\book@true\rm
+\let\@my@href=\href\relax\def\href##1##2{\@my@href{##1}{{\tt ##2}}}}}
+
+
+\let\thesis=\preprint
+\let\thesisinfo=\preprintinfo
+
+\let\eprint=\preprint
+\let\eprintinfo=\preprintinfo
+
+\def\makerefbox#1#2{\test@Ref@\endgraf
+  \setbox\z@\lastbox
+  \global\setbox\@ne\hbox{\unhbox\holdoverbox
+    \ifvoid\z@\else\unhbox\z@\unskip\unskip\unpenalty\fi}%
+  \egroup
+  \setbox\curbox\box\ifdim\wd\@ne>\z@ \@ne \else\voidb@x\fi
+  \def\curbox{#1}\setbox#1\vbox\bgroup \hsize\maxdimen \noindent
+  #2\leftskip0truemm\relax}
+
+
+\def\refbreaks{%
+\def\refconcat##1{\setbox\z@\lastbox \setbox\holdoverbox\hbox{%
+\unhbox\holdoverbox \unhbox\z@\unskip\unskip\unpenalty##1}}%
+\def\holdover##1{%
+\RIfM@
+%      Break the current line, adding \null to ensure proper spacing
+%      for a preceding mathrel or mathbin.
+\penalty -\@M\null
+%      Put a temporary ending of the current math formula on the next
+%      line, by itself.
+\hfil$\clubpenalty\z@\widowpenalty\z@\interlinepenalty\z@
+\offinterlineskip\endgraf
+%      Now remove that unwanted extra line and the preceding \lineskip
+%      (of 0pt) and any  penalty.  There shouldn't be any penalty,
+%      actually, because the relevant penalties were set to 0 above;
+%      but the \unpenalty is harmless and perhaps there is an
+%      overlooked eventuality that it will catch.
+\setbox\z@\lastbox\unskip \unpenalty
+\refconcat{##1}%
+\noindent
+%      Since we did a temporary end of the current math formula there
+%      remains some more math coming up; therefore we need to shift
+%      into math mode again.  By breaking immediately after the
+%      beginning of the math formula we leave the unwanted extra
+%      \mathon item in a line by itself; this will be ignored because
+%      in the unpacking process we will only take the last line out of
+%      the current \vbox.
+$\hfil\penalty -\@M
+%      No \null here because we don't need to do anything extra to
+%      affect the math spacing of the following item.
+\else {\parfillskip0pt
+\endgraf}\refconcat{##1}\noindent
+\fi}%
+\def\break{\holdover{\penalty -\@M}}%
+\def\linebreak{\holdover{\penalty -\@M}}%
+\def\newline{\holdover{\hfill\penalty -\@M}}%
+\let\vadjust@\vadjust
+\def\vadjust##1{\holdover{\vadjust@{##1}}}%
+%      It seems unlikely that \newpage will be needed inside of a
+%      \ref...\endref construction (more likely it will occur between
+%      references, if at all).  So we provide only a very simple
+%      alternate version using \vadjust.
+\def\newpage{\vadjust{\vfill\break}}%
+}%
+
+
+\def\finalpunct{\ifnum\lastkern=\m@ne\unkern\else\if@finalpunct@.\fi\fi
+       \refquotes@\refbreak@}%
+\def\continuepunct#1#2#3#4{}%
+
+
+\def\end@@ref{\makerefbox \z@ {\endgraf \egroup }\end@ref@ \endgraf \endgroup
+\keyhook@ \global \let \keyhook@ \empty\color[rgb]{0,0,0}}
+
+\def\end@ref@{%
+\def\nofrillscheck##1{%
+\def\do####1{\ifx##1####1\let\frills@\eat@\fi}%
+\let\frills@\identity@ \nofrills@list}%
+\@ref}
+
+
+\gdef\@ref{%\spaceskip 0.5 emplus.5em minus0.2em%
+%\tolerance1000%
+\@kernfalse
+\ifmoreref@
+    \commaunbox@\translbox@
+\else
+    \@kerntrue
+\fi
+\if@kern\kern-\tw@ sp\kern\m@ne sp\fi \@@ref
+\color[rgb]{0,0,0}}
+
+
+\def\moreref{\transl}
+\def\morerref{\rtransl}
+
+
+\def\transl{%
+\makerefbox\z@{\endgraf\egroup}%
+\let\savedef@\finalpunct  \let\finalpunct\empty
+\end@ref@
+%\book@false\procpaper@false
+\defaultreftexts
+\def\punct@##1##2{\unskip ##2{\@No@Color;}\allowbreak\ }%
+\global\let\nofrills@list\empty%
+\let\finalpunct\savedef@
+\moreref@true
+\def\curbox{\translbox@}%
+\setbox\translbox@\vbox\bgroup \hsize\maxdimen \noindent
+\misc@\nofrills}%
+
+\def\rtransl{%
+\makerefbox\z@{\endgraf\egroup}%
+\let\savedef@\finalpunct  \let\finalpunct\empty
+\end@ref@
+%\book@false\procpaper@false
+\defaultrusreftexts
+\def\punct@##1##2{\unskip ##2{\@No@Color;}\allowbreak\ }%
+\global\let\nofrills@list\empty%
+\let\finalpunct\savedef@
+\moreref@true
+\def\curbox{\translbox@}%
+\setbox\translbox@\vbox\bgroup \hsize\maxdimen \noindent
+\misc@\nofrills}%
+
+\newif\if@misc@transl
+\@misc@translfalse
+
+\def\misctransl{%
+\makerefbox\z@{\endgraf\egroup}%
+\let\savedef@\finalpunct  %\let\finalpunct\empty
+\def\finalpunct{\if@finalpunct@\@No@Color.\fi}%
+\end@ref@
+\defaultreftexts
+\@misc@transltrue
+\def\punct@##1##2{\unskip ##2{\@No@Color}\allowbreak\
+\if@misc@transl[\kern-\spaceskip\nobreak\fi
+}%
+\global\let\nofrills@list\empty%
+\let\finalpunct\savedef@
+\moreref@true
+\def\curbox{\translbox@}%
+\setbox\translbox@\vbox\bgroup \hsize\maxdimen \noindent
+\misc@}%
+
+\def\miscrtransl{%
+\makerefbox\z@{\endgraf\egroup}%
+\let\savedef@\finalpunct  %\let\finalpunct\empty
+\def\finalpunct{\if@finalpunct@\@No@Color.\fi}%
+\end@ref@
+\defaultrusreftexts
+\@misc@transltrue
+\def\punct@##1##2{\unskip ##2{\@No@Color}\allowbreak\
+\if@misc@transl[\kern-\spaceskip\nobreak\fi
+}%
+\global\let\nofrills@list\empty%
+\let\finalpunct\savedef@
+\moreref@true
+\def\curbox{\translbox@}%
+\setbox\translbox@\vbox\bgroup \hsize\maxdimen \noindent
+\misc@}%
+
+
+
+%
+\def\punct@#1{#1}
+\def\ppunbox@#1#2#3#4{\ifvoid#3\else
+  \let\prespace@\relax
+  \ifnum\lastkern=\m@ne \unkern\let\punct@\eat@
+    \ifnum\lastkern=-\tw@ \unkern\let\prespace@\ignorespaces \fi
+  \fi
+  \nofrillscheck#3%
+  \punct@{#1}\refquotes@\refbreak@
+  \let\punct@\identity@
+  \prespace@
+  \frills@{#2\eat@}\space
+  \unhbox#3\breakcheck
+  \frills@{#4\eat@}{\kern\m@ne sp}\fi}
+
+\def\commaunbox@#1{\ppunbox@,\space{#1}\empty}
+
+\def\pnktunbox@#1{\ppunbox@.\space{#1}\empty}%
+
+
+\def\breakcheck{\edef\refbreak@{\ifnum\lastpenalty=\z@\else
+  \penalty\the\lastpenalty\relax\fi}\unpenalty}
+\def\endquotes{\def\refquotes@{''\let\refquotes@\empty}}
+\let\refquotes@\empty
+\let\refbreak@\empty
+
+
+
+\def\identity@#1{#1}
+\def\nofrills@@#1{%
+ \DN@{#1}%
+ \ifx\next\nofrills \let\frills@\eat@
+   \expandafter\expandafter\expandafter\next@\expandafter\eat@
+  \else \let\frills@\identity@\expandafter\next@\fi}
+
+\def\nofrillscheck#1{\def\nofrills@{\nofrills@@{#1}}%
+  \futurelet\next\nofrills@}
+
+\def\add@missing#1{\expandafter\ifx\envir@end#1%
+  \Err@{You seem to have a missing or misspelled
+  \expandafter\string\envir@end ...}%
+  \envir@end
+\fi}
+
+\def\err@#1{\errmessage{Error: #1}}
+
+\newhelp\defaulthelp@{Sorry, I already gave what help I could...^^J
+Maybe you should try asking a human?^^J
+An error might have occurred before I noticed any problems.^^J
+``If all else fails, read the instructions.''}
+
+\def\Err@{\errhelp\defaulthelp@\err@}
+
+\def\Bibitem{\par\defaultreftexts\bibitem}
+\def\RBibitem{\par\defaultrusreftexts\bibitem}
+
+\AtBeginDocument{\def\refname{\CYRS \cyrp \cyri \cyrs \cyro \cyrk \ \cyrl \cyri \cyrt \cyre \cyrr \cyra \cyrt \cyru \cyrr \cyrery }}
+\AtBeginDocument{\def\bibname{\CYRS \cyrp \cyri \cyrs \cyro \cyrk \ \cyrl \cyri \cyrt \cyre \cyrr \cyra \cyrt \cyru \cyrr \cyrery }}
+
+\def\byfont{\it}
+\def\withfont{\rmfamily}
+%\def\byfont{\slshape}
+%\def\byfont{\itshape}
+%   Конец м кросов для оформления списк  литер туры
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% New commands for bibliography %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\gdef\@@ref{%
+\ppunbox@\empty\empty\misc@box@\space%
+\ppunbox@\empty\empty\bybox@\empty%
+\ifbook@% Case 1: \book etc.
+\ppunbox@{}{ }\bookbox@\empty
+\ppunbox@{:}{ }\bookinfobox@\empty
+\ppunbox@{.}{ \bookvoltext@}\bookvolbox@\empty
+\ppunbox@{:}{ \voltitletext@}\voltitlebox@\empty
+\ppunbox@{:}{ }\procbox@\empty%
+\ppunbox@{}{ (}\procinfobox@)%
+\ppunbox@{\,/}{ }\serialbox@{}%
+\ppunbox@{.}{ \bookvoltext@}\volbox@\empty
+\ppunbox@{:}{ \volinfotext@ }\volinfobox@\empty
+\ppunbox@{\,/}{ }\editionbox@ \empty%
+\ppunbox@,{ \serissuetext@ }\serissuebox@\empty
+\ppunbox@{\,/}{ \issueinfotext@ }\issueinfobox@\empty
+\ppunbox@{\,/}{ \edtext~}\edbox@ \empty%
+\ppunbox@{,}{ }\finalbookinfobox@\empty
+\ppunbox@{.}{ }\publaddrbox@{}%
+\ppunbox@{:}{ }\publbox@ \empty
+\ppunbox@{;}{ }\publaddrrbox@{}%
+\ppunbox@{:}{ }\publlbox@ \empty
+\ppunbox@{;}{ }\publaddrrrbox@{}%
+\ppunbox@{:}{ }\publllbox@ \empty
+\ppunbox@,{ }\yrbox@{}%
+%\ppunbox@,{ \isbntext@ }\isbnbox@{}%
+\else
+\ifprocpaper@ % Case 2: \paper ... \inbook
+\ifvoid \byybox@
+\ppunbox@{}{ }\paperbox@{}%
+\ppunbox@{,}{ }\paperinfobox@{}%
+\else
+\ppunbox@{,}{ }\paperbox@{}%
+\ppunbox@{,}{ }\paperinfobox@{}%
+\ppunbox@{:}{ \byytext@ }\byybox@\empty%
+\fi
+\ppunbox@{\,/}{ \inbook@text }\bookbox@\empty
+\ppunbox@{:}{ }\bookinfobox@\empty
+\ppunbox@{.}{ \bookvoltext@}\bookvolbox@\empty
+\ppunbox@{:}{ \voltitletext@}\voltitlebox@\empty
+\ppunbox@{,}{ }\procbox@\empty%
+\ppunbox@{}{ (}\procinfobox@)%
+\ppunbox@{\,/}{ }\serialbox@{}%
+\ppunbox@{,}{ \voltext}\volbox@\empty
+\ppunbox@,{ \volinfotext@ }\volinfobox@\empty
+\ppunbox@,{ \serissuetext@ }\serissuebox@\empty
+\ppunbox@,{ \issueinfotext@ }\issueinfobox@\empty
+\ppunbox@{\/;}{ }\editionbox@ \empty%
+\ppunbox@{\/;}{ \edtext~}\edbox@ \empty%
+\ppunbox@{,}{ }\finalbookinfobox@\empty
+\ppunbox@{.}{ }\publaddrbox@{}%
+\ppunbox@{:}{ }\publbox@ \empty
+\ppunbox@{;}{ }\publaddrrbox@{}%
+\ppunbox@{:}{ }\publlbox@ \empty
+\ppunbox@{;}{ }\publaddrrrbox@{}%
+\ppunbox@{:}{ }\publllbox@ \empty
+\ifvoid \monthissuebox@
+\ppunbox@,{ }\yrbox@{}%
+\else
+\ppunbox@,{ }\monthissuebox@\empty
+\ppunbox@{}{ }\yrbox@{}%
+\fi
+\ppunbox@{.}{ \pagestext}\pagesbox@\empty
+\ppunbox@,{ \isbntext@ }\isbnbox@{}%
+\else % Case 3: \paper ... \jour
+\ppunbox@{}{ }\paperbox@{}%
+\ppunbox@{,}{ }\paperinfobox@{}%
+\ppunbox@{\,/\!/}{ }\jourbox@{}%
+\ifvoid\volbox@
+\ppunbox@{.}{ }\yrbox@{}%
+\ppunbox@{.}{ \volinfotext@}\volinfobox@\empty
+\ppunbox@{.}{ \issuetext}\issuebox@\empty
+\ppunbox@{.}{ \issueinfotext@}\issueinfobox@\empty
+\else
+\ifvoid \monthissuebox@
+\ppunbox@{,}{ }\yrbox@{}%
+\else
+\ppunbox@{,}{ }\yrbox@{}%
+\ppunbox@{,}{ }\monthissuebox@\empty
+\fi
+\ppunbox@{.}{ \bookvoltext@}\volbox@\empty
+\ppunbox@{,}{ \volinfotext@}\volinfobox@\empty
+\ppunbox@{,}{ \issuetext}\issuebox@\empty
+\ppunbox@{}{ (\issueinfotext@}\issueinfobox@{)}%
+\fi
+\ppunbox@{\,/}{ \proc@text@}\procbox@{}%
+\ppunbox@{}{ (}\procinfobox@)%
+\ppunbox@{.}{ \pagestext }\pagesbox@\empty
+\ppunbox@,{ \paperidtext@ }\paperidbox@\empty
+\fi
+\fi
+\ppunbox@.{ }\totalpagesbox@{\totalpagestext@}%
+\ppunbox@{}{ \isbntext@ }\isbnbox@{.}%
+\ppunbox@\empty{ (}\miscnotebox@)%
+\ppunbox@{,}{ [}\langbox@{]}%
+\ppunbox@,{ \elinktext@ }\elinkbox@{}%
+\ppunbox@,{ \arxivtext@ }\arxivbox@{}%
+\ppunbox@{,}{ }\finalinfobox@\empty
+\ppunbox@\empty{ (\withtext}\withbox@)%
+\ppunbox@\empty{ }\@@finalinfobox@\empty
+\if@misc@transl]\fi
+\finalpunct
+}%
+
+
+%%%%%%%%%%%%%% Доб вление от ноября 2009 год  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newbox\isbnbox@
+\newbox\paperidbox@
+\newbox\totalpagesbox@
+\newbox\finalbookinfobox@
+\newbox\volinfobox@
+\newbox\issueinfobox@
+\newbox\serissuebox@
+\newbox\elinkbox@
+\newbox\arxivbox@
+\newbox\publlbox@
+\newbox\publaddrrbox@
+\newbox\publllbox@
+\newbox\publaddrrrbox@
+\newbox\byybox@
+\newbox\monthissuebox@
+
+\newbox\journalnamebox@
+\newbox\frombox@
+\newbox\issnbox@
+\newbox\bibIDbox@
+\newbox\ptypebox@
+
+\newbox\editionbox@
+\newbox\procbox@
+\newbox\bookvolbox@
+\newbox\voltitlebox@
+
+\let\@@temp@@href=\href
+\def\href#1#2{\@@temp@@href{#1}{{\tt #2}}}
+%%%% Н  выходе этих ком нд - ничего %%%%
+\def\ptype{\makerefbox\ptypebox@\empty}
+\def\issn{\makerefbox\issnbox@\empty}
+\def\journalname{\makerefbox\journalnamebox@\empty}
+\def\from{\makerefbox\frombox@\empty}
+\def\bibID{\makerefbox\bibIDbox@\empty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\if@finalpunct@
+\@finalpunct@true
+\def\isbn{\makerefbox\isbnbox@\empty}   \def\isbntext@{ISBN }
+\def\papernumber{\makerefbox\paperidbox@\empty}    \def\paperidtext@{}
+%\let\paperid=\papernumber
+\def\totalpages{\global\@finalpunct@false\makerefbox\totalpagesbox@\empty}
+\def\byy{\makerefbox\byybox@\empty}
+
+\def\finalbookinfo{\makerefbox\finalbookinfobox@\empty}
+\def\edition{\makerefbox\editionbox@\empty}
+\def\proc{\makerefbox\procbox@\empty}
+\def\bookvol{\makerefbox\bookvolbox@\empty}
+\let\bookvols=\bookvol
+\def\voltitle{\makerefbox\voltitlebox@{\rmfamily}}
+\def\volinfo{\makerefbox\volinfobox@\empty}   \def\volinfotext@{}
+\def\issueinfo{\makerefbox\issueinfobox@\empty}
+\def\serissue{\makerefbox\serissuebox@\empty}
+\def\monthissue{\makerefbox\monthissuebox@\empty}   \def\monthissuetext@{}
+
+\def\elink{\global\@finalpunct@true\makerefbox\elinkbox@\empty}    \def\elinktext@{}
+\def\arxiv{\global\@finalpunct@true\makerefbox\arxivbox@\empty}    \def\arxivtext@{arXiv:\,\allowbreak}
+%%%% Теперь arxiv для href-ов ния: %%%%%%%%%%%%%%%%%%%
+\def\hrarxiv#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{\lower0.5mm\hbox{\includegraphics[height=3mm]{hrarxiv}}}\else\unskip\unskip\fi\fi}
+%\def\hrarxiv#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{arXiv}\else\unskip\unskip\fi\fi}
+%%% (втор я версия - пок  нет к ртинки, т м просто н дпись arXiv:)
+%\def\finalinfo{\global\@finalpunct@true\makerefbox\finalinfobox@\empty}
+\newbox\finalinfobox@
+\def\@@finalinfo{\global\@finalpunct@true\makerefbox\@@finalinfobox@\empty}
+\newbox\@@finalinfobox@
+
+
+\def\publl{\makerefbox\publlbox@\empty}
+\def\publaddrr{\makerefbox\publaddrrbox@\empty}
+\def\publll{\makerefbox\publllbox@\empty}
+\def\publaddrrr{\makerefbox\publaddrrrbox@\empty}
+
+
+
+\def\defaultreftexts{\select@language{english}%
+\color[rgb]{0,0,0}%
+\frenchspacing
+\gdef\edtext{ed.}\gdef\pagetext{P.~}\gdef\pagestext{Pp.~}%
+\gdef\voltext{}\gdef\voltitletext@{}\def\bookvoltext@{Vol.\,}%
+\gdef\issuetext{no.\,}\gdef\serissuetext@{no.\,}\gdef\t@appear{to appear}%
+\def\eds{\gdef\edtext{eds.}\makerefbox\edbox@\empty}%
+%\def\inbook@text{In:}}%
+\def\issueinfotext@{}\def\byytext@{}\def\proc@text@{}%
+\global\@finalpunct@true
+\def\totalpagestext@{~pp.}%
+\def\inbook@text{In: }\def\withtext{with }}%
+
+
+\def\eds{\gdef\edtext{eds}\makerefbox\edbox@\empty}%
+
+\def\defaultrusreftexts{\select@language{russian}%
+\color[rgb]{0,0,0}%
+\frenchspacing
+\gdef\edtext{\cyrr\cyre\cyrd.}\gdef\pagestext{\CYRS.~}%
+\gdef\pagestext{\CYRS.~}%
+%\def\inbook@text{В~сб.:}% %\def\inbook@text{\CYRV~\cyrs\cyrb.}
+\def\issueinfotext@{}\def\byytext@{}\def\proc@text@{}%
+\def\inbook@text{\CYRV~\cyrs\cyrb.: }%
+\global\@finalpunct@true
+\def\totalpagestext@{~\cyrs.}%
+\def\eds{\gdef\edtext{\cyrr\cyre\cyrd.}\makerefbox\edbox@\empty}%
+\gdef\voltext{\CYRT.\,}\gdef\voltitletext@{}\def\bookvoltext@{\CYRT.\,}%
+\gdef\issuetext{\No\,}\gdef\serissuetext@{\No\,}%
+\gdef\t@appear{\cyrv~\cyrp\cyre \cyrch\cyra\cyrt\cyri}%
+\def\withtext{\cyrs\cyro\cyrv\cyrm.\ \cyrs~}}%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% End of the new commands for bibliography %%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\href#1#2{#2}
+
+\gdef\No{{\select@language{russian}\textnumero}}
+
+\if@hyper
+\RequirePackage[unicode]{hyperref}
+%\RequirePackage{hyperref}
+\hypersetup{
+colorlinks=true,
+linkcolor=blue,
+citecolor=blue,
+urlcolor=blue,
+filecolor=blue,
+pdfpagemode=None,
+pdfstartview=FitH,
+pdfhighlight=/N
+}
+\fi
+
+%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+\newif\if@finalinfo
+\@finalinfotrue
+
+\def\Href@Crossref#1{\if@short
+\href{http://dx.doi.org/#1}{\tt doi\,#1}\else
+\href{#1}{\includegraphics[height=3mm]{crossref}}\fi}
+
+\def\Href@Mathscinet#1{\if@short
+\href{http://www.ams.org/mathscinet-getitem?mr=#1}{\tt MR\,#1}\else
+\href{#1}{\includegraphics[height=3mm]{ams}}\fi
+}
+
+\def\Href@Mathnet#1{\if@short
+\href{http://mi.mathnet.ru/#1}{\tt Mi\,#1}\else
+\href{#1}{\includegraphics[height=3mm]{mi}}\fi
+}
+
+\def\Href@Zmath#1{\if@short
+\href{http://www.zentralblatt-math.org/zmath/search/?an=#1}{\tt #1}\else
+\href{#1}{\includegraphics[height=3mm]{zmath}}\fi
+}
+
+\def\Href@Ads#1{\if@short
+\href{http://adsabs.harvard.edu/cgi-bin/bib_query?#1}{\tt ADS\,#1}\else
+\href{#1}{\includegraphics[height=3mm]{ads}}\fi
+}
+
+%\def\crossref#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@finalinfo\@@finalinfo \@finalinfofalse\else\unskip, \fi\Href@Crossref{#1}\fi}
+%\def\mathscinet#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@finalinfo\@@finalinfo \@finalinfofalse\else\unskip, \fi\Href@Mathscinet{#1}\fi}
+%\def\mathnet#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@finalinfo\@@finalinfo \@finalinfofalse\else\unskip, \fi\Href@Mathscinet{#1}\fi}
+%\def\zmath#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@finalinfo\@@finalinfo \@finalinfofalse\else\unskip, \fi\Href@Zmath{#1}\fi}
+%\def\adsnasa#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@finalinfo\@@finalinfo \@finalinfofalse\else\unskip, \fi\Href@Ads{#1}\fi}
+
+
+\def\crossref#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{\includegraphics[height=3mm]{crossref}}\else\unskip\unskip\fi\fi}
+\def\mathscinet#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{\includegraphics[height=3mm]{ams}}\else\unskip\unskip\fi\fi}
+\def\mathnet#1{\edef\next{#1}\ifx\empty\next \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{\includegraphics[height=3mm]{mi}}\else\unskip\unskip\fi\fi}
+\def\zmath#1{\edef\next{#1}\ifx\empty\next  \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{\includegraphics[height=3mm]{zmath}}\else\unskip\unskip\fi\fi}
+\def\adsnasa#1{\edef\next{#1}\ifx\empty\next  \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{\includegraphics[height=3mm]{ads}}\else\unskip\unskip\fi\fi}
+\def\isi#1{\edef\next{#1}\ifx\empty\next  \ignorespaces\else\if@logos\if@finalinfo\@@finalinfo \@finalinfofalse\fi\href{#1}{\lower 0.7mm\hbox{\includegraphics[height=3mm]{isi}}}\else\unskip\unskip\fi\fi}
+
+
+\def\@Color{\if@hyper\color[rgb]{0,0,1}\fi}
+
+\def\@No@Color{\color[rgb]{0,0,0}}
+
+\long\def\@makefntext#1{\@No@Color\parindent 12pt%\noindent
+ $^{\@thefnmark}$#1}
+
+\def\thefootnote{\@No@Color\ifnum\c@footnote>0 \arabic{footnote}\else\fi}
+
+\def\footnoterule{\@No@Color\kern-3\p@
+  \hrule \@width 2in \kern 2.6\p@} % the \hrule is .4pt high
+
+%\def\thepage{\@No@Color\arabic{page}}
+
+\defaultreftexts
+
+\endinput
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

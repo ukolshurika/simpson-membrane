@@ -19,27 +19,13 @@ double a = 1.0;
 double l = 3.0;
 double h0 = 0.02;
 double dx = 0.001;
+const double kB = 4.5;// heigth of matrix
 
 ifstream free_data("data/free_new.dat");
-ifstream constrained_data("data/constrained_new.dat");
+ifstream constrained_data_x("data/constrained_x.dat");
+ifstream constrained_data_y("data/constrained_y.dat");
 
 int stadia = 1;
-
-double po(double var){
-  return a/sin(var);
-}
-
-double center(double var){
-  return -1*a/tan(var);
-}
-
-double h(double var){
-  return sin(var)/var;
-}
-
-double m(double x){
-  return 4.5*(1-x*x*x);
-}
 
 GLfloat spin=-9.0;
 GLUquadricObj *quadObj;
@@ -91,31 +77,25 @@ void renderAxes(){
   glEnd();
 }
 
-void renderParallelogram(double x1, double x2, double y1, double y2, double z1, double z2){
-  glVertex3d(x1, y1, z1);
-  glVertex3d(x1, y1, z2);
-  glVertex3d(x2, y2, z2);
-  glVertex3d(x2, y2, z1);
-}
-
-void draw_matrix(double  x_0, double dy){
-  for(double x = x_0; x < 1; x+=0.001){
-    glBegin(GL_POLYGON);
-      glVertex3d(x, m(abs(x))-dy, -l/2.0);
-      glVertex3d(x, m(abs(x))-dy, l/2.0);
-      glVertex3d(x+0.001, m(abs(x+0.001))-dy, l/2.0);
-      glVertex3d(x+0.001, m(abs(x+0.001))-dy, -l/2.0);
-    glEnd(); 
-  }
-  
-  for(double x = -1; x < -x_0; x+=0.001){
-    glBegin(GL_POLYGON);
-      glVertex3d(x, m(abs(x))-dy, -l/2.0);
-      glVertex3d(x, m(abs(x))-dy, l/2.0);
-      glVertex3d(x+0.001, m(abs(x+0.001))-dy, l/2.0);
-      glVertex3d(x+0.001, m(abs(x+0.001))-dy, -l/2.0);
-    glEnd(); 
-  }
+void draw_matrix(){
+  //right side
+  glPushMatrix();
+    glTranslatef(1.05, kB/2, 0);
+    glScalef(0.1, kB, 3);
+    glutSolidCube(1);
+  glPopMatrix();
+  //left side
+  glPushMatrix();
+    glTranslatef(-1.05, kB/2, 0);
+    glScalef(0.1, kB, 3);
+    glutSolidCube(1);
+  glPopMatrix();
+  //bottom
+  glPushMatrix();
+    glTranslatef(0, kB, 0);
+    glScalef(2.2, 0.1, 3);
+    glutSolidCube(1);
+  glPopMatrix();
 }
 
 void set_camera() {
@@ -133,10 +113,88 @@ void set_camera() {
   glRotatef(global.camera.rotation_z, 0.0, 0.0, 1.0);
 }
 
+void half_cylinder(double center, double rho, double h, GLUquadricObj *quadObj1, double cliping){
+  double clip_plane2[] = {0, 1.0, 0 , -cliping};
+  glEnable(GL_CLIP_PLANE1);
+
+  glPushMatrix();
+    glTranslatef(0, center, -l/2.0);
+    gluCylinder(quadObj1, rho, rho, l, 100, 100);
+  glPopMatrix();
+
+  glClipPlane(GL_CLIP_PLANE1,clip_plane2);
+
+  glPushMatrix();
+    glTranslatef(0, center, -l/2.0);
+    gluCylinder(quadObj1, rho-h, rho-h, l, 100, 100);
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(0, center, l/2.0);
+    gluDisk(quadObj1, rho - h, rho, 100, 100);
+  glPopMatrix();
+
+
+  glPushMatrix();
+    glTranslatef(0, center, -l/2.0);
+    gluDisk(quadObj1, rho - h, rho, 100, 100);
+  glPopMatrix();
+
+  glDisable(GL_CLIP_PLANE1);
+}
+
+void quarter_cylinder(double center_x, double center_y, double rho, double h, GLUquadricObj *quadObj1, double *clip_plane1, double cliping_y){
+  double clip_plane2[] = {0.0, 1.0, 0.0, -cliping_y};
+  // double clip_plane1[] = {1.0, 0.0, 0.0, -cliping_x};
+
+  glEnable(GL_CLIP_PLANE1);
+  glEnable(GL_CLIP_PLANE2);
+
+
+  glPushMatrix();
+    glTranslatef(center_x, center_y, -l/2.0);
+    gluCylinder(quadObj1, rho, rho, l, 100, 100);
+  glPopMatrix();
+
+  glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+  glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+
+  glPushMatrix();
+    glTranslatef(center_x, center_y, -l/2.0);
+    gluCylinder(quadObj1, rho-h, rho-h, l, 100, 100);
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(center_x, center_y, l/2.0);
+    gluDisk(quadObj1, rho - h, rho, 100, 100);
+  glPopMatrix();
+
+
+  glPushMatrix();
+    glTranslatef(center_x, center_y, -l/2.0);
+    gluDisk(quadObj1, rho - h, rho, 100, 100);
+  glPopMatrix();
+
+  glDisable(GL_CLIP_PLANE1);
+  glDisable(GL_CLIP_PLANE2);
+}
+
+void borders(double y, double h){
+  glPushMatrix();
+    glTranslatef(a-h, y/2.0, 0);
+    glScalef(h, y, l);
+    glutSolidCube(1);
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(-a+h, y/2.0, 0);
+    glScalef(h, y, l);
+    glutSolidCube(1);
+  glPopMatrix();
+}
+
 void display(void) {
-  double t, var, h;
-  double clip_plane1[]={0.0,1.0,0.0,-h0/2.0};
-  double clip_plane2[]={0.0,1.0,0.0,h0/2.0};
+  double t, var, h, rho, center;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   glColor3ub(255,255,0);
@@ -144,92 +202,77 @@ void display(void) {
   set_camera();
   renderAxes();
 
-  double x= -1;
-
-  draw_matrix(0, 0);
+  glColor4f(0.3, 0.3, 0.3,0.5);
 
   GLUquadricObj *quadObj1;
 
   quadObj1 = gluNewQuadric();
 
+  // ********** fixed parts ***********//
   glColor4f(0.5,0.5,0.5, 1.0);
   glPushMatrix();
-    glTranslatef(-a*1.5, 0, 0);
+    glTranslatef(-a*1.6, 0, 0);
     glScalef(a, h0, l);
     glutSolidCube(1.0); 
-    glTranslatef(3*a, 0, 0);
+    glTranslatef(3.1*a, 0, 0);
     glutSolidCube(1.0); 
   glPopMatrix();
 
-  glClipPlane(GL_CLIP_PLANE1,clip_plane1);
-  glEnable(GL_CLIP_PLANE1);
 
-  glColor4f(0.5,0.5,0.5, 1.0);
+ 
+  glColor4f(0.7,0.3,0.9, 1.0);
 
   if (free_data.fail())
     stadia = 2;
 
-  if (constrained_data.fail()){
+  if (constrained_data_y.fail())
+    stadia = 3;
+
+  if (constrained_data_x.fail()){
     sleep(10000);
     glutSwapBuffers();
-
     return; 
   }
     
 
   if(stadia == 1)
-    free_data >> t >> var >> h;
-  else{
-    constrained_data >> t >> var >> h;
-    cout << t << " " << var << " " << h << endl;
+    free_data >> t >> var >> h >> rho >> center;
+  else if(stadia == 2){
+    constrained_data_y >> t >> var >> h >> rho >> center;
+  } else {
+    constrained_data_x >> t >> var >> h >> rho >> center;
   }
 
   if(stadia == 1){ 
-    glPushMatrix();
-      glTranslatef(0, center(var), -l/2.0);
-      gluCylinder(quadObj1, po(var), po(var), l, 100, 100);
-    glPopMatrix();
+    half_cylinder(center, rho, h, quadObj1, h0/2.0);
 
-    glClipPlane(GL_CLIP_PLANE1,clip_plane2);
-
-    glPushMatrix();
-      glTranslatef(0, center(var), -l/2.0);
-      gluCylinder(quadObj1, po(var)-h, po(var)-h, l, 100, 100);
-    glPopMatrix();
-
-    glPushMatrix();
-      glTranslatef(0, center(var), l/2.0);
-      gluDisk(quadObj1, po(var) - h, po(var), 100, 100);
-    glPopMatrix();
-
-
-    glPushMatrix();
-      glTranslatef(0, center(var), -l/2.0);
-      gluDisk(quadObj1, po(var) - h, po(var), 100, 100);
-    glPopMatrix();
-
-    // usleep(1000);
-
+  } else if (stadia==2) {
+    borders(var, h);
+    half_cylinder(center, rho, h, quadObj1, var);
+    // usleep(10000);
   } else {
-    glColor4f(0.9,0.5,0.5, 1.0);
-    h = 0.5;
-    draw_matrix(var, h);
-    glColor4f(0.5, 0.5, 0.9, 0.7);
-    for(double i = 1; i > var; i-=0.01){
-     glBegin(GL_POLYGON);
-      glVertex3f(i-h,      m(i)-h,         l/2);
-      // glVertex3f(i-h+0.01, m(i-h+0.01)-h , l/2);
-      // glVertex3f(i+0.01,   m(i+0.01) ,     l/2);
-      // glVertex3f(i,        m(i),           l/2);
-      
-      glVertex3f(-1,        1,           l/2);
-      glVertex3f(-1,        -1,           l/2);
-      glVertex3f(1,        -1,           l/2);
+    double cpx[] = {1.0, 0.0, 0.0,  -var};
+    double cpx2[] = {-1.0, 0.0, 0.0, -var};
+    borders(kB-(a-var), h);
 
-     glEnd(); 
-    }
+    // bottom part
+    glPushMatrix();
+      glTranslatef(0, kB-h, 0);
+      glScalef(var, h, l);
+      glutSolidCube(1);
+    glPopMatrix();
+
+    glPopMatrix();
+
+    quarter_cylinder(var,  kB-(a-var), a-var, h, quadObj1, cpx, kB-(a-var));
+    quarter_cylinder(-var, kB-(a-var), a-var, h, quadObj1, cpx2, kB-(a-var));
+    usleep(100000);
   }
-    glDisable(GL_CLIP_PLANE1);
+
+  glColor4f(0.3, 0.3, 0.3,0.5);
+  draw_matrix();
+
+
   gluDeleteQuadric(quadObj1);
   glutSwapBuffers();
 
