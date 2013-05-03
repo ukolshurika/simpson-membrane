@@ -589,24 +589,25 @@ An error might have occurred before I noticed any problems.^^J
 %%%%%%%%%% End of the new commands for bibliography %%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\href#1#2{#2}
+% AUkolova. I use my own config for hyperref. You may uncomment it if need pretty links
+%\def\href#1#2{#2}
 
-\gdef\No{{\select@language{russian}\textnumero}}
+%\gdef\No{{\select@language{russian}\textnumero}}
 
-\if@hyper
-\RequirePackage[unicode]{hyperref}
+%\if@hyper
+%\RequirePackage[unicode]{hyperref}
 %\RequirePackage{hyperref}
-\hypersetup{
-colorlinks=true,
-linkcolor=blue,
-citecolor=blue,
-urlcolor=blue,
-filecolor=blue,
-pdfpagemode=None,
-pdfstartview=FitH,
-pdfhighlight=/N
-}
-\fi
+%\hypersetup{
+%colorlinks=true,
+%linkcolor=blue,
+%citecolor=blue,
+%urlcolor=blue,
+%filecolor=blue,
+%pdfpagemode=None,
+%pdfstartview=FitH,
+%pdfhighlight=/N
+%}
+%\fi
 
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -666,7 +667,7 @@ pdfhighlight=/N
 
 %\def\thepage{\@No@Color\arabic{page}}
 
-\defaultreftexts
+%\defaultreftexts
 
 \endinput
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
