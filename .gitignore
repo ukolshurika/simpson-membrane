@@ -11,3 +11,6 @@ tex_script/data
 *.table
 *.dpth
 *.pdf
+*.out
+*.toc
+
