@@ -28,6 +28,8 @@ struct HFunctor{
   Bound b;
 };
 
+const double Bound::kB = 4.5;
+
 Bound::Bound(const Membrane& m, char ordinate):m_(m), ordinate_(ordinate){};
 
 double Bound::operator()(double x) const{

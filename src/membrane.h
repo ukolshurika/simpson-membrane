@@ -14,7 +14,7 @@ class Membrane{
   void free(int steps);
   void constrained(int steps);
   void averageAllDt();
-  
+
   std::string free_data_to_draw(double alpha);
   std::string constrained_x_data_to_draw(double x);
   std::string constrained_y_data_to_draw(double x);
@@ -39,6 +39,10 @@ class Membrane{
   double alpha1_;
   /*величина угла, при котором происходит касание*/
   double alpha2_;
+
+  private:
+  double MeanValueDt();
+  void averageDt(std::vector<std::pair<double, double>>* times, double dt_average);
 };
 
 

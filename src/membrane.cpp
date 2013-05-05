@@ -2,7 +2,8 @@
 
 #include <cmath>
 #include <iostream>
-#include <sstream> 
+#include <sstream>
+#include <cassert>
 
 #include "bound.h"
 #include "matrix.h"
@@ -12,8 +13,19 @@
 using namespace std;
 
 namespace{
-  const double kSqrt3 = sqrt(3);
-  const int kSimpsonStep = 99;
+
+const double kSqrt3 = sqrt(3);
+const int kSimpsonStep = 99;
+
+double ValueAsLine(double time,
+                   const pair<double, double>& point1,
+                   const pair<double, double>& point2) {
+  double k, b;
+  k = (point2.second - point1.second)/(point2.first - point1.first);
+  b = -k*point1.first+point1.second;
+  return k*time + b;
+}
+
 }
 
 struct Free {
@@ -34,7 +46,7 @@ struct Free {
   double n_;
 };
 
-Membrane::Membrane(double q, double h0, double n):q_(q), h0_(h0), n_(n){
+Membrane::Membrane(double q, double h0, double n):q_(q), n_(n), h0_(h0) {
   alpha1_ = 0.41; // from Maxima flexible step(boolsh it just get it from terraud)
   alpha2_ = M_PI/2;
   h1_ = sin(alpha2_)/alpha2_*h0_;
@@ -109,23 +121,14 @@ void Membrane::constrained(int steps){
     offset2 += it->first;
   }
 
- // for (auto it = t_constrained_.begin(); it != t_constrained_.end(); ++it) {
- //    t_constrained_y_.push_back(make_pair(it->first, it->second+Bound::kB));
- //    offset += it->first;
- //  }
+ for (auto it = t_constrained_.begin(); it != t_constrained_.end(); ++it) {
+    t_constrained_y_.push_back(make_pair(it->first, it->second+Bound::kB));
+    offset += it->first;
+  }
 
-}
-
-/*double Membrane::ValueAsLine(double time, vector<pair<double, double>>::iterator point1, vector<pair<double, double>>::iterator point2){
-  double k, b;
-  k = (point2->second - point1->second)/(point2->first - point1->first);
-  b = -k*point1->first+point1->second;
-  return k*time + b;
 }
 
 double Membrane::MeanValueDt(){
-  assert(t_free_.size() > 2);
-
   double delta = 0.0;
   vector<pair<double, double>>::iterator next, cur;
   next = t_free_.begin();
@@ -158,31 +161,31 @@ double Membrane::MeanValueDt(){
 
 void Membrane::averageDt(vector<pair<double, double>>* times, double dt_average){
   double delta, next_time;
+  assert((*times).size() > 2);
   vector<pair<double, double>> new_times;
-  vector<pair<double, double>><double, double>::iterator next, cur;
+  vector<pair<double, double>>::iterator next, cur;
   next = (*times).begin();
   cur = next++;
-  
+
   while(next != (*times).end()){
     delta = next->first - cur->first;
 
     if(new_times.size() == 0)
-      new_times[cur->first] = new_times[cur->second];
+      new_times.push_back(make_pair(cur->first,cur->second));
 
     next_time = new_times.rbegin()->first + dt_average;
 
     if (delta >= dt_average){
       for(double i = new_times.rbegin()->first; i <= next->first; i += dt_average)
-        new_times[i] = ValueAsLine(i, cur, next);
+        new_times.push_back(make_pair(i, ValueAsLine(i, *cur, *next)));
 
     }else if(next_time <= next->first){
-      new_times[next_time] = ValueAsLine(next_time, cur, next);
+      new_times.push_back(make_pair(next_time,
+                                    ValueAsLine(next_time, *cur, *next)));
     }
-
     ++cur;
     ++next;
   }
-
 
   (*times).swap(new_times);
 }
@@ -191,10 +194,10 @@ void Membrane::averageAllDt(){
   double dt_average;
   dt_average = MeanValueDt();
 
-  averageDt(t_free_,         dt_average);
-  averageDt(t_constrained_,  dt_average);
-  averageDt(t_constrained_y_, dt_average);
-}*/
+  averageDt(&t_free_,         dt_average);
+  averageDt(&t_constrained_,  dt_average);
+  averageDt(&t_constrained_y_, dt_average);
+}
 
 string Membrane::free_data_to_draw(double alpha){
   ostringstream data;
