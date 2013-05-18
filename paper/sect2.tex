@@ -1,4 +1,85 @@
 \chapter{Реализация}
 \section{Численное интегрирование}
-\section{Погрешности}
+В работе рассматриваются два метода приближенного вычисления интегралов
+(\ref{simpson}, \ref{gauss}).
+
+Все приемы численного интегрирования [\ref{samarskiy}] основаны на  замене определенного интеграла 
+\begin{equation}
+	I = \int\limits_a^b f(x)\,dx
+\end{equation}
+конечной суммой
+\begin{equation}
+	I_n = \sum\limits_{k=0}^n c_k f(x_k),
+\end{equation}
+
+где $c_k$~--- числовые коэффициенты и $x_k$~---точки отрезка $[a,b]$, $k=0, 1, \ldots, n$.
+При этом интеграл по переменному верхнему пределу берется так: Выбирается разбиение возможных значений верхнего предела
+с определенным шагом. Внутри этого отрезка оба предела интеграла являются определенными и выбирается одна из ниже описанных формул.
+
+\subsection{Метод Симпсона\label{simpson}}
+При аппроксимации интеграла заменим подынтегральную функцию $f(x)$ параболой, проходящей через точки
+($x_j, f(x_j) $), $j=i-1, i-0.5, i$. Подробный вывод формул представлен в [\ref{samarin}]. Приведем окончательную формулу:
+\begin{equation}
+\int\limits^b_a f(x)\,dx \approx \dfrac{b-a}{6N}\left[f_0 +f_{2N}+2(f_2+f_4+\ldots+f_{2N-2})+4(f_1+f_3+\ldots+f(2N-1))\right],
+\end{equation}
+
+где $2N$~--- количество узлов одномерной сетки c шагом $h$, $f_i$~--- значение функции $f$ в точке $x_i$. $x_i = a+kh$
+
+\subsection{Метод Гаусса\label{gauss}}
+Повысить точность вычисления численного интеграла можно не только с помощью уменьшения шага интегрирования, но и за счет 
+выбора определенных точек интегрирования. Уменьшение шага ведет в пропорциональному увеличению времени работы программы, что не
+приемлемо по времени работы при сильно увеличивающейся точности.
+
+Метод Гаусса описывает способ нахождения специальных точек интегрирования, при этом в разложении интеграла используются квадратурные
+формулы наивысшей алгебраической точности.
+Изначально при методе Гаусса рассматривается канонический интеграл:
+\begin{equation}
+\int\limits_{-1}^1 f(x)\, dx = \sum\limits_{i=1}^n w_i f(x_i)
+\end{equation}
+
+Для перехода к произвольному интервалу можно воспользоваться следующей заменой:
+\begin{equation}
+\int_a^b f(x)\,dx = \frac{b-a}{2} \int_{-1}^1 f\left(\frac{b-a}{2}z 
++ \frac{a+b}{2}\right)\,dz \approx \frac{b-a}{2} \sum_{i=1}^n w_i f\left(\frac{b-a}{2}z_i + \frac{a+b}{2}\right).
+\end{equation}
+
+В работах [\ref{samarskiy}, \ref{gauss_book}, \ref{gauss_article}] подробно описан вывод и доказательство корректности формул, поэтому просто приведем таблицу 
+ключевых значений для 1,2,3,4,5-ти точечного метода.
+
+\begin{center}
+
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{|c|c|c|}
+\hline
+Кол-во точек    & $x_i$ & $w_i$ \\
+\hline\hline
+1    & 0  & 2\\[5pt] \hline
+2     & $\pm\frac{\sqrt{3}}{3}$   & 1 \\[5pt] \hline
+\multirow{2}{*}{3}    & 0  & $\frac 89$\\[5pt] \cline{2-3}
+& $\pm \sqrt{\frac 3 5}$  & $\frac 5 9$\\[5pt] \hline
+
+\multirow{2}{*}{4}    & $\pm\sqrt{\Big( 3 - 2\sqrt{\frac65} \Big)/7}$ & $\frac{18+\sqrt{30}}{36}$\\[5pt] \cline{2-3}
+& $\pm\sqrt{\Big( 3 + 2\sqrt{\frac{6}{5}} \Big)/7}$ & $\frac{18-\sqrt{30}}{36}$\\[5pt] \hline
+
+\multirow{3}{*}{5}    & 0 & $\frac{128}{225}$\\[5pt] \cline{2-3}
+& $\pm\frac13\sqrt{5-2\sqrt{\frac{10}{7}}}$ & $\frac{322+13\sqrt{70}}{900}$\\[5pt] \cline{2-3}
+& $\pm\frac13\sqrt{5+2\sqrt{\frac{10}{7}}}$ & $\frac{322-13\sqrt{70}}{900}$\\[5pt] \hline
+
+\end{tabular}
+\label{gauss_table}
+\end{center}
+
+В работе использовался пятиточечный метод и окончательная формула принимает вид:
+\begin{equation}
+\begin{split}
+	\int\limits_a^b f(x)\,dx =  128/255 f(\dfrac{a+b}{2})+
+  \dfrac{322+13\sqrt{70}}{900}\cdot f\left(\dfrac{a+b}{2} + \dfrac 13\cdot \sqrt{5-2\sqrt{\dfrac{10}{7}}}\cdot\dfrac{b-a}{2}\right) +\\
+  \dfrac{322+13\sqrt{70}}{900}\cdot f\left(\dfrac{a+b}{2} - \dfrac 13\cdot \sqrt{5-2\sqrt{\dfrac{10}{7}}}\cdot\dfrac{b-a}{2}\right) +\\
+  \dfrac{322-13\sqrt{70}}{900}\cdot f\left(\dfrac{a+b}{2} + \dfrac 13\cdot \sqrt{5+2\sqrt{\dfrac{10}{7}}}\cdot\dfrac{b-a}{2}\right) +\\
+  \dfrac{322-13\sqrt{70}}{900}\cdot f\left(\dfrac{a+b}{2} - \dfrac 13\cdot \sqrt{5+2\sqrt{\dfrac{10}{7}}}\cdot\dfrac{b-a}{2}\right);
+\end{split}
+\end{equation}
+
+\subsection{Погрешности и сравнение}
+
 \section{Анимирование}
