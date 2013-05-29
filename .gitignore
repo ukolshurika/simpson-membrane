@@ -2,3 +2,6 @@ data/
 img/
 bin/
 *.o
+paper/images
+
+

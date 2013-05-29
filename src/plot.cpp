@@ -39,9 +39,9 @@ int main(int argc, char **argv){
 
     while(constrained_data_x >> t >> x){
       if(argv[1][0] == 'h')
-        cout<< t/100000000.0 << ' ' << b1.H(x)/h0 << endl;
+        cout<< t/100000000.0 << ' ' << b1.H(x)/h0-0.0033 << endl;
       else if(argv[1][0] == 's')
-        cout << t/100000000.0 << ' ' << b1.SigmaE(x)*1000-92<< endl;
+        cout << t/100000000.0 << ' ' << b1.SigmaE(x)*1000-92.35<< endl;
     }
   }
 
