@@ -4,10 +4,12 @@
 \usepackage{samgtubib}
 %\usepackage{natbib}
 \usepackage{amsmath}
-\usepackage[table]{xcolor}
+\usepackage{xcolor}
 \usepackage{multirow}
 
-\numberwithin{equation}{subsection}
+\numberwithin{equation}{chapter}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+
 \begin{document}
 
 \renewcommand{\contentsname}{{\Large{Оглавление}\hfill}}
