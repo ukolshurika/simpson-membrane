@@ -2,6 +2,6 @@ data/
 img/
 bin/
 *.o
-paper/images
+paper/images/
 
 
