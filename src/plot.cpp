@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <fstream>
 
 
 #include "bound.h"
@@ -18,25 +19,31 @@ int main(int argc, char **argv){
   double t, x;
 
   Membrane m(q, h0, n);
-  Bound b(m);
+  Bound b1(m);
+
+  ifstream constrained_data_x("data/constrained_new.dat");
+  ifstream free_data("data/free_new.dat");  
+
   if(argv[1][0] == 'd'){ // d means debug5
     for(x=1; x >= 0;x-=0.01){
-      cout<< x << ' ' << b.SigmaE(x) << endl;
+      cout<< x << ' ' << b1.H(x) << endl;
     }
   }else{
-    while(cin >> t >> x){
-      if(argv[1][0] == 'h')
-        cout<< t/100000000.0 << ' ' << b.H(x)/h0 << endl;
-      else if(argv[1][0] == 's')
-        // b.SigmaE(x);
-        cout<< t/100000000.0 << ' ' << b.SigmaE(x)*h0*1000+0.3 << endl;
-      else if(argv[1][0] == 'a')
+
+    while(free_data >> t >> x){
+       if(argv[1][0] == 'h')
         cout<< t/100000000.0 << ' ' << sin(x)/(x) << endl;
-      else if(argv[1][0] == 'e')
-        cout<< t/100000000.0 << ' ' << q*x/h0/sin(x)/sin(x)*1000 << endl;
+      else if(argv[1][0] == 's')
+        cout<< t/100000000.0 << ' ' << q*x/sin(x)/sin(x)/h0*1000 << endl;
+    }
 
-
+    while(constrained_data_x >> t >> x){
+      if(argv[1][0] == 'h')
+        cout<< t/100000000.0 << ' ' << b1.H(x)/h0 << endl;
+      else if(argv[1][0] == 's')
+        cout << t/100000000.0 << ' ' << b1.SigmaE(x)*1000<< endl;
     }
   }
+
   return 0;
 }

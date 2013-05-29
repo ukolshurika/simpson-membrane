@@ -15,7 +15,7 @@ int main(){
   ofstream constrained_data("data/constrained_new.dat");
 
   m.free(999);
-  m.constrained(9999);
+  m.constrained(999);
 
 
   for(auto i = m.t_free_.cbegin(); i != m.t_free_.cend(); ++i){

@@ -13,6 +13,7 @@ public:
   double operator()(double x) const;
   double B1(double x) const;
   double B2(double x) const;
+  double B3(double x) const;
 
   double Rho(double x) const;
   double dRho(double x) const;

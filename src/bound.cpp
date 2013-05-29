@@ -19,7 +19,7 @@ struct HFunctor{
   HFunctor(const Bound& bound): b(bound){};
 
   double operator()(double x) const{
-    return b.B1(x)/b.B2(x);
+    return b.B1(x)/b.B3(x);
   }
 
   Bound b;
@@ -30,7 +30,7 @@ Bound::Bound(const Membrane& m):m_(m){};
 double Bound::operator()(double x) const{
   // std::cerr << "CONSTRAINED" << std::endl;
   // std::cerr << B1(x)/B2(x) << std::endl;
-  return B1(x)/B2(x)*pow(k2Sqrt3*H(x)/(m_.q_*Rho(x)), m_.n_);
+  return B1(x)/B3(x)*pow(k2Sqrt3*H(x)/(m_.q_*Rho(x)), m_.n_);
 }
 
 double Bound::Rho(double x) const{
@@ -65,6 +65,10 @@ double Bound::B1(double x) const{
 
 double Bound::B2(double x) const{
   return Rho(x)*Alpha(x)+S(x);
+}
+
+double Bound::B3(double x) const{
+  return Rho(x)*Alpha(x);
 }
 
 double Bound::SigmaE(double x) const{
