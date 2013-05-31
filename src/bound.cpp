@@ -7,6 +7,7 @@
 #include "utils.h"
 
 const double k2Sqrt3 = 2/sqrt(3);
+const double Bound::kB = 1;
 
 struct SFunctor{
   SFunctor(){};
@@ -21,7 +22,7 @@ double Bound::operator()(double x) const{
   // std::cerr << "CONSTRAINED" << std::endl;
   // std::cerr << "!!!!"<< B1(x) << ' ' << B2(x) << std::endl;
   double multiplier;
-  multiplier = (ordinate_ == 'y') ? 2/M_PI_2 : 2/M_PI_2;
+  multiplier = (ordinate_ == 'y') ? 2/M_PI_2 : 2/M_PI/(1-x);
   return multiplier*pow(k2Sqrt3*H(x)/(m_.q_*Rho(x)), m_.n_);
 }
 
@@ -71,5 +72,5 @@ double Bound::SigmaE(double x) const{
 
 double Bound::H(double x) const{
 
-  return (ordinate_ == 'y') ? m_.h1_*exp(-2/M_PI*x) : m_.h1_*exp(-2/M_PI*x);//(1+(2/M_PI - 1)*x); //*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
+  return (ordinate_ == 'y') ? m_.h1_*exp(-2/M_PI*x) : m_.h1_*pow((1-x), M_PI_2);//(1+(2/M_PI - 1)*x); //*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
 }
