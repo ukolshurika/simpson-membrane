@@ -61,56 +61,48 @@ void Membrane::free(int steps){
   }
 }
 
+double p_k[10000], p_k1[10000];
+double ds_k[10000], ds_k1[10000];
+double delta_ds_k[10000], delta_ds_k1[10000];
+double drho_k, drho_k1;
+double sigma_k[10000], sigma_k1[10000];
+double h_k[10000], h_k1[10000];
+double dt = 1.5*100000, mu = 0.3;
+
+void iteration(int iter){
+  int i = 0;
+  
+  for(i = 1; i<=iter; ++i){
+    delta_ds_k1[i] = pow((sigma_k1[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n)*ds_k[i]*dt;
+  }
+  
+  ds_k1[iter] = M_PI*(pow(k2Sqrt3*H(x)/(q_*Rho(x)), n_));
+
+  for(i = 1; i<=iter; ++i){
+    h_k1[i] = h_k[i](1-(pow(k2Sqrt3*H(x)/(q_*Rho(x)), m_.n_))));
+  }
+
+  sigma_k1[iter] = (m_.q_)/(m_.h0_*h_k1[iter]);
+
+  for(i = iter-1; i>0; --i){
+    sigma_k1[i] = sigma_k1[i+1]*h_k1[i+1]/h_k1[i] - mu*((ds_k1[i+1]*q_)/(h_k1[i])*h0_);
+  }
+}
+
+
 void Membrane::constrained(int steps){
+  int k;
+
+  // set sigma_0? zero others, 
   
-  double dx = Bound::kB/steps;
-  double t;
-
-  Bound b1(*this, 'y');
-  Bound b2(*this, 'x');
-
-  vector<pair<double, double>> v;
-  for(double x = 0; x <= Bound::kB-1; x+=dx){
-    t = Simpson::Integrate(x, x+dx, kSimpsonStep, b1);
-    v.push_back(make_pair(t, x));
-  }
-
-  /*by y ordinate*/
-  t_constrained_y_.clear();
-  double offset = 0;
-  double multiplire = sqrt(3)/2;
-  double t_free_end = t_free_.back().first;
-  double x_touch = Bound::kB - 1;
-  double offset2 = 0;
-
-  for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained_y_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
-    offset += it->first;
-  }
-
-  h1_ = b1.H(Bound::kB - 1);
-  cerr << h1_ << endl;
-  /*by x ordinate*/
-  offset2 = Simpson::Integrate(0, x_touch, 999, b1);
-  v.clear();
-  for(double x = 0; x <= 1; x+=dx){
-    t = Simpson::Integrate(x, x+dx, kSimpsonStep, b2);
-    if(!utils::IsNaN(t))
-    v.push_back(make_pair(t, x));
-  }
+  for(k = 0; k< 10000; ++k){
+    iteration(k);
+    swap(delta_ds_k1, delta_ds_k);
+    swap(h_k1, h_k);
+    swap(sigma_k1, sigma_k);
+    //save to vector results? or print it already
+  };
 
 
-  t_constrained_.clear();
-  // offset2 = 0;
-  
-  for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained_.push_back(make_pair(multiplire*(it->first + offset2)+t_free_end, it->second));
-    offset2 += it->first;
-  }
-
- // for (auto it = t_constrained_.begin(); it != t_constrained_.end(); ++it) {
- //    t_constrained_y_.push_back(make_pair(it->first, it->second+Bound::kB));
- //    offset += it->first;
- //  }
-
+  // copy-paste part 4
 }
