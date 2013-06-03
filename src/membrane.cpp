@@ -68,14 +68,16 @@ double drho_k, drho_k1;
 double sigma_k[10000], sigma_k1[10000];
 double h_k[10000], h_k1[10000];
 double dt = 1.5*100000, mu = 0.3;
+ofstream constrained_data_h("data/constrained_h.dat");
+ofstream constrained_data_s("data/constrained_s.dat");
 
 void iteration(int iter){
   int i = 0;
-  
+
   for(i = 1; i<=iter; ++i){
     delta_ds_k1[i] = pow((sigma_k1[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n)*ds_k[i]*dt;
   }
-  
+
   ds_k1[iter] = M_PI*(pow(k2Sqrt3*H(x)/(q_*Rho(x)), n_));
 
   for(i = 1; i<=iter; ++i){
@@ -92,17 +94,29 @@ void iteration(int iter){
 
 void Membrane::constrained(int steps){
   int k;
+  double x;
 
-  // set sigma_0? zero others, 
-  
+  for(i=10000; i>=0; i--){
+    x=i/10000.0;
+    sigma_k[i] = q_*(x)/sin(x)/sin(x)/h0_
+  }
+
   for(k = 0; k< 10000; ++k){
     iteration(k);
     swap(delta_ds_k1, delta_ds_k);
     swap(h_k1, h_k);
     swap(sigma_k1, sigma_k);
-    //save to vector results? or print it already
+    constrained_data_s << k*dt << " " << sigma_k[k] << endl;
+    constrained_data_h << k*dt << " " << h_k[k] << endl;
   };
 
-
+  for(k = 0; k< 10000; ++k){
+    iteration(k);
+    swap(delta_ds_k1, delta_ds_k);
+    swap(h_k1, h_k);
+    swap(sigma_k1, sigma_k);
+    constrained_data_s << k*dt << " " << sigma_k[k] << endl;
+    constrained_data_h << k*dt << " " << h_k[k] << endl;
+  };
   // copy-paste part 4
 }
