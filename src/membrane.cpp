@@ -101,10 +101,10 @@ void Membrane::iteration_gorizontal(int iter){
     sum+= delta_ds_k1[i];
   }
 
-!!//  ds_k1[iter] = M_PI*(pow(k2Sqrt3*H(x)/(q_*rho_k[iter]), n_));
+  ds_k1[iter] = (sum+*(pow(k2Sqrt3*H(x)/(q_*rho_k[iter]), n_)))*M_PI/8;
 
   for(i = 0; i<=iter; ++i){
-    drho_k1[i] = -(sum + ds_k1[iter]);
+    drho_k1[i] = -(sum + 2*ds_k1[iter]);
   }
 
   sum = 0;
@@ -129,6 +129,14 @@ void Membrane::constrained(int steps){
   int k;
   double x, tmp;
 
+  memset(p_k, 0, 10000*sizeof(double));        memset(p_k1, 0, 10000*sizeof(double));
+  memset(rho_k, 0, 10000*sizeof(double));      memset(rho_k1, 0, 10000*sizeof(double));
+  memset(drho_k, 0, 10000*sizeof(double));     memset(drho_k1, 0, 10000*sizeof(double));
+  memset(ds_k, 0, 10000*sizeof(double));       memset(ds_k1, 0, 10000*sizeof(double));
+  memset(delta_ds_k, 0, 10000*sizeof(double)); memset(delta_ds_k1, 0, 10000*sizeof(double));
+  memset(sigma_k, 0, 10000*sizeof(double));    memset(sigma_k1, 0, 10000*sizeof(double));
+  memset(h_k, 0, 10000*sizeof(double));        memset(h_k1, 0, 10000*sizeof(double));
+
   for(i=10000; i>=0; i--){
     x=i/10000.0;
     sigma_k[i] = q_*(x)/sin(x)/sin(x)/h0_
@@ -143,7 +151,7 @@ void Membrane::constrained(int steps){
     constrained_data_h << k*dt << " " << h_k[k] << endl;
   };
 
-  tmp = sigma_k[k] 
+  tmp = sigma_k[k];
   for(i=0; i<10000; ++i){
     sigma_k[i] = tmp;
   }
