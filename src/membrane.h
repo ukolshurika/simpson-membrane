@@ -12,8 +12,8 @@ class Membrane{
 
   void free(int steps);
   void constrained(int steps);
-  void iteration_vert();
-  void iteration_gorizontal();
+  void iteration_vert(int iter);
+  void iteration_gorizontal(int iter);
 
   std::vector<std::pair<double, double>> t_free_;
   std::vector<std::pair<double, double>> t_constrained_;

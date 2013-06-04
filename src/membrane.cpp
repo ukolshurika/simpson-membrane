@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <iostream>
+#include <fstream>
+#include <string.h>
 
 #include "bound.h"
 #include "matrix.h"
@@ -61,13 +63,15 @@ void Membrane::free(int steps){
   }
 }
 
-double p_k[10000], p_k1[10000];
-double ds_k[10000], ds_k1[10000];
-double delta_ds_k[10000], delta_ds_k1[10000];
-double drho_k[10000], drho_k1[10000];
-double rho_k[10000], rho_k1[10000];
-double sigma_k[10000], sigma_k1[10000];
-double h_k[10000], h_k1[10000];
+#define N 2
+const double k2Sqrt3 = 2/sqrt(3);
+double p_k[N], p_k1[N];
+double ds_k[N], ds_k1[N];
+double delta_ds_k[N], delta_ds_k1[N];
+double drho_k[N], drho_k1[N];
+double rho_k[N], rho_k1[N];
+double sigma_k[N], sigma_k1[N];
+double h_k[N], h_k1[N];
 double dt = 1.5*100000, mu = 0.3;
 ofstream constrained_data_h("data/constrained_h.dat");
 ofstream constrained_data_s("data/constrained_s.dat");
@@ -75,17 +79,19 @@ ofstream constrained_data_s("data/constrained_s.dat");
 void Membrane::iteration_vert(int iter){
   int i = 0;
 
-  for(i = 1; i<=iter; ++i){
-    delta_ds_k1[i] = pow((sigma_k1[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n)*ds_k[i]*dt;
+  for(i = 1; i<N; ++i){
+    delta_ds_k1[i] = pow((sigma_k[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n_)*ds_k[i]*dt;
   }
 
-  ds_k1[iter] = M_PI*(pow(k2Sqrt3*H(x)/(q_), n_));
+  cout << endl;
+
+  ds_k1[iter] = M_PI*(pow(k2Sqrt3*h_k[i]/(q_), n_));
 
   for(i = 1; i<=iter; ++i){
-    h_k1[i] = h_k[i](1-(pow(k2Sqrt3*H(x)/(q_), m_.n_))));
+    h_k1[i] = h_k[i]*(1-(pow(k2Sqrt3*h_k[i]/(q_), n_)));
   }
 
-  sigma_k1[iter] = (m_.q_)/(m_.h0_*h_k1[iter]);
+  sigma_k1[iter] = (q_)/(h0_*h_k1[iter]);
 
   for(i = iter-1; i>0; --i){
     sigma_k1[i] = sigma_k1[i+1]*h_k1[i+1]/h_k1[i] - mu*((ds_k1[i+1]*q_)/(h_k1[i])*h0_);
@@ -94,14 +100,15 @@ void Membrane::iteration_vert(int iter){
 
 void Membrane::iteration_gorizontal(int iter){
   int i = 0;
-  double sum = 0, s;
+  double sum = 0;
 
   for(i = 1; i<=iter; ++i){
-    delta_ds_k1[i] = pow((sigma_k1[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n)*ds_k[i]*dt;
-    sum+= delta_ds_k1[i];
+    delta_ds_k1[i] = pow((sigma_k[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n_)*ds_k[i]*dt;
+    sum += delta_ds_k1[i];
+    cout << sum << " ";
   }
-
-  ds_k1[iter] = (sum+*(pow(k2Sqrt3*H(x)/(q_*rho_k[iter]), n_)))*M_PI/8;
+  cout << endl;
+  ds_k1[iter] = (sum+M_PI_2*(pow(k2Sqrt3*h_k[iter]/(q_*rho_k[iter]), n_))*rho_k[iter])/4;
 
   for(i = 0; i<=iter; ++i){
     drho_k1[i] = -(sum + 2*ds_k1[iter]);
@@ -113,58 +120,75 @@ void Membrane::iteration_gorizontal(int iter){
     rho_k1[i] = 1-(sum);
   }
 
-  for(i = 1; i<=iter; ++i){
-    h_k1[i] = h_k[i](1-(pow(k2Sqrt3*H(x)/(q_*Rho(x)), m_.n_))));
+  cout << "H: ";
+  for(i = 0; i<=iter; ++i){
+    h_k1[i] = h_k[i]*(1-(pow(k2Sqrt3*h_k[i]/(q_*rho_k[i]), n_)));
+    cout << h_k[i]/(q_*rho_k[i])<< " ";
   }
 
 
-  sigma_k1[iter] = (m_.q_)/(m_.h0_*h_k1[iter]);
 
-  for(i = iter-1; i>0; --i){
+  sigma_k1[iter] = (q_)/(h0_*h_k1[iter]);
+  cout <<  h_k1[iter] << endl;
+
+  for(i = iter-1; i>=0; --i){
     sigma_k1[i] = sigma_k1[i+1]*h_k1[i+1]/h_k1[i] - mu*((ds_k1[i+1]*q_)/(h_k1[i])*h0_);
+    cout << i<< ":" << sigma_k1[i+1] << " ";
   }
+  cout << endl;
 }
 
 void Membrane::constrained(int steps){
-  int k;
+  int k, i;
   double x, tmp;
 
-  memset(p_k, 0, 10000*sizeof(double));        memset(p_k1, 0, 10000*sizeof(double));
-  memset(rho_k, 0, 10000*sizeof(double));      memset(rho_k1, 0, 10000*sizeof(double));
-  memset(drho_k, 0, 10000*sizeof(double));     memset(drho_k1, 0, 10000*sizeof(double));
-  memset(ds_k, 0, 10000*sizeof(double));       memset(ds_k1, 0, 10000*sizeof(double));
-  memset(delta_ds_k, 0, 10000*sizeof(double)); memset(delta_ds_k1, 0, 10000*sizeof(double));
-  memset(sigma_k, 0, 10000*sizeof(double));    memset(sigma_k1, 0, 10000*sizeof(double));
-  memset(h_k, 0, 10000*sizeof(double));        memset(h_k1, 0, 10000*sizeof(double));
+  memset(p_k, 0, N*sizeof(double));        memset(p_k1, 0, N*sizeof(double));
+  memset(rho_k, 0, N*sizeof(double));      memset(rho_k1, 0, N*sizeof(double));
+  memset(drho_k, 0, N*sizeof(double));     memset(drho_k1, 0, N*sizeof(double));
+  memset(ds_k, 0, N*sizeof(double));       memset(ds_k1, 0, N*sizeof(double));
+  memset(delta_ds_k, 0, N*sizeof(double)); memset(delta_ds_k1, 0, N*sizeof(double));
+  memset(sigma_k, 0, N*sizeof(double));    memset(sigma_k1, 0, N*sizeof(double));
+  memset(h_k, 0, N*sizeof(double));        memset(h_k1, 0, N*sizeof(double));
 
-  for(i=10000; i>=0; i--){
-    x=i/10000.0;
-    sigma_k[i] = q_*(x)/sin(x)/sin(x)/h0_
+  for(i=0; i<N; ++i){
+    sigma_k[i] = q_/sin(1)/sin(1)/h0_;
+    h_k[i] = h1_;
+    cout << h_k[i] << " !! ";
   }
 
-  for(k = 0; k< 10000; ++k){
+  cout << endl << " jjjjj " << endl;
+
+  for(k = 2; k<N; ++k){
     iteration_vert(k);
+    cout << k<< endl << "================"<< endl;
+    for(i=0; i<N; ++i){
+     // cout << i<< ":" << sigma_k[i] << " ";
+    }
+    cout << endl;
+
+    
     swap(delta_ds_k1, delta_ds_k);
     swap(h_k1, h_k);
     swap(sigma_k1, sigma_k);
+    
     constrained_data_s << k*dt << " " << sigma_k[k] << endl;
     constrained_data_h << k*dt << " " << h_k[k] << endl;
   };
 
   tmp = sigma_k[k];
-  for(i=0; i<10000; ++i){
+  for(i=0; i<N; ++i){
     sigma_k[i] = tmp;
   }
 
-  for(k = 0; k< 10000; ++k){
+  for(k = 0; k< N; ++k){
     iteration_gorizontal(k);
     swap(delta_ds_k1, delta_ds_k);
     swap(h_k1, h_k);
     swap(sigma_k1, sigma_k);
     swap(drho_k1, drho_k);
     swap(rho_k1, rho_k);
-    constrained_data_s << k*dt << " " << sigma_k[k] << endl;
-    constrained_data_h << k*dt << " " << h_k[k] << endl;
+    constrained_data_s << k*dt + N*dt<< " " << sigma_k[k] << endl;
+    constrained_data_h << k*dt + N*dt<< " " << h_k[k] << endl;
   };
 
 }

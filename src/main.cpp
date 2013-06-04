@@ -30,14 +30,14 @@ int main(){
     free_data<< i -> first << ' '<< i->second << endl;
   }
 
-  for(auto i = m.t_constrained_.cbegin(); i != m.t_constrained_.cend(); ++i){
-    constrained_data_x<< i -> first << ' ' << i->second << endl;
-  }
+  // for(auto i = m.t_constrained_.cbegin(); i != m.t_constrained_.cend(); ++i){
+  //   constrained_data_x<< i -> first << ' ' << i->second << endl;
+  // }
 
 
-  for(auto i = m.t_constrained_y_.cbegin(); i != m.t_constrained_y_.cend(); ++i){
-    constrained_data_y<< i -> first << ' ' << i->second << endl;
-  }
+  // for(auto i = m.t_constrained_y_.cbegin(); i != m.t_constrained_y_.cend(); ++i){
+  //   constrained_data_y<< i -> first << ' ' << i->second << endl;
+  // }
 
   cerr << "C0MPLETE" << endl;
   return 0;
