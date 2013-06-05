@@ -63,7 +63,7 @@ void Membrane::free(int steps){
   }
 }
 
-#define N 5
+#define N 7
 const double k2Sqrt3 = 2/sqrt(3);
 double p_k[N], p_k1[N];
 double ds_k[N], ds_k1[N];
@@ -80,9 +80,9 @@ void Membrane::iteration_vert(int iter){
   int i = 0;
 
   cout << "Delta: ";
-  for(i = 1; i<N; ++i){
+  for(i = 1; i<N/2; ++i){
     delta_ds_k1[i] = pow((sigma_k[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n_);
-    cout << delta_ds_k1[i] << " ";
+    cout << (sigma_k[i-1]+sigma_k[i])<< " ";
   }
   cout << endl;
 
@@ -91,13 +91,13 @@ void Membrane::iteration_vert(int iter){
   ds_k1[iter] = M_PI_2*(pow(k2Sqrt3*h_k[i]/(q_), n_));
   for(i = 0; i<iter; ++i){
     ds_k1[i] = ds_k[i]+delta_ds_k1[i];
-    cout << ds_k1[i] << " ";
+   cout << ds_k1[i] << " ";
   }
   cout << endl;
 
 
   cout << "H: ";
-  for(i = 0; i<N; ++i){
+  for(i = 0; i<=iter; ++i){
     h_k1[i] = h_k[i]*(1-(pow((1/(1-k2Sqrt3*q_/h0_/h_k[iter-1])-1), n_)));
     cout <<  h_k[i] << " ";
   }
@@ -178,13 +178,13 @@ void Membrane::constrained(int steps){
 
   
   for(k = 2; k<N; ++k){
-    cerr << k<< endl << "=+++==============="<< endl;
+     cerr << k<< endl << "=+++==============="<< endl;
     iteration_vert(k);
 
     for(i=0; i<N; ++i){
-     // cout << i<< ":" << sigma_k[i] << " ";
+      //cout << i<< ":" << sigma_k[i] << " ";
     }
-    cout << endl;
+    // cout << endl;
 
     
     swap(delta_ds_k1, delta_ds_k);
