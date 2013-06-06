@@ -76,20 +76,27 @@ double dt = 1.5*100000, mu = 0.3;
 ofstream constrained_data_h("data/constrained_h.dat");
 ofstream constrained_data_s("data/constrained_s.dat");
 
-void Membrane::iteration_vert(int iter){
-  int i = 0;
+void my_swap(double* a, double* b){
+  double tmp;
+  for (int i = 0; i < N; ++i){
+    tmp = a[i];
+    a[i] = b[i];
+    b[i] = tmp; 
+  }
+}
 
+void Membrane::iteration_vert(int iter){
   cout << "Delta: ";
-  for(i = 1; i<N/2; ++i){
+  for(int i = 1; i<N/2; ++i){
     delta_ds_k1[i] = pow((sigma_k[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n_);
-    cout << (sigma_k[i-1]+sigma_k[i])<< " ";
+    cout << (sigma_k[i])<< " ";
   }
   cout << endl;
 
 
   cout << "Ds: ";
-  ds_k1[iter] = M_PI_2*(pow(k2Sqrt3*h_k[i]/(q_), n_));
-  for(i = 0; i<iter; ++i){
+  ds_k1[iter] = M_PI_2*(pow((1/(1-k2Sqrt3*q_/h0_/h_k[iter-1])-1), n_));
+  for(int i = 0; i<iter; ++i){
     ds_k1[i] = ds_k[i]+delta_ds_k1[i];
    cout << ds_k1[i] << " ";
   }
@@ -97,7 +104,7 @@ void Membrane::iteration_vert(int iter){
 
 
   cout << "H: ";
-  for(i = 0; i<=iter; ++i){
+  for(int i = 0; i<=iter; ++i){
     h_k1[i] = h_k[i]*(1-(pow((1/(1-k2Sqrt3*q_/h0_/h_k[iter-1])-1), n_)));
     cout <<  h_k[i] << " ";
   }
@@ -105,35 +112,34 @@ void Membrane::iteration_vert(int iter){
 
   cout << "sigma: ";
   sigma_k1[iter] = (q_)/(h0_*h_k1[iter]);
-  for(i = iter-1; i>=0; --i){
+  for(int i = iter-1; i>=0; --i){
     sigma_k1[i] = sigma_k1[i+1]*h_k1[i+1]/h_k1[i] - mu*((ds_k1[i+1]*q_)/(h_k1[i])/h0_);
-    cout << h_k1[iter] << " ";
+    cout << sigma_k1[iter] << " ";
   }
   cout<< endl;
 }
 
 void Membrane::iteration_gorizontal(int iter){
-  int i = 0;
   double sum = 0;
 
-  for(i = 1; i<=iter; ++i){
+  for(int i = 1; i<=iter; ++i){
     delta_ds_k1[i] = pow((sigma_k[i-1]+sigma_k[i])/(4/sqrt(3)-(sigma_k[i-1]+(sigma_k[i]))), n_)*ds_k[i]*dt;
     sum += delta_ds_k1[i];
   }
   cout << endl;
 
-  ds_k1[iter] = (sum+M_PI_2*(pow(k2Sqrt3*h_k[iter]/(q_*rho_k[iter]), n_))*rho_k[iter])/4;
-  for(i = 0; i<iter; ++i){
+  ds_k1[iter] = (sum+M_PI_2*(pow(k2Sqrt3*h_k[iter-1]/(q_*rho_k[iter-1]), n_))*rho_k[iter-1])/4;
+  for(int i = 0; i<iter; ++i){
     ds_k1[i] = ds_k[i]+delta_ds_k1[i];
   }
 
-  for(i = 0; i<=iter; ++i){
+  for(int i = 0; i<=iter; ++i){
     drho_k1[i] = -(sum + 2*ds_k1[iter]);
   }
 
   sum = 0;
   cout << "Rho: ";
-  for(i = 0; i<=iter; ++i){
+  for(int i = 0; i<=iter; ++i){
     sum+=ds_k1[i];
     rho_k1[i] = 1-(sum);
     cout << ds_k1[i]<< " ";
@@ -141,7 +147,7 @@ void Membrane::iteration_gorizontal(int iter){
   cout << endl;
 
   cout << "H: ";
-  for(i = 0; i<=iter; ++i){
+  for(int i = 0; i<=iter; ++i){
     h_k1[i] = h_k[i]*(1-(pow((1/(1-k2Sqrt3*q_*rho_k[iter-1]/h0_/h_k[iter-1])-1), n_)));
     cout << (q_*rho_k[i])<< " ";
   }
@@ -151,7 +157,7 @@ void Membrane::iteration_gorizontal(int iter){
   sigma_k1[iter] = (q_)/(h0_*h_k1[iter]);
   cout <<  h_k1[iter] << endl;
 
-  for(i = iter-1; i>=0; --i){
+  for(int i = iter-1; i>=0; --i){
     sigma_k1[i] = sigma_k1[i+1]*h_k1[i+1]/h_k1[i] - mu*((ds_k1[i+1]*q_)/(h_k1[i])*h0_);
     cout << i<< ":" << sigma_k1[i+1] << " ";
   }
@@ -187,9 +193,9 @@ void Membrane::constrained(int steps){
     // cout << endl;
 
     
-    swap(delta_ds_k1, delta_ds_k);
-    swap(h_k1, h_k);
-    swap(sigma_k1, sigma_k);
+    my_swap(delta_ds_k1, delta_ds_k);
+    my_swap(h_k1, h_k);
+    my_swap(sigma_k1, sigma_k);
     
     constrained_data_s << k*dt << " " << sigma_k[k] << endl;
     constrained_data_h << k*dt << " " << h_k[k] << endl;
