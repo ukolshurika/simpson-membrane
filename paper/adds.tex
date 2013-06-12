@@ -1,2 +1,94 @@
 \chapter*{Приложения}
 \addcontentsline{toc}{chapter}{Приложения}
+
+Метод Симпсона
+\begin{lstlisting}[language=C]
+#ifndef SIMPSON_H_
+#define SIMPSON_H_
+
+#include "utils.h"
+namespace{
+
+template<typename F>
+class SubSum {
+public:
+  SubSum(const F& f, double offset, double scale)
+    : f_(f), offset_(offset), scale_(scale) {
+  }
+
+  double operator () (int i) const {
+    return f_(offset_ + scale_ * i);
+  }
+
+private:
+  const F& f_;
+  double offset_;
+  double scale_;
+};
+}
+
+class Simpson{
+  public:
+
+  template <class F>
+  static double Integrate(double from, double to, int steps, const F& f){
+    double  h = (to - from) / steps;
+
+    SubSum<F> even_sum(f, from + 2 * h, 2 * h);
+    SubSum<F> odd_sum(f, from + h, 2 * h);
+
+    double sum1 = utils::KahanSum((steps - 1) / 2, even_sum);
+    double sum2 = utils::KahanSum(steps / 2, odd_sum);
+
+    double sum = f(from) + 2*sum1 + 4*sum2 + f(to);
+    sum *= h/3;
+    return sum;
+  }
+};
+
+#endif  // SIMPSON_H_
+
+\end{lstlisting}
+
+Метод Гаусса
+\begin{lstlisting}[language=C]
+#ifndef GAUSS_H_
+#define GAUSS_H_
+
+#include <cmath>
+
+class Gaus{
+  public:
+
+  template <class F>
+  static double Integrate(double from, double to, const F& f){
+    double summand = (from+to)/2.0, sum, multiplier = (to-from)/2.0;
+    sum =  128/255.0*f(summand)+
+           (322+13*sqrt(70))/900.0*f(summand+1/3.0*sqrt(5-2*sqrt(10/7.0)))*multiplier +
+           (322+13*sqrt(70))/900.0*f(summand-1/3.0*sqrt(5-2*sqrt(10/7.0)))*multiplier +
+           (322-13*sqrt(70))/900.0*f(summand+1/3.0*sqrt(5+2*sqrt(10/7.0)))*multiplier +
+           (322-13*sqrt(70))/900.0*f(summand-1/3.0*sqrt(5+2*sqrt(10/7.0)))*multiplier;
+
+    return sum*(to-from)/2.0;
+  }
+};
+
+#endif  // GAUSS_H_
+\end{lstlisting}
+
+Метод Кахана
+\begin{lstlisting}[language=C]
+  template<typename F>
+  double KahanSum(int n, const F& f) {
+    double s = 0, c = 0, t, y;
+    for(int j=0; j<n; j++){
+      y = f(j) - c;
+      t = s + y;
+      c = (t - s) -y;
+      s = t;
+    }
+    return s;
+  }
+};
+
+\end{lstlisting}
