@@ -154,4 +154,56 @@ $b/a$    & $\overline{t_2}$/$\overline{H_2}$ & $\overline{t_3}$/$\overline{H_3}$
 
 \section{Анимирование}
 \subsection{Используемые инструменты}
-В качестве 
+В качестве средства построения трех-мерного изображения было выбрано программное 
+средство OpenGL. Оно представляет собой свободное программное обеспечение, состоящее 
+из большого набора библиотек и простой процедурный интерфейс [\ref{opengl-manual}]. 
+Несмотря на это с  помощью OpenGL можно создавать сложные и мощные программные 
+комплексы, затрачивая при 
+этом минимальное время по сравнению с другими графическими библиотеками. При этом с 
+помощью OpenGL обеспечивается высокая эффективность работы с графическими объектами.
+%а тут наверно тоже можно раздуть
+\subsection{Подготовка выходных данных}
+Изначально полученная зависимость имеет равномерный шаг по переменной $x$ и переменный по искомой $t$. Чтобы видео отражало реальную временную зависимость требуется перейти к равномерному шагу по $x$ и неравномерному по $t$.
+Так же нужно было расширить выходные параметры значениями толщины. Для перехода к равномерному шагу по $t$ использовалась линеаризация значений, по следующему алгоритму:
+\begin{itemize}
+\item[1.] Найти среднее значение $\Delta t$,
+\item[2.] Пересчитать зависимость $x(t)$, с шагом $\Delta t$:
+\begin{itemize}
+	\item[2.1] Если очередной отрезок $(x_k; x_{k+1})$ имеет шаг по $t$ больше, чем $\Delta t$, берем линейное приближение для вычисления $x_{k+1}(t_k+\Delta t)$, операция выполняется кратно отношению $\frac{t_{k+1}-t_k}{\Delta t}$,
+	\item[2.2] Иначе выкидываем точку $x_{k+1}$ из новых выходных данных.
+\end{itemize}
+\end{itemize} 
+Таким образом получаем усредненную и равномерную зависимость по времени, которую уже на вход получает модуль графической интерпретации данных. Ниже представлены различные 
+кадры из видео деформирующейся мембраны.
+		\begin{figure}[h!]	
+				\def\svgwidth{\columnwidth}
+				\center{\includegraphics[width=0.5\linewidth]{images/state11.png}}
+				\caption{}				
+				\label{animate1}
+		\end{figure}
+
+		\begin{figure}[h!]	
+				\def\svgwidth{\columnwidth}
+				\center{\includegraphics[width=0.5\linewidth]{images/state12.png}}
+				\caption{} 
+				\label{animation2}
+		\end{figure}
+				\begin{figure}[h!]	
+				\def\svgwidth{\columnwidth}
+				\center{\includegraphics[width=0.5\linewidth]{images/state21.png}}
+				\caption{} 
+				\label{animation3}
+		\end{figure}
+				\begin{figure}[h!]	
+				\def\svgwidth{\columnwidth}
+				\center{\includegraphics[width=0.5\linewidth]{images/state22.png}}
+				\caption{} 
+				\label{animation4}
+		\end{figure}
+		\begin{figure}[h!]	
+				\def\svgwidth{\columnwidth}
+				\center{\includegraphics[width=0.5\linewidth]{images/state33.png}}
+				\caption{} 
+				\label{animation5}
+		\end{figure}
+\clearpage

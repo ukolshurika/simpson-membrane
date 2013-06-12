@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-class Gaus{
+/*class Gaus{
   public:
 
   template <class F>
@@ -17,6 +17,6 @@ class Gaus{
 
     return sum*(to-from)/2.0;
   }
-};
+};*/
 
 #endif  // SIMPSON_H_
