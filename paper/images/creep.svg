@@ -10,12 +10,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="547.26996"
+   height="557.59497"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="Новый документ 1">
+   sodipodi:docname="creep.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -23,78 +23,93 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="168.12039"
-     inkscape:cy="708.67919"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="176.84209"
+     inkscape:cy="307.34807"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
+     inkscape:window-width="1295"
+     inkscape:window-height="744"
      inkscape:window-x="65"
      inkscape:window-y="24"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
     <inkscape:grid
        id="grid2985"
-       type="xygrid" />
+       type="xygrid"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       originx="-25.410015px"
+       originy="-473.11498px" />
   </sodipodi:namedview>
   <defs
      id="defs4">
     <marker
        inkscape:stockid="Arrow2Mstart"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="Arrow2Mstart"
        style="overflow:visible">
       <path
          id="path3785"
-         style="fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round"
-         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         transform="scale(0.6) translate(0,0)" />
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="scale(0.6,0.6)"
+         inkscape:connector-curvature="0" />
     </marker>
     <marker
        inkscape:stockid="Arrow2Mend"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="Arrow2Mend"
-       style="overflow:visible;">
+       style="overflow:visible">
       <path
          id="path3788"
-         style="fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
-         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         transform="scale(0.6) rotate(180) translate(0,0)" />
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="scale(-0.6,-0.6)"
+         inkscape:connector-curvature="0" />
     </marker>
     <marker
        inkscape:stockid="Arrow1Mend"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="Arrow1Mend"
-       style="overflow:visible;">
+       style="overflow:visible">
       <path
          id="path3770"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
-         transform="scale(0.4) rotate(180) translate(10,0)" />
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
     </marker>
     <marker
        style="overflow:visible"
        id="Arrow1Mstart"
-       refX="0.0"
-       refY="0.0"
+       refX="0"
+       refY="0"
        orient="auto"
        inkscape:stockid="Arrow1Mstart">
       <path
-         transform="scale(0.4) translate(10,0)"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         id="path3767" />
+         transform="matrix(0.4,0,0,0.4,4,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         id="path3767"
+         inkscape:connector-curvature="0" />
     </marker>
     <filter
        inkscape:collect="always"
-       id="filter5974">
+       id="filter5974"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="2.25"
@@ -109,19 +124,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      id="layer1"
      inkscape:groupmode="layer"
-     inkscape:label="Layer 1">
+     inkscape:label="Layer 1"
+     transform="translate(-25.410015,-21.6522)">
     <path
        inkscape:connector-curvature="0"
        id="path2987"
        d="M 60,32.362183 C 60,532.36218 60,532.36218 60,532.36218"
-       style="fill:none;stroke:#000000;stroke-width:4.20000000000000018;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#Arrow1Mstart)" />
+       style="fill:none;stroke:#000000;stroke-width:4.19999981;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1Mstart)" />
     <path
        style="fill:none;stroke:#000000;stroke-width:4.19999981;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1Mstart)"
        d="m 560,532.36218 c -500,0 -500,0 -500,0"
@@ -176,7 +192,6 @@
     <g
        ns0:preamble=""
        ns0:text="O"
-       text-anchor="start"
        word-spacing="normal"
        letter-spacing="normal"
        font-size-adjust="none"
@@ -184,19 +199,11 @@
        font-weight="normal"
        font-variant="normal"
        font-style="normal"
-       fill-opacity="1"
-       fill-rule="evenodd"
-       fill="none"
-       stroke-opacity="1"
-       stroke-dashoffset="0"
-       stroke-dasharray="none"
        stroke-miterlimit="10.433"
-       stroke-linejoin="miter"
-       stroke-linecap="butt"
-       stroke="black"
        xml:space="preserve"
-       transform="matrix(4.500000,0,0,-4.500000,-900.000000,3375.000000)"
-       id="g4271">
+       transform="matrix(4.5,0,0,-4.5,-900,3375)"
+       id="g4271"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0">
 <path
    id="path4273"
    d="m 212.25667,627.11285 0,0.19 -0.01,0.19 -0.02,0.18 -0.03,0.18 -0.04,0.18 -0.05,0.17 -0.05,0.17 -0.06,0.17 -0.06,0.16 -0.08,0.15 -0.08,0.16 -0.09,0.14 -0.09,0.15 -0.1,0.13 -0.1,0.13 -0.11,0.13 -0.12,0.12 -0.12,0.11 -0.12,0.11 -0.13,0.1 -0.14,0.1 -0.14,0.08 -0.14,0.08 -0.15,0.07 -0.15,0.07 -0.15,0.06 -0.16,0.04 -0.16,0.04 -0.16,0.04 -0.16,0.02 -0.17,0.01 -0.17,0.01 v -0.25 c 0.87,0 2.29,-0.71 2.29,-3.25 0,-2.63 -1.36,-3.47 -2.28,-3.47 h 0 c -0.95,0 -2.29,0.88 -2.29,3.47 0,2.58 1.46,3.25 2.28,3.25 v 0.25 c -1.78,0 -3.3,-1.59 -3.3,-3.64 0,-2.03 1.53,-3.58 3.3,-3.58 1.81,0 3.31,1.58 3.31,3.58 z"
@@ -241,18 +248,9 @@
        inkscape:connector-curvature="0" />
     <g
        id="g6386"
-       transform="matrix(4.500000,0,0,-4.500000,-900.000000,3375.000000)"
+       transform="matrix(4.5,0,0,-4.5,-900,3375)"
        xml:space="preserve"
-       stroke="black"
-       stroke-linecap="butt"
-       stroke-linejoin="miter"
        stroke-miterlimit="10.433"
-       stroke-dasharray="none"
-       stroke-dashoffset="0"
-       stroke-opacity="1"
-       fill="none"
-       fill-rule="evenodd"
-       fill-opacity="1"
        font-style="normal"
        font-variant="normal"
        font-weight="normal"
@@ -260,9 +258,9 @@
        font-size-adjust="none"
        letter-spacing="normal"
        word-spacing="normal"
-       text-anchor="start"
        ns0:text="A"
-       ns0:preamble="">
+       ns0:preamble=""
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0">
 <path
    style="fill:#000000;stroke-width:0"
    inkscape:connector-curvature="0"
@@ -291,7 +289,7 @@
 </g>    <g
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        id="g6530"
-       transform="matrix(4.5,0,0,-4.5,-452.545,3469.6572)"
+       transform="matrix(4.5,0,0,-4.5,-462.545,3369.6572)"
        xml:space="preserve"
        stroke-miterlimit="10.433"
        font-style="normal"

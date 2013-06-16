@@ -47,6 +47,7 @@
  %мб. что-нить пр тикз написать? кто его создал и вообще что есть такой замечательный инструмент)))
  
 \section{Анализ численного эксперимента\label{section_2}}
+\subsection{Деформирование внутри криволинейной матрицы}
 	В качестве примера рассмотрим деформирование мембраны из алюминиевого сплава Д16T при $400^\circ\text{C}$ [\ref{teraud}]. Константы материала: 
    $C=9.37\cdot10^5 \text{МПа}^{-n}\text{сек}^{-1}$, $n=3.4$, $\sigma_b = 88.3\; \text{МПа}$. 
    Геометрические размеры мембраны: ширина $2a=200$ мм, толщина $H_0=2$ мм, $k$=1.5, $\overline{b}$=4.5 давление $q=2.65$ кПа [\ref{teraud}].  
@@ -60,7 +61,7 @@
    		\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
 				\center{\includegraphics[width=0.9\linewidth]{images/quad_sliding.png}}
-				\caption{} 
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии идеального скольжения внутри криволинейной матрицы.} 
 				\label{quad_sliging}
 		\end{figure}
 
@@ -70,16 +71,19 @@
 		\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
 				\center{\includegraphics[width=0.9\linewidth]{images/quad_sticking.png}}
-				\caption{} 
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии прилипания внутри криволинейной матрицы. } 
 				\label{quad_sticking}
 		\end{figure}
 
+\subsection{Деформирование внутри матрицы с вертикальными стенками и плоским днищем}
 		
 		Расчет для мембраны внутри матрицы с вертикальными стенками и плоским днищем проводился для матриц с различной высотой:
 		$b = a$ (рис.\ref{vert_sliging_ba}), $b = 4.5a$ (рис.\ref{vert_sliging_4ba}),$b=7a$ (рис.\ref{vert_sliging_7ba}), $b=10a$ (рис.\ref{vert_sliging_10ba}). Из рисунков видно, что при увеличении высоты мембраны увеличивается максимально достижимая интенсивность напряжения, которая при достижении значения $\sigma_b$ приведет к разрушению мембраны. Приведем результаты вычислений в таблице \ref{vert_table}
+\begin{table}
 \begin{center}
 
 \renewcommand{\arraystretch}{2}
+
 \begin{tabular}{|c|c|c|}
 \hline
 $b/a$    & $\overline{t_2}$/$\overline{H_2}$ & $\overline{t_3}$/$\overline{H_3}$ \\
@@ -88,34 +92,35 @@ $b/a$    & $\overline{t_2}$/$\overline{H_2}$ & $\overline{t_3}$/$\overline{H_3}$
 4.5  & $7.14\cdot10^8$/0.636  & $13.67\cdot10^8$/0.186\\ \hline
 7    & $7.14\cdot10^8$/0.636  & $13.96\cdot10^8$/0.125\\ \hline
 10   & $7.14\cdot10^8$/0.636  & $13.98\cdot10^8$/0.089\\ \hline
-
 \end{tabular}
-\label{vert_table}
+
 \end{center}
-				 
+\label{vert_table}
+\caption{}
+\end{table}				 
 		\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/ab.png}}
-				\caption{b=a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/ab.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии идеального скольжения внутри криволинейной матрицы. Отношение $b/a = 1$} 
 				\label{vert_sliging_ba}
 		\end{figure}
 
 		\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/ab4.png}}
-				\caption{b=4.5a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/ab4.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии идеального скольжения внутри криволинейной матрицы. Отношение $b/a = 4.5$} 
 				\label{vert_sliging_4ba}
 		\end{figure}
 				\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/ab7.png}}
-				\caption{b=7a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/ab7.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии идеального скольжения внутри криволинейной матрицы. Отношение $b/a = 7$} 
 				\label{vert_sliging_7ba}
 		\end{figure}
 				\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/ab10.png}}
-				\caption{b=10a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/ab10.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии идеального скольжения внутри криволинейной матрицы. Отношение $b/a$ = 10} 
 				\label{vert_sliging_10ba}
 		\end{figure}
 
@@ -126,27 +131,27 @@ $b/a$    & $\overline{t_2}$/$\overline{H_2}$ & $\overline{t_3}$/$\overline{H_3}$
 						 
 		\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/stick_ab.png}}
-				\caption{b=a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/stick_ab.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии прилипания внутри криволинейной матрицы. Отношение $b/a = 1$} 
 				\label{vert_stick_ba}
 		\end{figure}
 
 		\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/stick_ab45.png}}
-				\caption{b=4.5a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/stick_ab45.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии прилипания внутри криволинейной матрицы. Отношение $b/a = 4.5$} 
 				\label{vert_stick_4ba}
 		\end{figure}
 				\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/stick_ab7.png}}
-				\caption{b=7a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/stick_ab7.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии прилипания внутри криволинейной матрицы. Отношение $b/a = 7$ }
 				\label{vert_stick_7ba}
 		\end{figure}
 				\begin{figure}[h!]	
 				\def\svgwidth{\columnwidth}
-				\center{\includegraphics[width=0.9\linewidth]{images/stick_ab10.png}}
-				\caption{b=10.8a} 
+				\center{\includegraphics[width=0.8\linewidth]{images/stick_ab10.png}}
+				\caption{Зависимости толщины(1) и интенсивности напряжений(2) от времени при условии прилипания внутри криволинейной матрицы. Отношение $b/a = 10.8$} 
 				\label{vert_stick_10ba}
 		\end{figure}
 
