@@ -26,6 +26,17 @@ double ValueAsLine(double time,
   return k*time + b;
 }
 
+
+void Kahan(double offset, const vector<pair<double, double>>& src, vector<pair<double, double>>* dst){
+  double s = offset, c = 0, t, y;
+  for(auto j=src.begin(); j!=src.end(); j++){
+    y = j->first - c;
+    t = s + y;
+    c = (t - s) - y;
+    s = t;
+    (*dst).push_back(make_pair(kSqrt3*s/2.0, j->second));
+  }
+}
 }
 
 struct Free {
@@ -68,10 +79,11 @@ void Membrane::free(int steps){
   t_free_.clear();
   double offset = 0;
 
-  for (auto it = v.begin(); it != v.end(); ++it) {
-    t_free_.push_back(make_pair((it->first + offset), it->second));
-    offset += it->first;
-  }
+  Kahan(offset, v, &t_free_);
+  // for (auto it = v.begin(); it != v.end(); ++it) {
+  //   t_free_.push_back(make_pair((it->first + offset), it->second));
+  //   offset += it->first;
+  // }
 }
 
 void Membrane::constrained(int steps){
@@ -96,10 +108,11 @@ void Membrane::constrained(int steps){
   double x_touch = Bound::kB - 1;
   double offset2 = 0;
 
-  for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained_y_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
-    offset += it->first;
-  }
+  Kahan(t_free_end, v, &t_constrained_y_);
+  // for (auto it = v.begin(); it != v.end(); ++it) {
+  //   t_constrained_y_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
+  //   offset += it->first;
+  // }
 
   h1_ = b1.H(Bound::kB - 1);
   cerr << h1_ << endl;
@@ -115,17 +128,12 @@ void Membrane::constrained(int steps){
 
   t_constrained_.clear();
   // offset2 = 0;
-  
-  for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained_.push_back(make_pair(multiplire*(it->first + offset2)+t_free_end, it->second));
-    offset2 += it->first;
-  }
 
- for (auto it = t_constrained_.begin(); it != t_constrained_.end(); ++it) {
-    t_constrained_y_.push_back(make_pair(it->first, it->second+Bound::kB));
-    offset += it->first;
-  }
-
+  Kahan(offset2, v, &t_constrained_);  
+  // for (auto it = v.begin(); it != v.end(); ++it) {
+  //   t_constrained_.push_back(make_pair(multiplire*(it->first + offset2)+t_free_end, it->second));
+  //   offset2 += it->first;
+  // }
 }
 
 double Membrane::MeanValueDt(){

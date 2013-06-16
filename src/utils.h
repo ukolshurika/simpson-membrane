@@ -22,6 +22,17 @@ namespace utils{
   bool eql(double a, double b);
   bool IsNaN(double a);
 
+  template<typename F>
+  double KahanSum(int n, const F& f) {
+    double s = 0, c = 0, t, y;
+    for(int j=0; j<n; j++){
+      y = f(j) - c;
+      t = s + y;
+      c = (t - s) -y;
+      s = t;
+    }
+    return s;
+  }
 };
 
 #endif  // UTILS_H_
