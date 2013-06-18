@@ -143,22 +143,17 @@ void half_cylinder(double center, double rho, double h, GLUquadricObj *quadObj1,
   glDisable(GL_CLIP_PLANE1);
 }
 
-void quarter_cylinder(double center_x, double center_y, double rho, double h, GLUquadricObj *quadObj1, double *clip_plane1, double cliping_y){
+void quarter_cylinder(double center_x, double center_y, double rho, double h, GLUquadricObj *quadObj1, double *clip_plane1, double *clip_plane3, double cliping_y, int right){
   double clip_plane2[] = {0.0, 1.0, 0.0, -cliping_y};
-  // double clip_plane1[] = {1.0, 0.0, 0.0, -cliping_x};
-
-  glEnable(GL_CLIP_PLANE1);
-  glEnable(GL_CLIP_PLANE2);
-
 
   glPushMatrix();
     glTranslatef(center_x, center_y, -l/2.0);
     gluCylinder(quadObj1, rho, rho, l, 100, 100);
   glPopMatrix();
 
-  glClipPlane(GL_CLIP_PLANE2,clip_plane2);
-  glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+  glPushMatrix();
 
+  glPopMatrix();
   glPushMatrix();
     glTranslatef(center_x, center_y, -l/2.0);
     gluCylinder(quadObj1, rho-h, rho-h, l, 100, 100);
@@ -175,8 +170,6 @@ void quarter_cylinder(double center_x, double center_y, double rho, double h, GL
     gluDisk(quadObj1, rho - h, rho, 100, 100);
   glPopMatrix();
 
-  glDisable(GL_CLIP_PLANE1);
-  glDisable(GL_CLIP_PLANE2);
 }
 
 void borders(double y, double h){
@@ -204,22 +197,23 @@ void display(void) {
 
   glColor4f(0.3, 0.3, 0.3,0.5);
 
-  GLUquadricObj *quadObj1;
+  GLUquadricObj *quadObj1, *quadObj2;
 
   quadObj1 = gluNewQuadric();
+  quadObj2 = gluNewQuadric();
 
   // ********** fixed parts ***********//
   glColor4f(0.5,0.5,0.5, 1.0);
   glPushMatrix();
     glTranslatef(-a*1.6, 0, 0);
     glScalef(a, h0, l);
-    glutSolidCube(1.0); 
+    glutSolidCube(1.0);
     glTranslatef(3.1*a, 0, 0);
-    glutSolidCube(1.0); 
+    glutSolidCube(1.0);
   glPopMatrix();
 
 
- 
+
   glColor4f(0.7,0.3,0.9, 1.0);
 
   if (free_data.fail())
@@ -231,9 +225,9 @@ void display(void) {
   if (constrained_data_x.fail()){
     sleep(10000);
     glutSwapBuffers();
-    return; 
+    return;
   }
-    
+
 
   if(stadia == 1)
     free_data >> t >> var >> h >> rho >> center;
@@ -243,7 +237,7 @@ void display(void) {
     constrained_data_x >> t >> var >> h >> rho >> center;
   }
 
-  if(stadia == 1){ 
+  if(stadia == 1){
     half_cylinder(center, rho, h, quadObj1, h0/2.0);
 
   } else if (stadia==2) {
@@ -253,20 +247,36 @@ void display(void) {
   } else {
     double cpx[] = {1.0, 0.0, 0.0,  -var};
     double cpx2[] = {-1.0, 0.0, 0.0, -var};
+    double clip_plane2[] = {0.0, 1.0, 0.0, -(kB-(a-var))};
     borders(kB-(a-var), h);
 
     // bottom part
     glPushMatrix();
       glTranslatef(0, kB-h, 0);
-      glScalef(var, h, l);
+      glScalef(var*2, h, l);
       glutSolidCube(1);
     glPopMatrix();
 
     glPopMatrix();
+    glPushMatrix();
+      glEnable(GL_CLIP_PLANE1);
+      glEnable(GL_CLIP_PLANE2);
+      glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+      glClipPlane(GL_CLIP_PLANE1,cpx);
+      quarter_cylinder(var,  kB-(a-var), a-var, h, quadObj1, cpx, cpx2, kB-(a-var), 1);
+      glDisable(GL_CLIP_PLANE1);
+      glDisable(GL_CLIP_PLANE2);
+    glPopMatrix();
 
-    quarter_cylinder(var,  kB-(a-var), a-var, h, quadObj1, cpx, kB-(a-var));
-    quarter_cylinder(-var, kB-(a-var), a-var, h, quadObj1, cpx2, kB-(a-var));
-    usleep(100000);
+    glPushMatrix();
+      glEnable(GL_CLIP_PLANE1);
+      glEnable(GL_CLIP_PLANE2);
+      glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+      glClipPlane(GL_CLIP_PLANE1,cpx2);
+      quarter_cylinder(-var, kB-(a-var), a-var, h, quadObj1, cpx, cpx2, kB-(a-var), 0);
+      glDisable(GL_CLIP_PLANE1);
+      glDisable(GL_CLIP_PLANE2);
+    glPopMatrix();
   }
 
   glColor4f(0.3, 0.3, 0.3,0.5);
@@ -378,5 +388,5 @@ int main(int argc, char **argv) {
   glutKeyboardFunc(keyboard);
   glutIdleFunc(spinDisplay);
   glutMainLoop();
-  return 0;  
+  return 0;
 }
