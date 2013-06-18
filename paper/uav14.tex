@@ -7,9 +7,14 @@
 \usepackage{xcolor}
 \usepackage{multirow}
 \usepackage{caption}
+\usepackage{chngcntr}
 
 \numberwithin{equation}{chapter}
 \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+
+\setcounter{figure}{0}
+\numberwithin{figure}{chapter}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{\c@figure}}
 \captionsetup{width=15cm}
 \begin{document}
 
