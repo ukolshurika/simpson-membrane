@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt, openany]{memoir}
+\documentclass[a4paper,14pt, openany]{memoir}
 \usepackage{msiu_term_work}
 \usepackage{my_term_styles}
 \usepackage{samgtubib}
@@ -7,10 +7,12 @@
 \usepackage{xcolor}
 \usepackage{multirow}
 \usepackage{caption}
+\usepackage{setspace}
 
 \numberwithin{equation}{chapter}
 \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
 \captionsetup{width=15cm}
+\onehalfspacing
 \begin{document}
 
 \renewcommand{\contentsname}{{\Large{Оглавление}\hfill}}
@@ -30,6 +32,7 @@
 \input{sect2}
 \input{conclusion}
 \input{bib}
+
 %\bibliographystyle{plainnat}
 %\bibliography{bib}
 %\printbibliography
