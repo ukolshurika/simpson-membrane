@@ -91,12 +91,13 @@ void Membrane::constrained(int steps){
   double dx = Bound::kB/steps;
   double t;
 
-  Bound b1(*this, 'y');
-  Bound b2(*this, 'x');
+  Bound b1(*this, 'x');
+  Bound b2(*this, 'y');
 
   vector<pair<double, double>> v;
   for(double x = 0; x <= Bound::kB-1; x+=dx){
     t = Simpson::Integrate(x, x+dx, kSimpsonStep, b1);
+    if(!utils::IsNaN(t))
     v.push_back(make_pair(t, x));
   }
 

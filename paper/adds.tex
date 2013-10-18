@@ -1,7 +1,7 @@
 \chapter*{Приложения}
 \addcontentsline{toc}{chapter}{Приложения}
-
-Метод Симпсона
+\setcounter{section}{0}
+\section{Метод Симпсона}
 \begin{lstlisting}[language=C]
 #ifndef SIMPSON_H_
 #define SIMPSON_H_
@@ -52,8 +52,8 @@ class Simpson{
 #endif  // SIMPSON_H_
 
 \end{lstlisting}
-
-Метод Гаусса
+\newpage
+\section{Метод Гаусса}
 \begin{lstlisting}[language=C]
 #ifndef GAUSS_H_
 #define GAUSS_H_
@@ -82,8 +82,8 @@ class Gaus{
 
 #endif  // GAUSS_H_
 \end{lstlisting}
-
-Метод Кахана
+\newpage
+\section{Метод Кахана}
 \begin{lstlisting}[language=C]
   template<typename F>
   double KahanSum(int n, const F& f) {

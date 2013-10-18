@@ -7,7 +7,7 @@ SOURCES=$(addprefix $(SDIR)/,main.cpp bound.cpp membrane.cpp matrix.cpp utils.cp
 HEADERS=$(wildcard $(SDIR)/*.h)
 OBJECTS=$(addprefix $(BDIR)/,$(notdir $(SOURCES:.cpp=.o)))
 
-CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -DDEBUG -DDRAWER -g
+CFLAGS=-Wall -I. -I$(GTEST_DIR)/include -std=c++0x -msse2 -DDEBUG -g
 LDFLAGS=$(GTEST_DIR)/libgtest.a -lpthread -lrt
 GLFLAGS=-lglut -lGL -lGLU
 
