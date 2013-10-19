@@ -8,6 +8,7 @@ class Bound{
 public:
   const static int kSimpsonStep = 99;
   const static double kB;
+  const static double kB2;
 
   Bound(const Membrane& m, char ordinate);
 

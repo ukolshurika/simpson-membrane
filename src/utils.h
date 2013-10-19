@@ -9,7 +9,7 @@
   if (!(e)) {               \
     std::cerr << "Check failed for " << (#e) << " "     \
               << "at " << __FILE__ << ":" << __LINE__ << std::endl; \
-    exit(-1);               \
+    *(int*) 0 = 0x31337;               \
   }                 \
 }
 #else

@@ -22,11 +22,26 @@ private:
 };
 }
 
+template<typename B>
+struct IsBound {
+  static const bool value = false;
+};
+
+template<>
+struct IsBound<Bound> {
+  static const bool value = true;
+};
+
 class Simpson{
   public:
 
   template <class F>
   static double Integrate(double from, double to, int steps, const F& f){
+    // if (IsBound<F>::value){
+      // std::cerr << "Integrate called on Bound" << std::endl;
+      // std::cerr  << from << ' ' << to <<  std::endl;  
+    
+    // }
     double  h = (to - from) / steps;
 
     SubSum<F> even_sum(f, from + 2 * h, 2 * h);

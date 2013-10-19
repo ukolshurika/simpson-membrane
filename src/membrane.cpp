@@ -28,6 +28,11 @@ double ValueAsLine(double time,
 
 
 void Kahan(double offset, const vector<pair<double, double>>& src, vector<pair<double, double>>* dst){
+  DCHECK(dst->empty());
+  for (auto& v : src)
+    DCHECK(!utils::IsNaN(v.first));
+  cerr << 'v' <<endl;
+  DCHECK(!utils::IsNaN(offset))
   double s = offset, c = 0, t, y;
   for(auto j=src.begin(); j!=src.end(); j++){
     y = j->first - c;
@@ -37,7 +42,8 @@ void Kahan(double offset, const vector<pair<double, double>>& src, vector<pair<d
     (*dst).push_back(make_pair(kSqrt3*s/2.0, j->second));
   }
 }
-}
+
+}  // namespace
 
 struct Free {
   Free(double h0, double q, double n):q_(q), h0_(h0), n_(n){};
@@ -78,7 +84,7 @@ void Membrane::free(int steps){
 
   t_free_.clear();
   double offset = 0;
-
+  cerr << " ### "<< offset << endl;
   Kahan(offset, v, &t_free_);
   // for (auto it = v.begin(); it != v.end(); ++it) {
   //   t_free_.push_back(make_pair((it->first + offset), it->second));
@@ -88,53 +94,51 @@ void Membrane::free(int steps){
 
 void Membrane::constrained(int steps){
   
-  double dx = Bound::kB/steps;
+  double dx = 1.0/steps;
   double t;
 
   Bound b1(*this, 'x');
   Bound b2(*this, 'y');
 
   vector<pair<double, double>> v;
-  for(double x = 0; x <= Bound::kB-1; x+=dx){
-    t = Simpson::Integrate(x, x+dx, kSimpsonStep, b1);
+
+  cerr<< dx << "QWEE   "<< Bound::kB << endl;
+  for(double x = 0; x <= 1 - Bound::kB; x+=dx){
+    t = Simpson::Integrate(x, x+dx, kSimpsonStep, b1); 
     if(!utils::IsNaN(t))
     v.push_back(make_pair(t, x));
   }
 
-  /*by y ordinate*/
-  t_constrained_y_.clear();
-  double offset = 0;
-  double multiplire = sqrt(3)/2;
+  //for(auto i : v) cerr << i.first << endl;
+
+  /*by x ordinate*/
+  t_constrained_.clear();
+  
   double t_free_end = t_free_.back().first;
-  double x_touch = Bound::kB - 1;
+  cerr << "  !!!  " << t_free_end << endl;
   double offset2 = 0;
 
-  Kahan(t_free_end, v, &t_constrained_y_);
-  // for (auto it = v.begin(); it != v.end(); ++it) {
-  //   t_constrained_y_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
-  //   offset += it->first;
-  // }
+  DCHECK(!v.empty())
 
-  h1_ = b1.H(Bound::kB - 1);
+  Kahan(t_free_end, v, &t_constrained_);
+
+  h1_ = b1.H(1-Bound::kB);
   cerr << h1_ << endl;
-  /*by x ordinate*/
-  offset2 = Simpson::Integrate(0, x_touch, 999, b1);
+  /*by y ordinate*/
+  
+  offset2 = t_constrained_.back().first;//Simpson::Integrate(0, x_touch, 999, b1);
+  
   v.clear();
-  for(double x = 0; x <= 1; x+=dx){
+  for(double x = 0; x+dx < 1; x+=dx){
     t = Simpson::Integrate(x, x+dx, kSimpsonStep, b2);
     if(!utils::IsNaN(t))
-    v.push_back(make_pair(t, x));
+      v.push_back(make_pair(t, x));
   }
 
+  t_constrained_y_.clear();
+  cerr<< "  @@@  "<< offset2 <<endl;
+  Kahan(offset2, v, &t_constrained_y_);  
 
-  t_constrained_.clear();
-  // offset2 = 0;
-
-  Kahan(offset2, v, &t_constrained_);  
-  // for (auto it = v.begin(); it != v.end(); ++it) {
-  //   t_constrained_.push_back(make_pair(multiplire*(it->first + offset2)+t_free_end, it->second));
-  //   offset2 += it->first;
-  // }
 }
 
 double Membrane::MeanValueDt(){

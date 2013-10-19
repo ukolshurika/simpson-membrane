@@ -19,16 +19,19 @@ struct HFunctor{
   HFunctor(const Bound& bound): b(bound){};
 
   double operator()(double x) const{
-    if(b.ordinate_=='x')
+    if(b.ordinate_=='x'){
+      DCHECK(x>=0);
       return b.B1(x)/b.B2(x);
-    if(b.ordinate_=='y')
+    }else{
       return (2-M_PI_2)/(Bound::kB+(M_PI_2-1))+(2-M_PI_2)*x;
+    }
   }
 
   Bound b;
 };
 
 const double Bound::kB = 0.5;
+const double Bound::kB2 = 0.25;
 
 Bound::Bound(const Membrane& m, char ordinate):m_(m), ordinate_(ordinate){};
 
@@ -36,6 +39,10 @@ double Bound::operator()(double x) const{
   // std::cerr << "CONSTRAINED" << std::endl;
    // std::cerr << "!!!!"<< B1(x) << ' ' << B2(x) << std::endl;
   if(utils::IsNaN(B1(x)/B2(x))) std::cerr << x << std::endl;
+  DCHECK(B1(x)>0);
+  DCHECK(B2(x)>0);
+  DCHECK(x>=0);
+  DCHECK(x<=1);
   double multiplier;
   multiplier = (ordinate_ == 'x') ? B1(x)/B2(x) : ((2-M_PI_2)/(M_PI_2+(2-M_PI_2)*x));
   return multiplier*pow(k2Sqrt3*H(x)/(m_.q_*Rho(x)), m_.n_);
@@ -50,7 +57,7 @@ double Bound::dRho(double x) const{
 }
 
 double Bound::S(double x) const{
-  return ((ordinate_ == 'x') ? x : -1+Bound::kB+2*x); 
+  return ((ordinate_ == 'x') ? x : 1-Bound::kB+2*x); 
 }
 
 double Bound::dS(double x) const{
@@ -58,24 +65,27 @@ double Bound::dS(double x) const{
 }
 
 double Bound::Alpha(double x) const{
-  return ((ordinate_ == 'x') ? atan((2*kB*(1-x))/((1*x)*(1-x)-kB*kB)) : M_PI_2/2); 
+  // std::cerr << "alpha: " << (2*kB*(1-x))/((1-x)*(1-x)+kB2) << " x:" << x << std::endl;
+  return ((ordinate_ == 'x') ? atan((2*kB*(1-x))/((1-x)*(1-x)+kB2)) : M_PI_2/2); 
 }
 
 double Bound::dAlpha(double x) const{
-  return 0;
+  double x2 = x*x;
+  double x3 = x*x*x;
+  double x4 = x3*x;
+  return (2*kB*(x-kB-1)*(x+kB-1))/(x4 - 4*x3 + 6*kB2*x2 + 6*x2 - 12*kB2*x - 4*x + kB2*kB2 + 6*kB2 + 1);
 }
 
 double Bound::B1(double x) const{
-  //std::cerr << x << ' '<< Rho(x)*dAlpha(x) << " alpha:" << Alpha(x)<< ' ' <<dRho(x) << ' ' << dS(x) << std::endl;
-  return Alpha(x)*dRho(x)+dS(x);
+  DCHECK(dS(x)>0);
+  return Alpha(x)*dRho(x)+dAlpha(x)*Rho(x)+dS(x);
 }
 
 double Bound::B2(double x) const{
-  // std::cerr <<  x  << ' ' << Rho(x)*Alpha(x)+S(x) << std::endl; 
-  
-  // double q = 
-  // std::cerr << x << ' ' << q << std::endl;
-  // DCHECK(q>=0);
+  DCHECK(x<=1);
+  DCHECK(Rho(x)>0);
+  DCHECK(Alpha(x)>0);
+  DCHECK(S(x)>=0);
   return Rho(x)*Alpha(x)+S(x);;
 }
 
@@ -86,6 +96,6 @@ double Bound::SigmaE(double x) const{
 }
 
 double Bound::H(double x) const{
-
-  return (ordinate_ == 'x') ? m_.h1_*exp(Simpson::Integrate(x, Matrix::RZero(), kSimpsonStep, HFunctor(*this))) : m_.h1_/(1+(4/M_PI - 1)*x);//(1+(2/M_PI - 1)*x); //*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
+  DCHECK(x>=0);
+  return (ordinate_ == 'x') ? m_.h1_*exp(Simpson::Integrate(x, 1-kB, kSimpsonStep, HFunctor(*this))) : m_.h1_/(1+(4/M_PI - 1)*x);//(1+(2/M_PI - 1)*x); //*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
 } 
