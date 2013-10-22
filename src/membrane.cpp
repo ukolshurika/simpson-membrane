@@ -31,15 +31,18 @@ void Kahan(double offset, const vector<pair<double, double>>& src, vector<pair<d
   DCHECK(dst->empty());
   for (auto& v : src)
     DCHECK(!utils::IsNaN(v.first));
-  cerr << 'v' <<endl;
+  // cerr << 'v' <<endl;
   DCHECK(!utils::IsNaN(offset))
   double s = offset, c = 0, t, y;
+  cerr << " #### " << s << endl;
   for(auto j=src.begin(); j!=src.end(); j++){
     y = j->first - c;
     t = s + y;
     c = (t - s) - y;
     s = t;
-    (*dst).push_back(make_pair(kSqrt3*s/2.0, j->second));
+    // DCHECK(kSqrt3*s/2.0 > offset);
+    // (*dst).push_back(make_pair(kSqrt3*s/2.0, j->second));
+    (*dst).push_back(make_pair(s, j->second));
   }
 }
 
@@ -64,8 +67,8 @@ struct Free {
 };
 
 Membrane::Membrane(double q, double h0, double n):q_(q), n_(n), h0_(h0) {
-  alpha1_ = 0.41; // from Maxima flexible step(boolsh it just get it from terraud)
-  alpha2_ = M_PI/2;
+  alpha1_ = 0.41; // from Maxima flexible step(boolshit just get it from terraud)
+  alpha2_ = 0.93;//atan(2*Bound::kB/(Bound::kB2));//M_PI/2;
   h1_ = sin(alpha2_)/alpha2_*h0_;
   cerr << h1_ << ' ' << h1_/h0_ << endl;
 }
@@ -105,6 +108,7 @@ void Membrane::constrained(int steps){
   cerr<< dx << "QWEE   "<< Bound::kB << endl;
   for(double x = 0; x <= 1 - Bound::kB; x+=dx){
     t = Simpson::Integrate(x, x+dx, kSimpsonStep, b1); 
+    DCHECK(t>0)
     if(!utils::IsNaN(t))
     v.push_back(make_pair(t, x));
   }
@@ -122,6 +126,8 @@ void Membrane::constrained(int steps){
 
   Kahan(t_free_end, v, &t_constrained_);
 
+  cerr << "  !!!  " << t_constrained_.front().first << endl;
+
   h1_ = b1.H(1-Bound::kB);
   cerr << h1_ << endl;
   /*by y ordinate*/
@@ -131,14 +137,14 @@ void Membrane::constrained(int steps){
   v.clear();
   for(double x = 0; x+dx < 1; x+=dx){
     t = Simpson::Integrate(x, x+dx, kSimpsonStep, b2);
+    DCHECK(t>0)
     if(!utils::IsNaN(t))
       v.push_back(make_pair(t, x));
   }
 
   t_constrained_y_.clear();
   cerr<< "  @@@  "<< offset2 <<endl;
-  Kahan(offset2, v, &t_constrained_y_);  
-
+  Kahan(offset2, v, &t_constrained_y_);
 }
 
 double Membrane::MeanValueDt(){
