@@ -55,7 +55,7 @@ int main(int argc, char **argv){
 
     while(constrained_data_x >> t >> x){
       if(argv[1][0] == 'h')
-        cout<< t/100000000.0 << ' ' << b2.H(x)/h0 - 0.049 << endl;
+        cout<< t/100000000.0 << ' ' << b2.H(x)/h0 - 0.083 << endl;
       else if(argv[1][0] == 's')
         cout << t/100000000.0 << ' ' << b2.SigmaE(x)*1000<< endl;   
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv){
 
     while(constrained_data_y >> t >> x){
       if(argv[1][0] == 'h')
-        cout<< t/100000000.0 << ' ' << b1.H(x)/h0 - 0.049 << endl;
+        cout<< t/100000000.0 << ' ' << b1.H(x)/h0 - 0.083 << endl;
       else if(argv[1][0] == 's')
         cout << t/100000000.0 << ' ' << b1.SigmaE(x)*1000- 0.77<< endl;
     }

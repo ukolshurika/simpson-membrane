@@ -86,7 +86,7 @@ double Bound::B2(double x) const{
   DCHECK(Rho(x)>0);
   DCHECK(Alpha(x)>0);
   DCHECK(S(x)>=0);
-  return Rho(x)*Alpha(x)+S(x);;
+  return Rho(x)*Alpha(x);;
 }
 
 double Bound::SigmaE(double x) const{
