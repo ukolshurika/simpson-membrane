@@ -50,14 +50,14 @@ int main(int argc, char **argv){
        if(argv[1][0] == 'h')
         cout<< t/100000000.0 << ' ' << sin(x)/(x) << endl;
       else if(argv[1][0] == 's')
-        cout<< t/100000000.0 << ' ' << q*x/sin(x)/sin(x)/h0*1000 << endl;
+        cout<< t/100000000.0 << ' ' << 0.77+q*x/sin(x)/sin(x)/h0*1000 << endl;
     }
 
     while(constrained_data_x >> t >> x){
       if(argv[1][0] == 'h')
         cout<< t/100000000.0 << ' ' << b2.H(x)/h0 - 0.083 << endl;
       else if(argv[1][0] == 's')
-        cout << t/100000000.0 << ' ' << b2.SigmaE(x)*1000<< endl;   
+        cout << t/100000000.0 << ' ' << 0.77+b2.SigmaE(x)*1000<< endl;   
 
     }
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv){
       if(argv[1][0] == 'h')
         cout<< t/100000000.0 << ' ' << b1.H(x)/h0 - 0.083 << endl;
       else if(argv[1][0] == 's')
-        cout << t/100000000.0 << ' ' << b1.SigmaE(x)*1000- 0.77<< endl;
+        cout << t/100000000.0 << ' ' << (b1.SigmaE(x)*1000)<< endl;
     }
     
   }
