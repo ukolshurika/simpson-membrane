@@ -21,30 +21,30 @@ ps2eps "\image.ps"}}
       xlabel=$\overline{t} \cdot 10^{-8}$,
       ylabel=$\overline{H}(t)$,
       axis x line=box,
-    axis y line*=left,
+      axis y line*=left,
       ytick={0,0.2,...,0.8, 0.97},
-      xtick={0,5.36,15, 30,...,80},
+      xtick={1.34,15,22.9,30, 45,...,80},
       ymin=0,
       ymax=1,
-      xmin=-0.1,
-      xmax=12]
-      \addplot[mark=none, smooth] file {data/h_stick.dat};   % Here is the data file
-      \addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 1)};   % Here is the data file
+      xmin=0,
+      xmax=80]
+      \addplot[mark=none, smooth] file {data/h05.dat};   % Here is the data file
+      \addplot[mark=none, dotted] coordinates {(22.9, 0) (22.9, 1)};   % Here is the data file
   \end{axis}
   \begin{axis}[   
     scale only axis,
       ylabel=$\overline{\sigma}_u(t) \cdot 10^3$,
       axis y line*=right,
       y label style={at={(1.26,0.5)}},
-    axis x line=center,
+    axis x line=box,
       ytick={0,10,...,20},
-      xtick={0,15,...,80},
+      xtick={75},
       ymin=0,
-      ymax=1000,
-      xmin=-0.1,
-      xmax=12]
-    \addplot[mark=none,smooth, dashdotted] file {data/s_stick.dat};   % Here is the data file 
-    \addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 20)}; 
+      ymax=20,
+      xmin=0,
+      xmax=80]
+    \addplot[mark=none,smooth, dashdotted] file {data/s05.dat};   % Here is the data file 
+    \addplot[mark=none, dotted] coordinates {(1.34, 0) (1.34, 20)}; 
     %\addplot[mark=none] coordinates {(60, 16) (60, 19.5) (75, 19.5) (75, 16) (60, 16)};
     \addplot[mark=none, dashdotted] coordinates {(57, 17) (70, 17)};
     \addplot[mark=none] coordinates {(57, 18.5) (70, 18.5)};
