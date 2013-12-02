@@ -27,19 +27,31 @@ int main(){
 
   Membrane m(q, h0, n);
   ofstream free_data("data/free_new.dat");
-  ofstream constrained_data_x("data/constrained_x.dat");
-  ofstream constrained_data_y("data/constrained_y.dat");
+  ofstream q1("q1.dat");
+  ofstream q2("q2.dat");
+  ofstream q3("q3.dat");
+  ofstream q4("q4.dat");
   Bound b1(m, 'x');
   Bound b2(m, 'y');
 
   for (auto i = 0.001; i<1; i+=0.01){
-    //cout<< i << ' ' <<b1.q(i) << endl;
+    q1 << i << ' ' <<b1.q(i) << endl;
   }
 
 
   for (auto i = 0.001; i<1; i+=0.01){
-     cout<< i << ' ' <<b2.q(i) << endl;
+    q2 << i << ' ' <<b2.q(i) << endl;
   }
+
+  for (auto l = 1.0; l<15; l+=0.5){
+    q3 << l << ' ' << M_PI/sqrt(3)/(1+2/M_PI*(l-1)) << endl;
+  }
+
+
+  for (auto l = 1.0; l<15; l+=0.5){
+    q4 << l << ' ' << 2*(2/M_PI)/(2/M_PI*(l-1)+1)*((2-M_PI_2)/l-1+M_PI_2+(2-M_PI_2)*(l-1)) << endl;
+  }
+
   // m.free(999);
   // m.constrained(999);
   // // m.averageAllDt();

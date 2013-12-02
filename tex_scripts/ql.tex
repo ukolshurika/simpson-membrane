@@ -18,42 +18,74 @@ ps2eps "\image.ps"}}
 \begin{tikzpicture}
   \begin{axis}[
     scale only axis,
-      xlabel=$\overline{t} \cdot 10^{-8}$,
-      ylabel=$\overline{H}(t)$,
+      xlabel=$l$,
+      ylabel=$\overline{q}$,
       axis x line=box,
-    axis y line*=left,
-      ytick={0,0.2,...,0.8, 0.97},
-      xtick={0,5.36,15, 30,...,80},
+      % axis y line*=left,
       ymin=0,
       ymax=1,
-      xmin=-0.1,
-      xmax=12]
+      xmin=1,
+      xmax=15]
       % \addplot[mark=none, smooth] file {data/h_stick.dat};   % Here is the data file
-      \addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 1)};   % Here is the data file
-  \end{axis}
-  \begin{axis}[   
-    scale only axis,
-      ylabel=$\overline{\sigma}_u(t) \cdot 10^3$,
-      axis y line*=right,
-      y label style={at={(1.26,0.5)}},
-    axis x line=center,
-      ytick={0,10,...,20},
-      xtick={0,15,...,80},
-      ymin=0,
-      ymax=1000,
-      xmin=-0.1,
-      xmax=12]
-    % \addplot[mark=none,smooth, dashdotted] file {data/s_stick.dat};   % Here is the data file 
-    \addplot[mark=none, dotted] coordinates {(5.36, 0) (5.36, 20)}; 
-    %\addplot[mark=none] coordinates {(60, 16) (60, 19.5) (75, 19.5) (75, 16) (60, 16)};
-    % \addplot[mark=none, dashdotted] coordinates {(57, 17) (70, 17)};
-    % \addplot[mark=none] coordinates {(57, 18.5) (70, 18.5)};
-    \addplot[domain=0:10] {3.1415/sqrt(3)/(1+2/3.1415*(x-1))};
-    \node at (72, 170) {2};
-    \node at (72, 185) {1};
+      \addplot[mark=none,smooth] file {../q3.dat};   % Here is the data file 
+      
   \end{axis}
 \end{tikzpicture}
 
+\newpage
+\begin{tikzpicture}
+  \begin{axis}[
+    scale only axis,
+      xlabel=$l$,
+      ylabel=$\overline{q}$,
+      axis x line=box,
+      % axis y line*=left,
+      ymin=0,
+      ymax=1,
+      xmin=1,
+      xmax=15]
+      % \addplot[mark=none, smooth] file {data/h_stick.dat};   % Here is the data file
+      \addplot[mark=none,smooth] file {../q4.dat};   % Here is the data file 
+  \end{axis}
+
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+  \begin{axis}[
+    scale only axis,
+      xlabel=$l$,
+      ylabel=$\overline{q}$,
+      axis x line=box,
+      % axis y line*=left,
+      ymin=0,
+      ymax=1,
+      xmin=0,
+      xmax=1]
+      % \addplot[mark=none, smooth] file {data/h_stick.dat};   % Here is the data file
+      \addplot[mark=none,smooth] file {../q1.dat};   % Here is the data file 
+  \end{axis}
+
+
+\end{tikzpicture}
+\newpage
+\begin{tikzpicture}
+  \begin{axis}[
+    scale only axis,
+      xlabel=$l$,
+      ylabel=$\overline{q}$,
+      axis x line=box,
+      % axis y line*=left,
+      ymin=0,
+      ymax=1,
+      xmin=0,
+      xmax=1]
+      % \addplot[mark=none, smooth] file {data/h_stick.dat};   % Here is the data file
+      \addplot[mark=none,smooth] file {../q2.dat};   % Here is the data file 
+  \end{axis}
+
+
+\end{tikzpicture}
 
 
 
