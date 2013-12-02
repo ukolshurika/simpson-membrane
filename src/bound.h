@@ -22,7 +22,7 @@ public:
   double dS(double x) const;
   double Alpha(double x) const;
   double dAlpha(double x) const;
-
+  double q(double l) const;
 
   double SigmaE(double x) const;
   double H(double x) const;

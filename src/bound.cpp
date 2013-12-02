@@ -98,4 +98,8 @@ double Bound::SigmaE(double x) const{
 double Bound::H(double x) const{
   DCHECK(x>=0);
   return (ordinate_ == 'x') ? m_.h1_*exp(Simpson::Integrate(x, 1-kB, kSimpsonStep, HFunctor(*this))) : m_.h1_/(1+(4/M_PI - 1)*x);//(1+(2/M_PI - 1)*x); //*exp(-Simpson::Integrate(0, x, kSimpsonStep, HFunctor(*this)));
-} 
+}
+
+double Bound::q(double l) const{
+  return (ordinate_ == 'x') ? 2*H(1-l)/sqrt(3)/Rho(1-l) : 2*H(1-l)/sqrt(3)/Rho(1-l);
+}  
