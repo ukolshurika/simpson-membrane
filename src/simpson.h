@@ -18,6 +18,21 @@ class Simpson{
     sum *= h/3;
     return sum;
   }
+
+  static double Integrate2(int from, int to, int steps, const F& f){
+    double  h = 0.005;//(to - from) / steps;
+    double sum = f(from);
+    for(int i = from; i< to; i++){
+      if (i%2 == 0)
+        sum += 2*f(from + h * (i-from));
+      else
+        sum += 4*f(from + h * (i-from));
+    }
+    sum += f(to);
+    sum *= h/3;
+    return sum;
+  }
+
 };
 
 #endif  // SIMPSON_H_

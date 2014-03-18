@@ -3,7 +3,7 @@ CC=g++
 SDIR=src
 BDIR=bin
 
-SOURCES=$(addprefix $(SDIR)/,main.cpp bound.cpp membrane.cpp matrix.cpp)
+SOURCES=$(addprefix $(SDIR)/,main.cpp bound.cpp membrane.cpp matrix.cpp, dbound.cpp)
 HEADERS=$(wildcard $(SDIR)/*.h)
 OBJECTS=$(addprefix $(BDIR)/,$(notdir $(SOURCES:.cpp=.o)))
 

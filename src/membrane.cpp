@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "bound.h"
+#include "dbound.h"
 #include "matrix.h"
 #include "simpson.h"
 
@@ -57,12 +58,13 @@ void Membrane::free(int steps){
 }
 
 void Membrane::constrained(int steps){
-  double dx = Matrix::RZero()/steps;
+  double dx = 0.05;//Matrix::RZero()/steps;
   double t;
-
+  
+  // Third step
   Bound b(*this);
   vector<pair<double, double>> v;
-  for(double x = 1; x >= 0; x-=dx){
+  for(double x = 1; x >= 0.9551; x-=dx){
     t = Simpson::Integrate(x, x-dx, kSimpsonStep, b);
     v.push_back(make_pair(t, x));
   }
@@ -76,4 +78,19 @@ void Membrane::constrained(int steps){
     t_constrained_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
     offset += it->first;
   }
+
+  //Fouth step
+  DBound b2(*this);
+  v.clear();
+  for(int i = 0; i <65; i+=10){
+    t = Simpson::Integrate2(i, i+10, 10, b2);
+    v.push_back(make_pair(t, x));
+  }
+
+  t_free_end = t_constrained_.back().first;
+
+  for (auto it = v.begin(); it != v.end(); ++it) {
+    t_constrained_.push_back(make_pair(multiplire*(it->first + offset)+t_free_end, it->second));
+    offset += it->first;
+  }  
 }
