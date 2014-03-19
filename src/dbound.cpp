@@ -1,4 +1,4 @@
-#include "bound.h"
+#include "dbound.h"
 
 #include <cmath>
 #include <iostream>
@@ -16,16 +16,16 @@ struct SFunctor{
 };
 
 struct HFunctor{
-  HFunctor(const Bound& bound): b(bound){};
+  HFunctor(const DBound& bound): b(bound){};
 
   double operator()(int i) const{
     return b.B1(i)/b.B2(i);
   }
 
-  Bound b;
+  DBound b;
 };
 
-DBound::Bound(const Membrane& m):m_(m){};
+DBound::DBound(const Membrane& m):m_(m){};
 
 double F(double x){
   return 1-x*x*x*x*x*x;
@@ -34,7 +34,7 @@ double F(double x){
 double DBound::operator()(int i ) const{
   // std::cerr << "CONSTRAINED" << std::endl;
   // std::cerr << B1(x)/B2(x) << std::endl;
-  return B1(i)/B2(i)*pow(k2Sqrt3*H(x)/(m_.q_*Rho(i)), m_.n_);
+  return B1(i)/B2(i)*pow(k2Sqrt3*H(i)/(m_.q_*Rho(i)), m_.n_);
 }
 
 double DBound::Rho(int i) const{
@@ -51,20 +51,19 @@ double DBound::S(int i) const{
 }
 
 double DBound::SdS(int i) const{
-  return S[i+1];
+  return S(i+1);
 }
 
 double DBound::Alpha(int i) const{
-  return 2*asin( 0.5*sqrt((x1[i]-x0[i])*(x1[i]-x0[i]) + (F(x1[i])-F(x0[i]))*(F(x1[i])-F(x0[i])))/Rho[i]);
+  return 2*asin( 0.5*sqrt((x1[i]-x0[i])*(x1[i]-x0[i]) + (F(x1[i])-F(x0[i]))*(F(x1[i])-F(x0[i])))/Rho(i));
 }
 
 double DBound::AlphadAlpha(int i) const{
-  return Alpha[i+1];
+  return Alpha(i+1);
 }
 
 double DBound::B1(int i) const{
-  // std::cerr << x << ' '<< Rho(x)*dAlpha(x) << " alpha:" << Alpha(x)<< ' ' <<dRho(x) << ' ' << dS(x) << std::endl;
-  return Rho(i)*Alpha(i)+S(i)-B2(i);//Rho(x)*dAlpha(x)+Alpha(x)*dRho(x)+dS(x);
+  return Rho(i+1)*Alpha(i+1)+S(i+1)-B2(i);//Rho(x)*dAlpha(x)+Alpha(x)*dRho(x)+dS(x);
 }
 
 double DBound::B2(int i) const{
@@ -78,7 +77,7 @@ double DBound::SigmaE(int i) const{
 }
 
 double DBound::H(int i) const{
-  // std::cerr << Simpson::Integrate(x, Matrix::RZero(), kSimpsonStep, HFunctor(*this)) << std::endl;
+  // std::cerr << Simpson::Integrate2(0, i, 10, HFunctor(*this))<< " " << HFunctor(*this)(i)<< std::endl;
   return m_.h1_*exp(-Simpson::Integrate2(0, i, kSimpsonStep, HFunctor(*this)));
 }
 

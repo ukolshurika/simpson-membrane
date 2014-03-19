@@ -1,9 +1,10 @@
 #ifndef DBOUND_H_
 #define DBOUND_H_
 
+#include <vector>
 #include "membrane.h"
 
-
+using namespace std;
 class DBound{
 public:
 
@@ -149,7 +150,7 @@ vector<double>  yc = {0.0256211, 0.030476, 0.0353047, 0.0401071, 0.0448834, 0.04
 0.650482, 0.650519, 0.650554, 0.650587, 0.650618, 0.650647, 0.650675,
 0.650701, 0.650725, 0.650747, 0.650767, 0.650786, 0.650803, 0.650818,
 0.650831, 0.650843, 0.650852, 0.65086, 0.650867, 0.650871, 0.650874,
-0.650874, 0.650874}
+0.650874, 0.650874};
 
 vector<double> xc = {0.00464052, 0.00859768, 0.0125292, 0.0164353, 0.020316, 0.0241714,
 0.0280015, 0.0318067, 0.0355868, 0.039342, 0.0430725, 0.0467783,
@@ -294,7 +295,7 @@ vector<double> xc = {0.00464052, 0.00859768, 0.0125292, 0.0164353, 0.020316, 0.0
 0.459125, 0.459146, 0.459166, 0.459185, 0.459203, 0.459219, 0.459235,
 0.459249, 0.459263, 0.459275, 0.459286, 0.459296, 0.459305, 0.459313,
 0.45932, 0.459326, 0.459331, 0.459335, 0.459337, 0.459339, 0.459339,
-0.459339}
+0.459339};
 
 
 vector<double> x1 = {0.00464052, 0.00859768, 0.0125292, 0.0164353, 0.020316, 0.0241714,
@@ -440,7 +441,7 @@ vector<double> x1 = {0.00464052, 0.00859768, 0.0125292, 0.0164353, 0.020316, 0.0
 0.621444, 0.621958, 0.622471, 0.622983, 0.623495, 0.624005, 0.624516,
 0.625025, 0.625534, 0.626042, 0.626549, 0.627056, 0.627561, 0.628067,
 0.628571, 0.629075, 0.629578, 0.63008, 0.630582, 0.631083, 0.631584,
-0.632083}
+0.632083};
 
 vector<double> x0 = {0.9591, 0.9581, 0.9571, 0.9561, 0.9551, 0.9541, 0.9531, 0.9521,
 0.9511, 0.9501, 0.9491, 0.9481, 0.9471, 0.9461, 0.9451, 0.9441,
@@ -565,26 +566,26 @@ vector<double> x0 = {0.9591, 0.9581, 0.9571, 0.9561, 0.9551, 0.9541, 0.9531, 0.9
 0.6441, 0.6436, 0.6431, 0.6426, 0.6421, 0.6416, 0.6411, 0.6406,
 0.6401, 0.6396, 0.6391, 0.6386, 0.6381, 0.6376, 0.6371, 0.6366,
 0.6361, 0.6356, 0.6351, 0.6346, 0.6341, 0.6336, 0.6331, 0.6326,
-0.6321, 0.6316, 0.6311}
+0.6321, 0.6316, 0.6311};
 
 const static int kSimpsonStep = 99;
 
   DBound(const Membrane& m);
 
-  double operator()(double x) const;
-  double B1(double x) const;
-  double B2(double x) const;
+  double operator()(int i) const;
+  double B1(int i) const;
+  double B2(int i) const;
 
-  double Rho(double x) const;
-  double RhodRho(double x) const;
-  double S(double x) const;
-  double SdS(double x) const;
-  double Alpha(double x) const;
-  double AlphadAlpha(double x) const;
+  double Rho(int i) const;
+  double RhodRho(int i) const;
+  double S(int i) const;
+  double SdS(int i) const;
+  double Alpha(int i) const;
+  double AlphadAlpha(int i) const;
 
 
-  double SigmaE(double x) const;
-  double H(double x) const;
+  double SigmaE(int i) const;
+  double H(int i) const;
 
   Membrane m_;
 };
