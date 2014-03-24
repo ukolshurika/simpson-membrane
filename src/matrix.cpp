@@ -3,8 +3,8 @@
 #include <cassert>
 #include <cmath>
 
-const double Matrix::kK = 1.5;
-const double Matrix::kB = 4.5;
+const double Matrix::kK = 6;
+const double Matrix::kB = 1;
 const double Matrix::kKBSquare = kK*kK*kB*kB;
 
 double Matrix::operator()(double x){

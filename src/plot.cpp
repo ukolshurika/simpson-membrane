@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-#include "dbound.h"
+#include "bound.h"
 #include "membrane.h"
 #include "simpson.h"
 

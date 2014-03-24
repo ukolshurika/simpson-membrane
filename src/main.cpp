@@ -13,6 +13,7 @@ int main(){
   Membrane m(q, h0, n);
   ofstream free_data("data/free_new.dat");
   ofstream constrained_data("data/constrained_new.dat");
+  ofstream constrained_data2("data/constrained2_new.dat");
 
   m.free(999);
   m.constrained(9999);
@@ -25,6 +26,11 @@ int main(){
   for(auto i = m.t_constrained_.cbegin(); i != m.t_constrained_.cend(); ++i){
     constrained_data<< i -> first << ' ' << i->second << endl;
   }
+
+  for(auto i = m.t_constrained2_.cbegin(); i != m.t_constrained2_.cend(); ++i){
+    constrained_data2<< i -> first << ' ' << i->second << endl;
+  }
+
   cerr << "C0MPLETE" << endl;
   return 0;
 }
