@@ -84,7 +84,7 @@ void Membrane::constrained(int steps){
   //Fouth step
   DBound b2(*this);
   v.clear();
-  for(int i = 0; i <290; i+=10){
+  for(int i = 0; i <330; i+=10){
     t = Simpson::Integrate2(i, i+10, 10, b2);
     v.push_back(make_pair(t, b2.H(i)));
     // cerr << i << b2.H(i)<<endl;

@@ -81,4 +81,8 @@ double DBound::H(int i) const{
   return m_.h1_*exp(-Simpson::Integrate2(0, i, kSimpsonStep, HFunctor(*this)));
 }
 
-
+void DBound::PrintX0X1(int q) const{
+  for(int i = 0; i<986; ++i){
+    std::cout << x0[i] << " " << RhodRho(i) << std::endl;
+  }
+}

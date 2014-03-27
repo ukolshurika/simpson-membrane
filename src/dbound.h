@@ -582,7 +582,7 @@ const static int kSimpsonStep = 99;
   double SdS(int i) const;
   double Alpha(int i) const;
   double AlphadAlpha(int i) const;
-
+  void PrintX0X1(int q) const;
 
   double SigmaE(int i) const;
   double H(int i) const;
