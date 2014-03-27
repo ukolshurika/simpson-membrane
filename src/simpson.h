@@ -22,7 +22,7 @@ class Simpson{
 
   template <class F>
   static double Integrate2(int from, int to, int steps, const F& f){
-    double  h = 0.0005;//(to - from) / steps;
+    double  h = 0.02;//(to - from) / steps;
     double sum = f(from);
     for(int i = from; i< to; i++){
       if (i%2 == 0)

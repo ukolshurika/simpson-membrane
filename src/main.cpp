@@ -8,7 +8,6 @@ using namespace std;
 
 int main(){
   double h0 = 2/100.0;
-  h0 = 0.634823;
   double q = 2.65*1000/88.3/1000000;
   double n = 3.4;
 

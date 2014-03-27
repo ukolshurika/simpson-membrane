@@ -83,6 +83,6 @@ double DBound::H(int i) const{
 
 void DBound::PrintX0X1(int q) const{
   for(int i = 0; i<658; ++i){
-    std::cout << x0[i] << " " << H(i)/m_.h0_ << std::endl;
+    std::cout << x0[i] << " " << H(i) << std::endl;
   }
 }
