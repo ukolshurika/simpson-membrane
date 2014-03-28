@@ -63,11 +63,11 @@ double DBound::AlphadAlpha(int i) const{
 }
 
 double DBound::B1(int i) const{
-  return Rho(i+1)*Alpha(i+1)+S(i+1)-B2(i);//Rho(x)*dAlpha(x)+Alpha(x)*dRho(x)+dS(x);
+  return Rho(i+1)*Alpha(i+1)+S(i+1)-B2(i)-S(i);//Rho(x)*dAlpha(x)+Alpha(x)*dRho(x)+dS(x);
 }
 
 double DBound::B2(int i) const{
-  return Rho(i)*Alpha(i)+S(i);
+  return Rho(i)*Alpha(i);
 }
 
 double DBound::SigmaE(int i) const{

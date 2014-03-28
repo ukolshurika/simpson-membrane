@@ -64,7 +64,7 @@ double Bound::B1(double x) const{
 }
 
 double Bound::B2(double x) const{
-  return Rho(x)*Alpha(x)+S(x);
+  return Rho(x)*Alpha(x);
 }
 
 double Bound::SigmaE(double x) const{
