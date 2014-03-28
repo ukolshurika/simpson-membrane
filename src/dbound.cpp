@@ -86,3 +86,7 @@ void DBound::PrintX0X1(int q) const{
     std::cout << x0[i] << " " << H(i) << std::endl;
   }
 }
+
+double DBound::qx0(int i){
+  return x0[i];
+}

@@ -89,13 +89,13 @@ void Membrane::constrained(int steps){
   for(int i = 0; i <658; i+=14){
     t = Simpson::Integrate2(i, i+14, 14, b2);
     v.push_back(make_pair(t, b2.H(i)));
-    cerr << i << endl;
   }
 
   t_free_end = t_constrained_.back().first;
+  cerr << t_free_end << endl;
   offset =0;
   for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained2_.push_back(make_pair(multiplire*(it->first + offset)/100000000.0+t_free_end, (it->second/h0_)));
+    t_constrained2_.push_back(make_pair(multiplire*(it->first + offset)/10000000000000.0+t_free_end, (it->second)));
     offset += it->first;
   }
 }

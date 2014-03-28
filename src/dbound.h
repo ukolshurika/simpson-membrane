@@ -402,6 +402,8 @@ const static int kSimpsonStep = 99;
   double SigmaE(int i) const;
   double H(int i) const;
 
+  double qx0(int i);
+
   Membrane m_;
 };
 
