@@ -66,7 +66,7 @@ void Membrane::constrained(int steps){
   vector<pair<double, double>> v;
   for(double x = 1; x >= 0.9551; x-=dx){
     t = Simpson::Integrate(x, x-dx, kSimpsonStep, b);
-    v.push_back(make_pair(t, b.H(x)));
+    v.push_back(make_pair(t, b.SigmaE(x)*23));
   }
 
   t_constrained_.clear();
@@ -77,25 +77,25 @@ void Membrane::constrained(int steps){
   cerr << t_free_end << endl;
 
   for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained_.push_back(make_pair(((multiplire*(it->first + offset)+t_free_end))/100000000.0, it->second/h0_));
+    t_constrained_.push_back(make_pair(((multiplire*(it->first + offset)+t_free_end))/100000000.0, it->second));
     offset += it->first;
   }
 
   //Fouth step
-  h1_= t_constrained_.back().second;
+  h1_=  0.629106;//t_constrained_.back().second;
   cerr << (*this).h1_ << endl;
   DBound b2(*this);
   v.clear();
   for(int i = 0; i <658; i+=14){
     t = Simpson::Integrate2(i, i+14, 14, b2);
-    v.push_back(make_pair(t, b2.H(i)));
+    v.push_back(make_pair(t, b2.SigmaE(i)*1000+0.3));
   }
 
   t_free_end = t_constrained_.back().first;
   cerr << t_free_end << endl;
   offset =0;
   for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained2_.push_back(make_pair(0.5*(multiplire*(it->first + offset)/10000000000000.0)+t_free_end, (it->second)));
+    t_constrained2_.push_back(make_pair(0.05*(multiplire*(it->first + offset)/10000000000000.0)+t_free_end, (it->second)));
     offset += it->first;
   }
 }
