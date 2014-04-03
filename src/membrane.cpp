@@ -95,7 +95,7 @@ void Membrane::constrained(int steps){
   cerr << t_free_end << endl;
   offset =0;
   for (auto it = v.begin(); it != v.end(); ++it) {
-    t_constrained2_.push_back(make_pair(multiplire*(it->first + offset)/10000000000000.0+t_free_end, (it->second)));
+    t_constrained2_.push_back(make_pair(0.5*multiplire*(it->first + offset)/10000000000000.0+t_free_end, (it->second)));
     offset += it->first;
   }
 }
