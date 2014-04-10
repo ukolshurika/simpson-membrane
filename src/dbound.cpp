@@ -83,8 +83,12 @@ double DBound::H(int i) const{
 
 void DBound::PrintX0X1(int q) const{
   for(int i = 0; i<658; ++i){
+    std::cout << x1[i] << " " << H(i) << std::endl;
+  }
+  for(int i = 658; i>=0; --i){
     std::cout << x0[i] << " " << H(i) << std::endl;
   }
+
 }
 
 double DBound::qx0(int i){

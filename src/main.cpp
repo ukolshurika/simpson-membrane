@@ -3,6 +3,7 @@
 
 #include "membrane.h"
 #include "dbound.h"
+#include "bound.h"
 
 using namespace std;
 
@@ -31,9 +32,14 @@ int main(){
   for(auto i = m.t_constrained2_.cbegin(); i != m.t_constrained2_.cend(); ++i){
     constrained_data2<< i -> first << ' ' << i->second << endl;
   }
-  
+  Bound b0(m);
+
+  m.h1_ = b0.H(0.9556);
+
   DBound b(m);
   b.PrintX0X1(1);  
+  
+  b0.PrintX0X1(1);
 
   cerr << "C0MPLETE" << endl;
   return 0;

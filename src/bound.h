@@ -27,6 +27,8 @@ const static int kSimpsonStep = 99;
   double SigmaE(double x) const;
   double H(double x) const;
 
+  void PrintX0X1(int i);
+
   Membrane m_;
 };
 

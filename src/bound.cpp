@@ -79,3 +79,9 @@ double Bound::H(double x) const{
 }
 
 
+void Bound::PrintX0X1(int i){
+  for(double x=0.9596; x<1; x+=0.0001){
+    std::cout << x << " " << H(x)-0.004 << std::endl;
+  }
+
+}
